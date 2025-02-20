@@ -6,6 +6,7 @@ import CountdownModule from './components/CountdownModule';
 import HappinessRecord from './components/HappinessRecord';
 import HolidayReminder from './components/HolidayReminder';
 import Login from './Login';
+import Register from './Register';
 
 const App = () => {
     const holidays = ['春节', '国庆节', '中秋节'];
@@ -14,6 +15,7 @@ const App = () => {
         <div>
             <h1>欢迎使用日历应用</h1>
             <Login />
+            <Register />
             <MyCalendar />
             <DiaryTemplate />
             <CheckInModule />
