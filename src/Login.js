@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const Login = () => {
+const Login = ({ onLogin }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -14,10 +14,20 @@ const Login = () => {
         password
       });
       console.log('登录成功:', response.data);
-      // 在这里可以处理登录成功后的逻辑，例如保存 token
+      onLogin();
     } catch (err) {
       setError('登录失败，请检查用户名和密码');
       console.error('登录失败:', err);
+    }
+  };
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post('http://localhost:5000/api/register', { username, password });
+      alert(response.data.message);
+    } catch (error) {
+      alert(error.response.data.message);
     }
   };
 

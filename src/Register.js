@@ -4,27 +4,26 @@ import axios from 'axios';
 const Register = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const handleSubmit = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3001/api/auth/register', {
-        username,
-        password
-      });
-      console.log('注册成功:', response.data);
-      // 在这里可以处理注册成功后的逻辑，例如重定向到登录页面
-    } catch (err) {
-      setError('注册失败，请检查用户名和密码');
-      console.error('注册失败:', err);
+      const response = await axios.post('http://localhost:5000/api/register', { username, password });
+      alert(response.data.message);
+    } catch (error) {
+      if (error.response) {
+        setErrorMessage(error.response.data.message);
+      } else {
+        setErrorMessage('注册失败，请稍后再试。');
+      }
     }
   };
 
   return (
     <div>
       <h2>注册</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleRegister}>
         <input
           type="text"
           placeholder="用户名"
@@ -41,7 +40,10 @@ const Register = () => {
         />
         <button type="submit">注册</button>
       </form>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+      <p style={{ color: 'gray' }}>
+        密码要求：至少8个字符，包含字母和数字。
+      </p>
     </div>
   );
 };
