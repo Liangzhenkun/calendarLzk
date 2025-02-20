@@ -1,4 +1,5 @@
-const User = require('../models/User');
+const MySQLUser = require('../models/MySQLUser'); // MySQL 用户模型
+const MongoUser = require('../models/User'); // MongoDB 用户模型
 const jwt = require('jsonwebtoken');
 
 class AuthController {
@@ -7,25 +8,26 @@ class AuthController {
       const { username, password } = req.body;
 
       // 检查用户是否已存在
-      const existingUser = await User.findOne({ username });
+      const existingUser = await MySQLUser.findOne({ username });
       if (existingUser) {
         return res.status(400).json({ message: '用户名已存在' });
       }
 
       // 创建新用户
-      const user = new User({ username, password });
-      await user.save();
+      const userId = await MySQLUser.create({ username, password });
+      console.log('新用户 ID:', userId); // 打印新用户 ID
 
       // 生成 token
       const token = jwt.sign(
-        { id: user._id, username: user.username },
+        { id: userId, username },
         process.env.JWT_SECRET,
         { expiresIn: '7d' }
       );
 
       res.status(201).json({ token });
     } catch (error) {
-      res.status(500).json({ message: '注册失败' });
+      console.error('注册错误:', error); // 打印详细错误信息
+      res.status(500).json({ message: '注册失败', error: error.message });
     }
   }
 
@@ -34,7 +36,7 @@ class AuthController {
       const { username, password } = req.body;
 
       // 查找用户
-      const user = await User.findOne({ username });
+      const user = await MongoUser.findOne({ username });
       if (!user) {
         return res.status(400).json({ message: '用户名或密码错误' });
       }

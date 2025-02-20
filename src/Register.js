@@ -9,9 +9,11 @@ const Register = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/register', { username, password });
+      console.log('注册请求数据:', { username, password });
+      const response = await axios.post('http://localhost:3001/api/register', { username, password });
       alert(response.data.message);
     } catch (error) {
+      console.error('注册失败:', error);
       if (error.response) {
         setErrorMessage(error.response.data.message);
       } else {

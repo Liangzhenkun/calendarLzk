@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const mysql = require('mysql2');
 const bodyParser = require('body-parser');
+const User = require('./src/models/User'); // 确保路径正确
 
 // 加载环境变量
 dotenv.config();
@@ -16,7 +17,7 @@ app.use(express.json());
 app.use(bodyParser.json());
 
 // 连接数据库
-mongoose.connect('mongodb://localhost:27017/calendar', {
+mongoose.connect('mongodb://localhost:27017/your_database_name', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 })
@@ -49,26 +50,22 @@ app.get('/', (req, res) => {
   res.send('欢迎使用日历应用 API');
 });
 
-app.post('/api/register', (req, res) => {
+app.post('/api/register', async (req, res) => {
     const { username, password } = req.body;
-    const checkQuery = 'SELECT * FROM users WHERE username = ?';
-    
-    db.query(checkQuery, [username], (err, results) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        if (results.length > 0) {
-            return res.status(400).json({ message: 'Username already exists.' });
+
+    try {
+        const existingUser = await User.findOne({ username });
+        if (existingUser) {
+            return res.status(400).json({ message: '用户已存在' });
         }
 
-        const query = 'INSERT INTO users (username, password) VALUES (?, ?)';
-        db.query(query, [username, password], (err, results) => {
-            if (err) {
-                return res.status(500).json({ error: err.message });
-            }
-            res.status(201).json({ message: 'User registered successfully!' });
-        });
-    });
+        const newUser = new User({ username, password });
+        await newUser.save();
+        res.status(201).json({ message: '注册成功' });
+    } catch (error) {
+        console.error('注册错误:', error); // 打印详细错误信息
+        res.status(500).json({ message: '注册失败，请稍后再试', error: error.message });
+    }
 });
 
 // 错误处理中间件
@@ -77,7 +74,7 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: '服务器错误' });
 });
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`服务器运行在端口 ${PORT}`);
 });
