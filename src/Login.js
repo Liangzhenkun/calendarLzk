@@ -4,20 +4,17 @@ import axios from 'axios';
 const Login = ({ onLogin }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3001/api/auth/login', {
-        username,
-        password
-      });
-      console.log('登录成功:', response.data);
+      const response = await axios.post('http://localhost:3001/api/auth/login', { username, password });
+      alert('登录成功');
       onLogin();
-    } catch (err) {
-      setError('登录失败，请检查用户名和密码');
-      console.error('登录失败:', err);
+    } catch (error) {
+      console.error('登录失败:', error);
+      setErrorMessage('用户名或密码错误');
     }
   };
 
@@ -34,7 +31,7 @@ const Login = ({ onLogin }) => {
   return (
     <div>
       <h2>登录</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleLogin}>
         <input
           type="text"
           placeholder="用户名"
@@ -51,7 +48,7 @@ const Login = ({ onLogin }) => {
         />
         <button type="submit">登录</button>
       </form>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
     </div>
   );
 };

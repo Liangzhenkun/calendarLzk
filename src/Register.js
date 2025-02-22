@@ -9,16 +9,11 @@ const Register = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      console.log('注册请求数据:', { username, password });
-      const response = await axios.post('http://localhost:3001/api/register', { username, password });
-      alert(response.data.message);
+      const response = await axios.post('http://localhost:3001/api/auth/register', { username, password });
+      alert('注册成功');
     } catch (error) {
       console.error('注册失败:', error);
-      if (error.response) {
-        setErrorMessage(error.response.data.message);
-      } else {
-        setErrorMessage('注册失败，请稍后再试。');
-      }
+      setErrorMessage('注册失败，请稍后再试。');
     }
   };
 

@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 const mysql = require('mysql2');
 const bodyParser = require('body-parser');
 const User = require('./src/models/User'); // 确保路径正确
+const MySQLUser = require('./src/models/MySQLUser'); // 确保路径正确
 
 // 加载环境变量
 dotenv.config();
@@ -17,12 +18,12 @@ app.use(express.json());
 app.use(bodyParser.json());
 
 // 连接数据库
-mongoose.connect('mongodb://localhost:27017/your_database_name', {
+mongoose.connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 })
-  .then(() => console.log('数据库连接成功'))
-  .catch((err) => console.error('数据库连接失败:', err));
+  .then(() => console.log('MongoDB 数据库连接成功'))
+  .catch((err) => console.error('MongoDB 数据库连接失败:', err));
 
 const db = mysql.createConnection({
     host: 'localhost',
@@ -34,10 +35,10 @@ const db = mysql.createConnection({
 // 连接数据库
 db.connect((err) => {
     if (err) {
-        console.error('数据库连接失败:', err.stack);
+        console.error('MySQL 数据库连接失败:', err.stack);
         return;
     }
-    console.log('成功连接到数据库');
+    console.log('成功连接到 MySQL 数据库');
 });
 
 // 路由
@@ -68,13 +69,18 @@ app.post('/api/register', async (req, res) => {
     }
 });
 
+// 用户注册路由
+app.post('/api/auth/register', async (req, res) => {
+    // 注册逻辑
+});
+
 // 错误处理中间件
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ message: '服务器错误' });
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3001; // 确保使用 3001 端口
 app.listen(PORT, () => {
-  console.log(`服务器运行在端口 ${PORT}`);
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
