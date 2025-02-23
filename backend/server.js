@@ -6,6 +6,7 @@ const mysql = require('mysql2');
 const bodyParser = require('body-parser');
 const User = require('./src/models/User'); // 确保路径正确
 const MySQLUser = require('./src/models/MySQLUser'); // 确保路径正确
+const authRoutes = require('./src/routes/auth'); // 更新路径
 
 // 加载环境变量
 dotenv.config();
@@ -41,15 +42,14 @@ db.connect((err) => {
     console.log('成功连接到 MySQL 数据库');
 });
 
-// 路由
-app.use('/api/auth', require('./src/routes/auth'));
-const calendarRoutes = require('./src/routes/calendar');
-
-app.use('/api/calendar', calendarRoutes);
-
+// 根路径路由
 app.get('/', (req, res) => {
   res.send('欢迎使用日历应用 API');
 });
+
+// 路由
+app.use('/api/auth', authRoutes); // 挂载路由
+app.use('/api/calendar', require('./src/routes/calendar'));
 
 app.post('/api/register', async (req, res) => {
     const { username, password } = req.body;
@@ -67,11 +67,6 @@ app.post('/api/register', async (req, res) => {
         console.error('注册错误:', error); // 打印详细错误信息
         res.status(500).json({ message: '注册失败，请稍后再试', error: error.message });
     }
-});
-
-// 用户注册路由
-app.post('/api/auth/register', async (req, res) => {
-    // 注册逻辑
 });
 
 // 错误处理中间件
