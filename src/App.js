@@ -32,15 +32,17 @@ const App = () => {
                     </button>
                 </div>
             ) : (
-                <MyCalendar />
+                <div>
+                    <MyCalendar />
+                    <DiaryTemplate />
+                    <CheckInModule />
+                    <CountdownModule />
+                    <HappinessRecord />
+                    <ErrorBoundary>
+                        <HolidayReminder holidays={holidays} />
+                    </ErrorBoundary>
+                </div>
             )}
-            <DiaryTemplate />
-            <CheckInModule />
-            <CountdownModule />
-            <HappinessRecord />
-            <ErrorBoundary>
-                <HolidayReminder holidays={holidays} />
-            </ErrorBoundary>
         </div>
     );
 };
