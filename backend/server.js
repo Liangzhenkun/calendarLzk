@@ -4,9 +4,9 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const mysql = require('mysql2');
 const bodyParser = require('body-parser');
-const User = require('./src/models/User'); // 确保路径正确
 const MySQLUser = require('./src/models/MySQLUser'); // 确保路径正确
 const authRoutes = require('./src/routes/auth'); // 更新路径
+
 
 // 加载环境变量
 dotenv.config();
@@ -17,6 +17,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
+app.use(express.static('public')); // 提供静态文件服务
 
 // 连接数据库
 mongoose.connect(process.env.MONGODB_URI, {

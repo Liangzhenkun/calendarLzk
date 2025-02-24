@@ -33,9 +33,15 @@ class AuthController {
       const token = generateToken(userId, username);
 
       res.status(201).json({ token });
+
+      // 获取所有用户信息
+      const users = await MySQLUser.findAll();
+      res.status(200).json(users);
+
     } catch (error) {
-      console.error('注册错误:', error);
-      if (error.code === 'ER_DUP_ENTRY') {
+      console.error('获取用户信息失败:', error);
+      res.status(500).json({ message: '获取用户信息失败', error: error.message });
+        if (error.code === 'ER_DUP_ENTRY') {
         res.status(400).json({ message: '用户名已存在' });
       } else {
         res.status(500).json({ message: '注册失败', error: error.message });
