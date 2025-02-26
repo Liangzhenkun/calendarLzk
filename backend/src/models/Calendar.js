@@ -1,33 +1,49 @@
-const mongoose = require('mongoose');
+const pool = require('../config/database');
 
-const calendarSchema = new mongoose.Schema({
-  userId: {
-    type: String,
-    required: true,
-    index: true
-  },
-  date: {
-    type: Date,
-    required: true
-  },
-  content: {
-    type: String,
-    required: true
-  },
-  mood: {
-    type: String,
-    enum: ['happy', 'sad', 'normal'],
-    default: 'normal'
-  },
-  tags: [String],
-  createdAt: {
-    type: Date,
-    default: Date.now
-  },
-  updatedAt: {
-    type: Date,
-    default: Date.now
-  }
-});
+class Calendar {
+    static async create(data) {
+        const { userId, date, content, mood = 'normal', tags = '' } = data;
+        try {
+            const [result] = await pool.query(
+                `INSERT INTO Calendar (userId, date, content, mood, tags) 
+                 VALUES (?, ?, ?, ?, ?)`,
+                [userId, date, content, mood, tags]
+            );
+            return result.insertId;
+        } catch (error) {
+            console.error('创建日历记录失败:', error);
+            throw error;
+        }
+    }
 
-module.exports = mongoose.model('Calendar', calendarSchema); 
+    static async findByUserAndDate(userId, date) {
+        try {
+            const [rows] = await pool.query(
+                'SELECT * FROM Calendar WHERE userId = ? AND date = ?',
+                [userId, date]
+            );
+            return rows[0];
+        } catch (error) {
+            console.error('查询日历记录失败:', error);
+            throw error;
+        }
+    }
+
+    static async update(id, data) {
+        const { content, mood, tags } = data;
+        try {
+            const [result] = await pool.query(
+                `UPDATE Calendar 
+                 SET content = ?, mood = ?, tags = ?
+                 WHERE id = ?`,
+                [content, mood, tags, id]
+            );
+            return result.affectedRows > 0;
+        } catch (error) {
+            console.error('更新日历记录失败:', error);
+            throw error;
+        }
+    }
+}
+
+module.exports = Calendar; 

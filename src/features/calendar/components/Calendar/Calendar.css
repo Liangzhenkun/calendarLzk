@@ -1,0 +1,54 @@
+.calendar-card {
+  margin: 24px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.calendar-card .ant-card-head-title {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.calendar-cell {
+  height: 100%;
+  padding: 4px;
+}
+
+.calendar-cell-content {
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.calendar-cell-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.calendar-cell-tags {
+  color: #666;
+  margin-top: 4px;
+}
+
+/* 心情指示器样式 */
+.mood-happy {
+  background-color: rgba(82, 196, 26, 0.1);
+  border-left: 3px solid #52c41a;
+}
+
+.mood-normal {
+  background-color: rgba(24, 144, 255, 0.1);
+  border-left: 3px solid #1890ff;
+}
+
+.mood-sad {
+  background-color: rgba(245, 34, 45, 0.1);
+  border-left: 3px solid #f5222d;
+}
+
+/* 日历单元格hover效果 */
+.ant-picker-cell:hover .calendar-cell {
+  background-color: rgba(24, 144, 255, 0.05);
+} 

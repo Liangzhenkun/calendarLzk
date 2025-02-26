@@ -30,33 +30,35 @@ exports.createRecord = async (req, res) => {
 
 // 创建或更新日历记录
 exports.createOrUpdateRecord = async (req, res) => {
-    const { userId, date, content } = req.body;
-
-    try {
-        const record = await Calendar.findOneAndUpdate(
-            { userId, date },
-            { content, createdAt: new Date() },
-            { new: true, upsert: true } // 如果记录不存在则创建
-        );
-        res.status(200).json({ message: '记录保存成功', record });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
+    const { userId, date, content, mood, tags } = req.body;
+    
+    // 查找是否已存在记录
+    const existingRecord = await Calendar.findByUserAndDate(userId, date);
+    
+    if (existingRecord) {
+        // 更新现有记录
+        await Calendar.update(existingRecord.id, { content, mood, tags });
+        res.json({ message: '记录已更新' });
+    } else {
+        // 创建新记录
+        const id = await Calendar.create({ userId, date, content, mood, tags });
+        res.status(201).json({ 
+            message: '记录已创建',
+            id 
+        });
     }
 };
 
 // 获取日历记录
 exports.getRecord = async (req, res) => {
     const { userId, date } = req.params;
-
-    try {
-        const record = await Calendar.findOne({ userId, date });
-        if (!record) {
-            return res.status(404).json({ message: '没有找到记录' });
-        }
-        res.status(200).json(record);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
+    const record = await Calendar.findByUserAndDate(userId, date);
+    
+    if (!record) {
+        return res.status(404).json({ message: '没有找到记录' });
     }
+    
+    res.json(record);
 };
 
 // 其他处理函数可以在这里添加...
