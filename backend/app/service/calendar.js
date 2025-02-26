@@ -18,30 +18,46 @@ class CalendarService extends Service {
   // 创建或更新日历记录
   async createOrUpdate(data) {
     const { app } = this;
-    const { userId, date } = data;
+    const { userId, date, content, mood = 3, tags = '' } = data;
     
     try {
+      this.ctx.logger.info('创建/更新日历记录，数据:', data);
+      
       // 查找是否存在记录
       const existing = await app.mysql.get('CalendarRecord', { userId, date });
 
       if (existing) {
         // 更新记录
-        await app.mysql.update('CalendarRecord', {
-          ...data,
+        const updateData = {
+          content,
+          mood,
+          tags,
           updatedAt: app.mysql.literals.now
-        }, {
+        };
+        
+        this.ctx.logger.info('更新已存在的记录:', { id: existing.id, updateData });
+        
+        await app.mysql.update('CalendarRecord', updateData, {
           where: { id: existing.id }
         });
-        return { ...existing, ...data };
+        return { ...existing, ...updateData };
       }
 
       // 创建新记录
-      const result = await app.mysql.insert('CalendarRecord', {
-        ...data,
+      const insertData = {
+        userId,
+        date,
+        content,
+        mood,
+        tags,
         createdAt: app.mysql.literals.now,
         updatedAt: app.mysql.literals.now
-      });
-      return { ...data, id: result.insertId };
+      };
+      
+      this.ctx.logger.info('创建新记录:', insertData);
+      
+      const result = await app.mysql.insert('CalendarRecord', insertData);
+      return { ...insertData, id: result.insertId };
     } catch (error) {
       this.ctx.logger.error('创建/更新日历记录失败:', error);
       throw error;
@@ -78,56 +94,6 @@ class CalendarService extends Service {
       });
     } catch (error) {
       this.ctx.logger.error('获取日期范围内的记录失败:', error);
-      throw error;
-    }
-  }
-
-  async create(data) {
-    const { app } = this;
-    const { userId, date, content, mood = 'normal', tags = '' } = data;
-    try {
-      const result = await app.mysql.insert('Calendar', {
-        userId,
-        date,
-        content,
-        mood,
-        tags
-      });
-      return result.insertId;
-    } catch (error) {
-      this.ctx.logger.error('创建日历记录失败:', error);
-      throw error;
-    }
-  }
-
-  async findByUserAndDate(userId, date) {
-    const { app } = this;
-    try {
-      const record = await app.mysql.get('Calendar', {
-        userId,
-        date
-      });
-      return record;
-    } catch (error) {
-      this.ctx.logger.error('查询日历记录失败:', error);
-      throw error;
-    }
-  }
-
-  async update(id, data) {
-    const { app } = this;
-    const { content, mood, tags } = data;
-    try {
-      const result = await app.mysql.update('Calendar', {
-        content,
-        mood,
-        tags
-      }, {
-        where: { id }
-      });
-      return result.affectedRows > 0;
-    } catch (error) {
-      this.ctx.logger.error('更新日历记录失败:', error);
       throw error;
     }
   }

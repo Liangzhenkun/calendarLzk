@@ -20,7 +20,7 @@ const initDatabase = async (app) => {
         userId INT NOT NULL,
         date DATE NOT NULL,
         content TEXT,
-        mood VARCHAR(20),
+        mood INT DEFAULT 3,
         tags VARCHAR(255),
         createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

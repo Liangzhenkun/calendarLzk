@@ -120,11 +120,20 @@ const handleSubmit = async () => {
     await formRef.value.validate()
     loading.value = true
     
-    await calendarApi.createCalendarRecord(form)
+    console.log('提交的表单数据:', form)
+    const result = await calendarApi.createCalendarRecord(form)
+    console.log('服务器响应:', result)
+    
     ElMessage.success('保存成功')
     dialogVisible.value = false
     await fetchRecords()
   } catch (error) {
+    console.error('保存失败:', error)
+    console.error('错误详情:', {
+      message: error.message,
+      response: error.response,
+      request: error.request
+    })
     ElMessage.error(error.message || '保存失败')
   } finally {
     loading.value = false
