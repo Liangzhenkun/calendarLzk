@@ -1,0 +1,308 @@
+{
+  "keys": "E:\\cursor\\clanderLzk\\backend\\config\\config.default.js",
+  "mysql": {
+    "client": {
+      "host": "E:\\cursor\\clanderLzk\\backend\\config\\config.default.js",
+      "port": "E:\\cursor\\clanderLzk\\backend\\config\\config.default.js",
+      "user": "E:\\cursor\\clanderLzk\\backend\\config\\config.default.js",
+      "password": "E:\\cursor\\clanderLzk\\backend\\config\\config.default.js",
+      "database": "E:\\cursor\\clanderLzk\\backend\\config\\config.default.js"
+    },
+    "default": {
+      "database": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-mysql\\config\\config.default.js",
+      "connectionLimit": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-mysql\\config\\config.default.js"
+    },
+    "app": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-mysql\\config\\config.default.js",
+    "agent": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-mysql\\config\\config.default.js"
+  },
+  "security": {
+    "csrf": {
+      "enable": "E:\\cursor\\clanderLzk\\backend\\config\\config.default.js",
+      "type": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js",
+      "ignoreJSON": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js",
+      "useSession": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js",
+      "cookieName": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js",
+      "sessionName": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js",
+      "headerName": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js",
+      "bodyName": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js",
+      "queryName": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js",
+      "rotateWhenInvalid": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js",
+      "supportedRequests": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js",
+      "refererWhiteList": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js",
+      "cookieOptions": {
+        "signed": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js"
+      }
+    },
+    "domainWhiteList": "E:\\cursor\\clanderLzk\\backend\\config\\config.default.js",
+    "protocolWhiteList": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js",
+    "defaultMiddleware": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js",
+    "xframe": {
+      "enable": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js",
+      "value": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js"
+    },
+    "hsts": {
+      "enable": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js",
+      "maxAge": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js",
+      "includeSubdomains": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js"
+    },
+    "dta": {
+      "enable": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js"
+    },
+    "methodnoallow": {
+      "enable": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js"
+    },
+    "noopen": {
+      "enable": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js"
+    },
+    "nosniff": {
+      "enable": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js"
+    },
+    "referrerPolicy": {
+      "enable": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js",
+      "value": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js"
+    },
+    "xssProtection": {
+      "enable": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js",
+      "value": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js"
+    },
+    "csp": {
+      "enable": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js",
+      "policy": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js"
+    },
+    "ssrf": {
+      "ipBlackList": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js",
+      "ipExceptionList": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js",
+      "hostnameExceptionList": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js",
+      "checkAddress": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js"
+    }
+  },
+  "cors": {
+    "origin": "E:\\cursor\\clanderLzk\\backend\\config\\config.default.js",
+    "allowMethods": "E:\\cursor\\clanderLzk\\backend\\config\\config.default.js"
+  },
+  "jwt": {
+    "secret": "E:\\cursor\\clanderLzk\\backend\\config\\config.default.js",
+    "enable": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-jwt\\config\\config.default.js"
+  },
+  "cluster": {
+    "listen": {
+      "port": "E:\\cursor\\clanderLzk\\backend\\config\\config.default.js",
+      "path": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+      "hostname": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js"
+    }
+  },
+  "session": {
+    "maxAge": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-session\\config\\config.default.js",
+    "key": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-session\\config\\config.default.js",
+    "httpOnly": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-session\\config\\config.default.js",
+    "encrypt": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-session\\config\\config.default.js",
+    "logValue": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-session\\config\\config.default.js"
+  },
+  "helper": {
+    "shtml": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js"
+  },
+  "jsonp": {
+    "limit": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-jsonp\\config\\config.default.js",
+    "callback": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-jsonp\\config\\config.default.js",
+    "csrf": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-jsonp\\config\\config.default.js"
+  },
+  "onerror": {
+    "errorPageUrl": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-onerror\\config\\config.default.js",
+    "appErrorFilter": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-onerror\\config\\config.default.js",
+    "templatePath": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-onerror\\config\\config.default.js"
+  },
+  "i18n": {
+    "defaultLocale": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-i18n\\config\\config.default.js",
+    "dirs": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-i18n\\config\\config.default.js",
+    "queryField": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-i18n\\config\\config.default.js",
+    "cookieField": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-i18n\\config\\config.default.js",
+    "cookieDomain": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-i18n\\config\\config.default.js",
+    "cookieMaxAge": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-i18n\\config\\config.default.js"
+  },
+  "watcher": {
+    "type": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-watcher\\config\\config.default.js",
+    "eventSources": {
+      "default": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-watcher\\config\\config.default.js",
+      "development": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-watcher\\config\\config.default.js"
+    }
+  },
+  "customLogger": {
+    "scheduleLogger": {
+      "consoleLevel": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-schedule\\config\\config.default.js",
+      "file": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-schedule\\config\\config.default.js"
+    }
+  },
+  "schedule": {
+    "directory": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-schedule\\config\\config.default.js"
+  },
+  "multipart": {
+    "mode": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-multipart\\config\\config.default.js",
+    "autoFields": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-multipart\\config\\config.default.js",
+    "defaultCharset": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-multipart\\config\\config.default.js",
+    "defaultParamCharset": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-multipart\\config\\config.default.js",
+    "fieldNameSize": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-multipart\\config\\config.default.js",
+    "fieldSize": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-multipart\\config\\config.default.js",
+    "fields": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-multipart\\config\\config.default.js",
+    "fileSize": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-multipart\\config\\config.default.js",
+    "files": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-multipart\\config\\config.default.js",
+    "fileExtensions": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-multipart\\config\\config.default.js",
+    "whitelist": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-multipart\\config\\config.default.js",
+    "allowArrayField": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-multipart\\config\\config.default.js",
+    "tmpdir": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-multipart\\config\\config.default.js",
+    "cleanSchedule": {
+      "cron": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-multipart\\config\\config.default.js",
+      "disable": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-multipart\\config\\config.default.js"
+    }
+  },
+  "logrotator": {
+    "filesRotateByHour": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-logrotator\\config\\config.default.js",
+    "hourDelimiter": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-logrotator\\config\\config.default.js",
+    "filesRotateBySize": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-logrotator\\config\\config.default.js",
+    "maxFileSize": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-logrotator\\config\\config.default.js",
+    "maxFiles": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-logrotator\\config\\config.default.js",
+    "rotateDuration": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-logrotator\\config\\config.default.js",
+    "maxDays": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-logrotator\\config\\config.default.js"
+  },
+  "static": {
+    "prefix": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-static\\config\\config.default.js",
+    "dir": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-static\\config\\config.default.js",
+    "dynamic": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-static\\config\\config.default.js",
+    "preload": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-static\\config\\config.default.js",
+    "buffer": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-static\\config\\config.prod.js",
+    "maxFiles": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-static\\config\\config.default.js",
+    "maxAge": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-static\\config\\config.prod.js"
+  },
+  "view": {
+    "root": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-view\\config\\config.default.js",
+    "cache": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-view\\config\\config.default.js",
+    "defaultExtension": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-view\\config\\config.default.js",
+    "defaultViewEngine": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-view\\config\\config.default.js",
+    "mapping": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-view\\config\\config.default.js"
+  },
+  "env": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+  "name": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+  "cookies": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+  "proxy": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+  "maxIpsCount": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+  "maxProxyCount": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+  "protocolHeaders": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+  "ipHeaders": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+  "hostHeaders": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+  "pkg": {
+    "name": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+    "version": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+    "description": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+    "private": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+    "egg": {
+      "declarations": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js"
+    },
+    "dependencies": {
+      "bcryptjs": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+      "egg": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+      "egg-cors": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+      "egg-jwt": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+      "egg-mysql": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+      "egg-scripts": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js"
+    },
+    "devDependencies": {
+      "egg-bin": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+      "egg-mock": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js"
+    },
+    "scripts": {
+      "start": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+      "stop": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+      "dev": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+      "debug": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+      "test": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+      "cov": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js"
+    }
+  },
+  "baseDir": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+  "HOME": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+  "rundir": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+  "dump": {
+    "ignore": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+    "timing": {
+      "slowBootActionMinDuration": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js"
+    }
+  },
+  "confusedConfigurations": {
+    "bodyparser": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+    "notFound": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+    "sitefile": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+    "middlewares": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+    "httpClient": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js"
+  },
+  "notfound": {
+    "pageUrl": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js"
+  },
+  "siteFile": {
+    "/favicon.ico": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+    "cacheControl": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js"
+  },
+  "bodyParser": {
+    "enable": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+    "encoding": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+    "formLimit": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+    "jsonLimit": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+    "textLimit": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+    "strict": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+    "queryString": {
+      "arrayLimit": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+      "depth": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+      "parameterLimit": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js"
+    },
+    "onerror": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js"
+  },
+  "logger": {
+    "dir": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+    "encoding": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+    "env": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+    "level": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+    "consoleLevel": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+    "disableConsoleAfterReady": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+    "outputJSON": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+    "buffer": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+    "appLogName": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+    "coreLogName": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+    "agentLogName": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+    "errorLogName": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+    "coreLogger": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+    "allowDebugAtProd": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+    "enablePerformanceTimer": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+    "enableFastContextLogger": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js"
+  },
+  "httpclient": {
+    "enableDNSCache": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+    "dnsCacheLookupInterval": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+    "dnsCacheMaxLength": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+    "request": {
+      "timeout": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js"
+    },
+    "httpAgent": {
+      "keepAlive": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+      "freeSocketTimeout": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+      "maxSockets": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+      "maxFreeSockets": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js"
+    },
+    "httpsAgent": {
+      "keepAlive": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+      "freeSocketTimeout": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+      "maxSockets": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+      "maxFreeSockets": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js"
+    },
+    "useHttpClientNext": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js"
+  },
+  "meta": {
+    "enable": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+    "logging": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js"
+  },
+  "coreMiddleware": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+  "workerStartTimeout": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+  "serverTimeout": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+  "clusterClient": {
+    "maxWaitTime": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+    "responseTimeout": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js"
+  },
+  "onClientError": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js"
+}

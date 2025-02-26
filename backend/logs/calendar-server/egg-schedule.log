@@ -1,0 +1,6 @@
+2025-02-26 18:01:58,986 INFO 5140 [Timer] E:\cursor\clanderLzk\backend\node_modules\egg-multipart\app\schedule\clean_tmpdir.js next time will execute after 37681019ms at 2025-02-27 04:30:00.005
+2025-02-26 18:01:58,986 INFO 5140 [Timer] E:\cursor\clanderLzk\backend\node_modules\egg-logrotator\app\schedule\clean_log.js next time will execute after 21481014ms at 2025-02-27 00:00:00.000
+2025-02-26 18:01:58,986 INFO 5140 [Timer] E:\cursor\clanderLzk\backend\node_modules\egg-logrotator\app\schedule\rotate_by_file.js next time will execute after 21482014ms at 2025-02-27 00:00:01.000
+2025-02-26 18:01:58,730 INFO 23024 [egg-schedule]: register schedule E:\cursor\clanderLzk\backend\node_modules\egg-multipart\app\schedule\clean_tmpdir.js
+2025-02-26 18:01:58,730 INFO 23024 [egg-schedule]: register schedule E:\cursor\clanderLzk\backend\node_modules\egg-logrotator\app\schedule\clean_log.js
+2025-02-26 18:01:58,730 INFO 23024 [egg-schedule]: register schedule E:\cursor\clanderLzk\backend\node_modules\egg-logrotator\app\schedule\rotate_by_file.js

@@ -1,0 +1,73 @@
+.diary-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px;
+}
+
+.diary-card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.diary-card .ant-card-head-title {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.mood-selector {
+    margin-bottom: 20px;
+}
+
+.diary-content {
+    margin-bottom: 20px;
+}
+
+.diary-content textarea.ant-input {
+    min-height: 200px;
+    font-size: 16px;
+    line-height: 1.6;
+    padding: 12px;
+}
+
+.tags-input {
+    margin-bottom: 24px;
+}
+
+.save-button {
+    width: 100%;
+    height: 40px;
+    font-size: 16px;
+}
+
+/* 心情选择器样式 */
+.mood-happy .ant-select-selector {
+    background-color: #f6ffed !important;
+    border-color: #b7eb8f !important;
+}
+
+.mood-normal .ant-select-selector {
+    background-color: #e6f7ff !important;
+    border-color: #91d5ff !important;
+}
+
+.mood-sad .ant-select-selector {
+    background-color: #fff1f0 !important;
+    border-color: #ffa39e !important;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .diary-container {
+        padding: 16px;
+    }
+
+    .diary-card .ant-card-head-title {
+        font-size: 18px;
+    }
+
+    .diary-content textarea.ant-input {
+        min-height: 150px;
+        font-size: 14px;
+    }
+} 
