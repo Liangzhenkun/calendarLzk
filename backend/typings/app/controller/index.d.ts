@@ -5,10 +5,12 @@
 import 'egg';
 import ExportAuth = require('../../../app/controller/auth');
 import ExportCalendar = require('../../../app/controller/calendar');
+import ExportDiary = require('../../../app/controller/diary');
 
 declare module 'egg' {
   interface IController {
     auth: ExportAuth;
     calendar: ExportCalendar;
+    diary: ExportDiary;
   }
 }

@@ -1,308 +1,320 @@
 {
-  "keys": "E:\\cursor\\clanderLzk\\backend\\config\\config.default.js",
+  "keys": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\config\\config.default.js",
   "mysql": {
     "client": {
-      "host": "E:\\cursor\\clanderLzk\\backend\\config\\config.default.js",
-      "port": "E:\\cursor\\clanderLzk\\backend\\config\\config.default.js",
-      "user": "E:\\cursor\\clanderLzk\\backend\\config\\config.default.js",
-      "password": "E:\\cursor\\clanderLzk\\backend\\config\\config.default.js",
-      "database": "E:\\cursor\\clanderLzk\\backend\\config\\config.default.js"
+      "host": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\config\\config.default.js",
+      "port": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\config\\config.default.js",
+      "user": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\config\\config.default.js",
+      "password": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\config\\config.default.js",
+      "database": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\config\\config.default.js"
     },
     "default": {
-      "database": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-mysql\\config\\config.default.js",
-      "connectionLimit": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-mysql\\config\\config.default.js"
+      "database": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-mysql\\config\\config.default.js",
+      "connectionLimit": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-mysql\\config\\config.default.js"
     },
-    "app": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-mysql\\config\\config.default.js",
-    "agent": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-mysql\\config\\config.default.js"
+    "app": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-mysql\\config\\config.default.js",
+    "agent": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-mysql\\config\\config.default.js"
+  },
+  "logger": {
+    "dir": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\config\\config.default.js",
+    "appLogName": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\config\\config.default.js",
+    "level": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\config\\config.default.js",
+    "consoleLevel": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\config\\config.default.js",
+    "encoding": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+    "env": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+    "disableConsoleAfterReady": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+    "outputJSON": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+    "buffer": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+    "coreLogName": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+    "agentLogName": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+    "errorLogName": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+    "coreLogger": {
+      "consoleLevel": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.local.js"
+    },
+    "allowDebugAtProd": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+    "enablePerformanceTimer": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+    "enableFastContextLogger": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js"
   },
   "security": {
     "csrf": {
-      "enable": "E:\\cursor\\clanderLzk\\backend\\config\\config.default.js",
-      "type": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js",
-      "ignoreJSON": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js",
-      "useSession": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js",
-      "cookieName": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js",
-      "sessionName": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js",
-      "headerName": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js",
-      "bodyName": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js",
-      "queryName": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js",
-      "rotateWhenInvalid": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js",
-      "supportedRequests": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js",
-      "refererWhiteList": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js",
+      "enable": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\config\\config.default.js",
+      "type": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-security\\config\\config.default.js",
+      "ignoreJSON": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-security\\config\\config.default.js",
+      "useSession": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-security\\config\\config.default.js",
+      "cookieName": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-security\\config\\config.default.js",
+      "sessionName": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-security\\config\\config.default.js",
+      "headerName": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-security\\config\\config.default.js",
+      "bodyName": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-security\\config\\config.default.js",
+      "queryName": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-security\\config\\config.default.js",
+      "rotateWhenInvalid": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-security\\config\\config.default.js",
+      "supportedRequests": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-security\\config\\config.default.js",
+      "refererWhiteList": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-security\\config\\config.default.js",
       "cookieOptions": {
-        "signed": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js"
+        "signed": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-security\\config\\config.default.js"
       }
     },
-    "domainWhiteList": "E:\\cursor\\clanderLzk\\backend\\config\\config.default.js",
-    "protocolWhiteList": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js",
-    "defaultMiddleware": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js",
+    "domainWhiteList": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\config\\config.default.js",
+    "protocolWhiteList": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-security\\config\\config.default.js",
+    "defaultMiddleware": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-security\\config\\config.default.js",
     "xframe": {
-      "enable": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js",
-      "value": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js"
+      "enable": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-security\\config\\config.default.js",
+      "value": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-security\\config\\config.default.js"
     },
     "hsts": {
-      "enable": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js",
-      "maxAge": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js",
-      "includeSubdomains": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js"
+      "enable": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-security\\config\\config.local.js",
+      "maxAge": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-security\\config\\config.default.js",
+      "includeSubdomains": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-security\\config\\config.default.js"
     },
     "dta": {
-      "enable": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js"
+      "enable": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-security\\config\\config.default.js"
     },
     "methodnoallow": {
-      "enable": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js"
+      "enable": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-security\\config\\config.default.js"
     },
     "noopen": {
-      "enable": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js"
+      "enable": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-security\\config\\config.default.js"
     },
     "nosniff": {
-      "enable": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js"
+      "enable": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-security\\config\\config.default.js"
     },
     "referrerPolicy": {
-      "enable": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js",
-      "value": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js"
+      "enable": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-security\\config\\config.default.js",
+      "value": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-security\\config\\config.default.js"
     },
     "xssProtection": {
-      "enable": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js",
-      "value": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js"
+      "enable": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-security\\config\\config.default.js",
+      "value": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-security\\config\\config.default.js"
     },
     "csp": {
-      "enable": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js",
-      "policy": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js"
+      "enable": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-security\\config\\config.default.js",
+      "policy": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-security\\config\\config.default.js"
     },
     "ssrf": {
-      "ipBlackList": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js",
-      "ipExceptionList": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js",
-      "hostnameExceptionList": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js",
-      "checkAddress": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js"
+      "ipBlackList": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-security\\config\\config.default.js",
+      "ipExceptionList": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-security\\config\\config.default.js",
+      "hostnameExceptionList": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-security\\config\\config.default.js",
+      "checkAddress": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-security\\config\\config.default.js"
     }
   },
   "cors": {
-    "origin": "E:\\cursor\\clanderLzk\\backend\\config\\config.default.js",
-    "allowMethods": "E:\\cursor\\clanderLzk\\backend\\config\\config.default.js"
+    "origin": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\config\\config.default.js",
+    "allowMethods": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\config\\config.default.js",
+    "credentials": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\config\\config.default.js"
   },
   "jwt": {
-    "secret": "E:\\cursor\\clanderLzk\\backend\\config\\config.default.js",
-    "enable": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-jwt\\config\\config.default.js"
+    "secret": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\config\\config.default.js",
+    "expiresIn": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\config\\config.default.js",
+    "enable": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-jwt\\config\\config.default.js"
   },
   "cluster": {
     "listen": {
-      "port": "E:\\cursor\\clanderLzk\\backend\\config\\config.default.js",
-      "path": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-      "hostname": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js"
+      "port": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\config\\config.default.js",
+      "path": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+      "hostname": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js"
     }
   },
   "session": {
-    "maxAge": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-session\\config\\config.default.js",
-    "key": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-session\\config\\config.default.js",
-    "httpOnly": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-session\\config\\config.default.js",
-    "encrypt": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-session\\config\\config.default.js",
-    "logValue": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-session\\config\\config.default.js"
+    "maxAge": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-session\\config\\config.default.js",
+    "key": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-session\\config\\config.default.js",
+    "httpOnly": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-session\\config\\config.default.js",
+    "encrypt": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-session\\config\\config.default.js",
+    "logValue": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-session\\config\\config.default.js"
   },
   "helper": {
-    "shtml": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js"
+    "shtml": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-security\\config\\config.default.js"
   },
   "jsonp": {
-    "limit": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-jsonp\\config\\config.default.js",
-    "callback": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-jsonp\\config\\config.default.js",
-    "csrf": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-jsonp\\config\\config.default.js"
+    "limit": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-jsonp\\config\\config.default.js",
+    "callback": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-jsonp\\config\\config.default.js",
+    "csrf": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-jsonp\\config\\config.default.js"
   },
   "onerror": {
-    "errorPageUrl": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-onerror\\config\\config.default.js",
-    "appErrorFilter": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-onerror\\config\\config.default.js",
-    "templatePath": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-onerror\\config\\config.default.js"
+    "errorPageUrl": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-onerror\\config\\config.default.js",
+    "appErrorFilter": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-onerror\\config\\config.default.js",
+    "templatePath": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-onerror\\config\\config.default.js"
   },
   "i18n": {
-    "defaultLocale": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-i18n\\config\\config.default.js",
-    "dirs": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-i18n\\config\\config.default.js",
-    "queryField": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-i18n\\config\\config.default.js",
-    "cookieField": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-i18n\\config\\config.default.js",
-    "cookieDomain": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-i18n\\config\\config.default.js",
-    "cookieMaxAge": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-i18n\\config\\config.default.js"
+    "defaultLocale": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-i18n\\config\\config.default.js",
+    "dirs": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-i18n\\config\\config.default.js",
+    "queryField": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-i18n\\config\\config.default.js",
+    "cookieField": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-i18n\\config\\config.default.js",
+    "cookieDomain": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-i18n\\config\\config.default.js",
+    "cookieMaxAge": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-i18n\\config\\config.default.js"
   },
   "watcher": {
-    "type": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-watcher\\config\\config.default.js",
+    "type": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-watcher\\config\\config.local.js",
     "eventSources": {
-      "default": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-watcher\\config\\config.default.js",
-      "development": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-watcher\\config\\config.default.js"
+      "default": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-watcher\\config\\config.default.js",
+      "development": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-watcher\\config\\config.default.js"
     }
   },
   "customLogger": {
     "scheduleLogger": {
-      "consoleLevel": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-schedule\\config\\config.default.js",
-      "file": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-schedule\\config\\config.default.js"
+      "consoleLevel": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-schedule\\config\\config.default.js",
+      "file": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-schedule\\config\\config.default.js"
     }
   },
   "schedule": {
-    "directory": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-schedule\\config\\config.default.js"
+    "directory": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-schedule\\config\\config.default.js"
   },
   "multipart": {
-    "mode": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-multipart\\config\\config.default.js",
-    "autoFields": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-multipart\\config\\config.default.js",
-    "defaultCharset": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-multipart\\config\\config.default.js",
-    "defaultParamCharset": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-multipart\\config\\config.default.js",
-    "fieldNameSize": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-multipart\\config\\config.default.js",
-    "fieldSize": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-multipart\\config\\config.default.js",
-    "fields": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-multipart\\config\\config.default.js",
-    "fileSize": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-multipart\\config\\config.default.js",
-    "files": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-multipart\\config\\config.default.js",
-    "fileExtensions": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-multipart\\config\\config.default.js",
-    "whitelist": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-multipart\\config\\config.default.js",
-    "allowArrayField": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-multipart\\config\\config.default.js",
-    "tmpdir": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-multipart\\config\\config.default.js",
+    "mode": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-multipart\\config\\config.default.js",
+    "autoFields": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-multipart\\config\\config.default.js",
+    "defaultCharset": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-multipart\\config\\config.default.js",
+    "defaultParamCharset": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-multipart\\config\\config.default.js",
+    "fieldNameSize": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-multipart\\config\\config.default.js",
+    "fieldSize": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-multipart\\config\\config.default.js",
+    "fields": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-multipart\\config\\config.default.js",
+    "fileSize": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-multipart\\config\\config.default.js",
+    "files": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-multipart\\config\\config.default.js",
+    "fileExtensions": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-multipart\\config\\config.default.js",
+    "whitelist": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-multipart\\config\\config.default.js",
+    "allowArrayField": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-multipart\\config\\config.default.js",
+    "tmpdir": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-multipart\\config\\config.default.js",
     "cleanSchedule": {
-      "cron": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-multipart\\config\\config.default.js",
-      "disable": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-multipart\\config\\config.default.js"
+      "cron": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-multipart\\config\\config.default.js",
+      "disable": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-multipart\\config\\config.default.js"
     }
+  },
+  "development": {
+    "watchDirs": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-development\\config\\config.default.js",
+    "ignoreDirs": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-development\\config\\config.default.js",
+    "fastReady": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-development\\config\\config.default.js",
+    "reloadOnDebug": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-development\\config\\config.default.js",
+    "overrideDefault": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-development\\config\\config.default.js",
+    "overrideIgnore": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-development\\config\\config.default.js"
   },
   "logrotator": {
-    "filesRotateByHour": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-logrotator\\config\\config.default.js",
-    "hourDelimiter": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-logrotator\\config\\config.default.js",
-    "filesRotateBySize": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-logrotator\\config\\config.default.js",
-    "maxFileSize": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-logrotator\\config\\config.default.js",
-    "maxFiles": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-logrotator\\config\\config.default.js",
-    "rotateDuration": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-logrotator\\config\\config.default.js",
-    "maxDays": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-logrotator\\config\\config.default.js"
+    "filesRotateByHour": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-logrotator\\config\\config.default.js",
+    "hourDelimiter": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-logrotator\\config\\config.default.js",
+    "filesRotateBySize": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-logrotator\\config\\config.default.js",
+    "maxFileSize": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-logrotator\\config\\config.default.js",
+    "maxFiles": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-logrotator\\config\\config.default.js",
+    "rotateDuration": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-logrotator\\config\\config.default.js",
+    "maxDays": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-logrotator\\config\\config.default.js"
   },
   "static": {
-    "prefix": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-static\\config\\config.default.js",
-    "dir": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-static\\config\\config.default.js",
-    "dynamic": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-static\\config\\config.default.js",
-    "preload": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-static\\config\\config.default.js",
-    "buffer": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-static\\config\\config.prod.js",
-    "maxFiles": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-static\\config\\config.default.js",
-    "maxAge": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-static\\config\\config.prod.js"
+    "prefix": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-static\\config\\config.default.js",
+    "dir": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-static\\config\\config.default.js",
+    "dynamic": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-static\\config\\config.default.js",
+    "preload": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-static\\config\\config.default.js",
+    "buffer": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-static\\config\\config.default.js",
+    "maxFiles": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-static\\config\\config.default.js"
   },
   "view": {
-    "root": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-view\\config\\config.default.js",
-    "cache": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-view\\config\\config.default.js",
-    "defaultExtension": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-view\\config\\config.default.js",
-    "defaultViewEngine": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-view\\config\\config.default.js",
-    "mapping": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-view\\config\\config.default.js"
+    "root": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-view\\config\\config.default.js",
+    "cache": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-view\\config\\config.local.js",
+    "defaultExtension": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-view\\config\\config.default.js",
+    "defaultViewEngine": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-view\\config\\config.default.js",
+    "mapping": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-view\\config\\config.default.js"
   },
-  "env": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-  "name": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-  "cookies": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-  "proxy": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-  "maxIpsCount": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-  "maxProxyCount": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-  "protocolHeaders": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-  "ipHeaders": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-  "hostHeaders": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+  "env": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+  "name": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+  "cookies": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+  "proxy": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+  "maxIpsCount": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+  "maxProxyCount": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+  "protocolHeaders": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+  "ipHeaders": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+  "hostHeaders": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
   "pkg": {
-    "name": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-    "version": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-    "description": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-    "private": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+    "name": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+    "version": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+    "description": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+    "private": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
     "egg": {
-      "declarations": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js"
+      "declarations": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js"
     },
     "dependencies": {
-      "bcryptjs": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-      "egg": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-      "egg-cors": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-      "egg-jwt": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-      "egg-mysql": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-      "egg-scripts": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js"
+      "bcryptjs": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+      "dotenv": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+      "egg": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+      "egg-cors": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+      "egg-jwt": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+      "egg-mysql": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+      "egg-scripts": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js"
     },
     "devDependencies": {
-      "egg-bin": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-      "egg-mock": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js"
+      "egg-bin": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+      "egg-mock": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js"
     },
     "scripts": {
-      "start": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-      "stop": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-      "dev": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-      "debug": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-      "test": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-      "cov": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js"
+      "start": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+      "stop": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+      "dev": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+      "debug": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+      "test": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+      "cov": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js"
     }
   },
-  "baseDir": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-  "HOME": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-  "rundir": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+  "baseDir": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+  "HOME": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+  "rundir": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
   "dump": {
-    "ignore": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+    "ignore": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
     "timing": {
-      "slowBootActionMinDuration": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js"
+      "slowBootActionMinDuration": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js"
     }
   },
   "confusedConfigurations": {
-    "bodyparser": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-    "notFound": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-    "sitefile": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-    "middlewares": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-    "httpClient": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js"
+    "bodyparser": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+    "notFound": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+    "sitefile": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+    "middlewares": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+    "httpClient": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js"
   },
   "notfound": {
-    "pageUrl": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js"
+    "pageUrl": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js"
   },
   "siteFile": {
-    "/favicon.ico": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-    "cacheControl": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js"
+    "/favicon.ico": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+    "cacheControl": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js"
   },
   "bodyParser": {
-    "enable": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-    "encoding": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-    "formLimit": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-    "jsonLimit": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-    "textLimit": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-    "strict": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+    "enable": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+    "encoding": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+    "formLimit": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+    "jsonLimit": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+    "textLimit": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+    "strict": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
     "queryString": {
-      "arrayLimit": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-      "depth": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-      "parameterLimit": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js"
+      "arrayLimit": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+      "depth": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+      "parameterLimit": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js"
     },
-    "onerror": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js"
-  },
-  "logger": {
-    "dir": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-    "encoding": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-    "env": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-    "level": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-    "consoleLevel": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-    "disableConsoleAfterReady": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-    "outputJSON": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-    "buffer": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-    "appLogName": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-    "coreLogName": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-    "agentLogName": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-    "errorLogName": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-    "coreLogger": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-    "allowDebugAtProd": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-    "enablePerformanceTimer": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-    "enableFastContextLogger": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js"
+    "onerror": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js"
   },
   "httpclient": {
-    "enableDNSCache": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-    "dnsCacheLookupInterval": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-    "dnsCacheMaxLength": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+    "enableDNSCache": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+    "dnsCacheLookupInterval": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+    "dnsCacheMaxLength": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
     "request": {
-      "timeout": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js"
+      "timeout": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js"
     },
     "httpAgent": {
-      "keepAlive": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-      "freeSocketTimeout": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-      "maxSockets": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-      "maxFreeSockets": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js"
+      "keepAlive": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+      "freeSocketTimeout": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+      "maxSockets": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+      "maxFreeSockets": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js"
     },
     "httpsAgent": {
-      "keepAlive": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-      "freeSocketTimeout": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-      "maxSockets": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-      "maxFreeSockets": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js"
+      "keepAlive": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+      "freeSocketTimeout": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+      "maxSockets": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+      "maxFreeSockets": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js"
     },
-    "useHttpClientNext": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js"
+    "useHttpClientNext": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js"
   },
   "meta": {
-    "enable": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-    "logging": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js"
+    "enable": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+    "logging": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js"
   },
-  "coreMiddleware": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-  "workerStartTimeout": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-  "serverTimeout": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+  "coreMiddleware": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+  "workerStartTimeout": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+  "serverTimeout": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
   "clusterClient": {
-    "maxWaitTime": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-    "responseTimeout": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js"
+    "maxWaitTime": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
+    "responseTimeout": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js"
   },
-  "onClientError": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js"
+  "onClientError": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js"
 }

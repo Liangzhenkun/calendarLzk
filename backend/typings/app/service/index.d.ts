@@ -9,10 +9,14 @@ type CanExportFunc = AnyFunc<Promise<any>> | AnyFunc<IterableIterator<any>>;
 type AutoInstanceType<T, U = T extends CanExportFunc ? T : T extends AnyFunc ? ReturnType<T> : T> = U extends AnyClass ? InstanceType<U> : U;
 import ExportAuth = require('../../../app/service/auth');
 import ExportCalendar = require('../../../app/service/calendar');
+import ExportDiary = require('../../../app/service/diary');
+import ExportUser = require('../../../app/service/user');
 
 declare module 'egg' {
   interface IService {
     auth: AutoInstanceType<typeof ExportAuth>;
     calendar: AutoInstanceType<typeof ExportCalendar>;
+    diary: AutoInstanceType<typeof ExportDiary>;
+    user: AutoInstanceType<typeof ExportUser>;
   }
 }

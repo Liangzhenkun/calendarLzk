@@ -29,6 +29,21 @@ const initDatabase = async (app) => {
       )
     `);
 
+    // 创建日记表
+    await mysql.query(`
+      CREATE TABLE IF NOT EXISTS Diary (
+        id INT PRIMARY KEY AUTO_INCREMENT,
+        userId INT NOT NULL,
+        title VARCHAR(100) NOT NULL,
+        content TEXT NOT NULL,
+        mood INT DEFAULT 3,
+        date DATE NOT NULL,
+        createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        FOREIGN KEY (userId) REFERENCES User(id)
+      )
+    `);
+
     console.log('数据库初始化成功');
   } catch (error) {
     console.error('数据库初始化失败:', error);

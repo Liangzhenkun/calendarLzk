@@ -4,3 +4,45 @@
 2025-02-26 18:01:58,730 INFO 23024 [egg-schedule]: register schedule E:\cursor\clanderLzk\backend\node_modules\egg-multipart\app\schedule\clean_tmpdir.js
 2025-02-26 18:01:58,730 INFO 23024 [egg-schedule]: register schedule E:\cursor\clanderLzk\backend\node_modules\egg-logrotator\app\schedule\clean_log.js
 2025-02-26 18:01:58,730 INFO 23024 [egg-schedule]: register schedule E:\cursor\clanderLzk\backend\node_modules\egg-logrotator\app\schedule\rotate_by_file.js
+2025-02-26 21:41:39,990 INFO 9028 [Timer] C:\Users\Lzk\Desktop\pyAI learning\cursor test\app-develop-test\backend\node_modules\egg-multipart\app\schedule\clean_tmpdir.js next time will execute after 24500011ms at 2025-02-27 04:30:00.001
+2025-02-26 21:41:39,991 INFO 9028 [Timer] C:\Users\Lzk\Desktop\pyAI learning\cursor test\app-develop-test\backend\node_modules\egg-logrotator\app\schedule\clean_log.js next time will execute after 8300009ms at 2025-02-27 00:00:00.000
+2025-02-26 21:41:39,991 INFO 9028 [Timer] C:\Users\Lzk\Desktop\pyAI learning\cursor test\app-develop-test\backend\node_modules\egg-logrotator\app\schedule\rotate_by_file.js next time will execute after 8301009ms at 2025-02-27 00:00:01.000
+2025-02-26 21:41:39,850 INFO 13892 [egg-schedule]: register schedule C:\Users\Lzk\Desktop\pyAI learning\cursor test\app-develop-test\backend\node_modules\egg-multipart\app\schedule\clean_tmpdir.js
+2025-02-26 21:41:39,850 INFO 13892 [egg-schedule]: register schedule C:\Users\Lzk\Desktop\pyAI learning\cursor test\app-develop-test\backend\node_modules\egg-logrotator\app\schedule\clean_log.js
+2025-02-26 21:41:39,850 INFO 13892 [egg-schedule]: register schedule C:\Users\Lzk\Desktop\pyAI learning\cursor test\app-develop-test\backend\node_modules\egg-logrotator\app\schedule\rotate_by_file.js
+2025-02-26 21:42:40,968 INFO 25952 [Timer] C:\Users\Lzk\Desktop\pyAI learning\cursor test\app-develop-test\backend\node_modules\egg-multipart\app\schedule\clean_tmpdir.js next time will execute after 24439033ms at 2025-02-27 04:30:00.001
+2025-02-26 21:42:40,968 INFO 25952 [Timer] C:\Users\Lzk\Desktop\pyAI learning\cursor test\app-develop-test\backend\node_modules\egg-logrotator\app\schedule\clean_log.js next time will execute after 8239032ms at 2025-02-27 00:00:00.000
+2025-02-26 21:42:40,968 INFO 25952 [Timer] C:\Users\Lzk\Desktop\pyAI learning\cursor test\app-develop-test\backend\node_modules\egg-logrotator\app\schedule\rotate_by_file.js next time will execute after 8240032ms at 2025-02-27 00:00:01.000
+2025-02-26 21:42:40,853 INFO 13032 [egg-schedule]: register schedule C:\Users\Lzk\Desktop\pyAI learning\cursor test\app-develop-test\backend\node_modules\egg-multipart\app\schedule\clean_tmpdir.js
+2025-02-26 21:42:40,853 INFO 13032 [egg-schedule]: register schedule C:\Users\Lzk\Desktop\pyAI learning\cursor test\app-develop-test\backend\node_modules\egg-logrotator\app\schedule\clean_log.js
+2025-02-26 21:42:40,853 INFO 13032 [egg-schedule]: register schedule C:\Users\Lzk\Desktop\pyAI learning\cursor test\app-develop-test\backend\node_modules\egg-logrotator\app\schedule\rotate_by_file.js
+2025-02-26 21:54:53,223 INFO 23908 [egg-schedule]: register schedule C:\Users\Lzk\Desktop\pyAI learning\cursor test\app-develop-test\backend\node_modules\egg-multipart\app\schedule\clean_tmpdir.js
+2025-02-26 21:54:53,223 INFO 23908 [egg-schedule]: register schedule C:\Users\Lzk\Desktop\pyAI learning\cursor test\app-develop-test\backend\node_modules\egg-logrotator\app\schedule\clean_log.js
+2025-02-26 21:54:53,223 INFO 23908 [egg-schedule]: register schedule C:\Users\Lzk\Desktop\pyAI learning\cursor test\app-develop-test\backend\node_modules\egg-logrotator\app\schedule\rotate_by_file.js
+2025-02-26 21:54:56,443 INFO 27544 [egg-schedule]: register schedule C:\Users\Lzk\Desktop\pyAI learning\cursor test\app-develop-test\backend\node_modules\egg-multipart\app\schedule\clean_tmpdir.js
+2025-02-26 21:54:56,444 INFO 27544 [egg-schedule]: register schedule C:\Users\Lzk\Desktop\pyAI learning\cursor test\app-develop-test\backend\node_modules\egg-logrotator\app\schedule\clean_log.js
+2025-02-26 21:54:56,444 INFO 27544 [egg-schedule]: register schedule C:\Users\Lzk\Desktop\pyAI learning\cursor test\app-develop-test\backend\node_modules\egg-logrotator\app\schedule\rotate_by_file.js
+2025-02-26 21:55:14,592 INFO 4728 [egg-schedule]: register schedule C:\Users\Lzk\Desktop\pyAI learning\cursor test\app-develop-test\backend\node_modules\egg-multipart\app\schedule\clean_tmpdir.js
+2025-02-26 21:55:14,592 INFO 4728 [egg-schedule]: register schedule C:\Users\Lzk\Desktop\pyAI learning\cursor test\app-develop-test\backend\node_modules\egg-logrotator\app\schedule\clean_log.js
+2025-02-26 21:55:14,592 INFO 4728 [egg-schedule]: register schedule C:\Users\Lzk\Desktop\pyAI learning\cursor test\app-develop-test\backend\node_modules\egg-logrotator\app\schedule\rotate_by_file.js
+2025-02-26 21:56:52,979 INFO 13292 [egg-schedule]: register schedule C:\Users\Lzk\Desktop\pyAI learning\cursor test\app-develop-test\backend\node_modules\egg-multipart\app\schedule\clean_tmpdir.js
+2025-02-26 21:56:52,979 INFO 13292 [egg-schedule]: register schedule C:\Users\Lzk\Desktop\pyAI learning\cursor test\app-develop-test\backend\node_modules\egg-logrotator\app\schedule\clean_log.js
+2025-02-26 21:56:52,979 INFO 13292 [egg-schedule]: register schedule C:\Users\Lzk\Desktop\pyAI learning\cursor test\app-develop-test\backend\node_modules\egg-logrotator\app\schedule\rotate_by_file.js
+2025-02-26 21:57:23,227 INFO 13016 [egg-schedule]: register schedule C:\Users\Lzk\Desktop\pyAI learning\cursor test\app-develop-test\backend\node_modules\egg-multipart\app\schedule\clean_tmpdir.js
+2025-02-26 21:57:23,227 INFO 13016 [egg-schedule]: register schedule C:\Users\Lzk\Desktop\pyAI learning\cursor test\app-develop-test\backend\node_modules\egg-logrotator\app\schedule\clean_log.js
+2025-02-26 21:57:23,227 INFO 13016 [egg-schedule]: register schedule C:\Users\Lzk\Desktop\pyAI learning\cursor test\app-develop-test\backend\node_modules\egg-logrotator\app\schedule\rotate_by_file.js
+2025-02-26 21:57:26,160 INFO 10720 [egg-schedule]: register schedule C:\Users\Lzk\Desktop\pyAI learning\cursor test\app-develop-test\backend\node_modules\egg-multipart\app\schedule\clean_tmpdir.js
+2025-02-26 21:57:26,160 INFO 10720 [egg-schedule]: register schedule C:\Users\Lzk\Desktop\pyAI learning\cursor test\app-develop-test\backend\node_modules\egg-logrotator\app\schedule\clean_log.js
+2025-02-26 21:57:26,160 INFO 10720 [egg-schedule]: register schedule C:\Users\Lzk\Desktop\pyAI learning\cursor test\app-develop-test\backend\node_modules\egg-logrotator\app\schedule\rotate_by_file.js
+2025-02-26 22:07:52,192 INFO 24304 [egg-schedule]: register schedule C:\Users\Lzk\Desktop\pyAI learning\cursor test\app-develop-test\backend\node_modules\egg-multipart\app\schedule\clean_tmpdir.js
+2025-02-26 22:07:52,192 INFO 24304 [egg-schedule]: register schedule C:\Users\Lzk\Desktop\pyAI learning\cursor test\app-develop-test\backend\node_modules\egg-logrotator\app\schedule\clean_log.js
+2025-02-26 22:07:52,192 INFO 24304 [egg-schedule]: register schedule C:\Users\Lzk\Desktop\pyAI learning\cursor test\app-develop-test\backend\node_modules\egg-logrotator\app\schedule\rotate_by_file.js
+2025-02-26 22:07:54,113 INFO 14132 [egg-schedule]: register schedule C:\Users\Lzk\Desktop\pyAI learning\cursor test\app-develop-test\backend\node_modules\egg-multipart\app\schedule\clean_tmpdir.js
+2025-02-26 22:07:54,113 INFO 14132 [egg-schedule]: register schedule C:\Users\Lzk\Desktop\pyAI learning\cursor test\app-develop-test\backend\node_modules\egg-logrotator\app\schedule\clean_log.js
+2025-02-26 22:07:54,113 INFO 14132 [egg-schedule]: register schedule C:\Users\Lzk\Desktop\pyAI learning\cursor test\app-develop-test\backend\node_modules\egg-logrotator\app\schedule\rotate_by_file.js
+2025-02-26 22:08:50,248 INFO 23612 [Timer] C:\Users\Lzk\Desktop\pyAI learning\cursor test\app-develop-test\backend\node_modules\egg-multipart\app\schedule\clean_tmpdir.js next time will execute after 22869753ms at 2025-02-27 04:30:00.001
+2025-02-26 22:08:50,249 INFO 23612 [Timer] C:\Users\Lzk\Desktop\pyAI learning\cursor test\app-develop-test\backend\node_modules\egg-logrotator\app\schedule\clean_log.js next time will execute after 6669752ms at 2025-02-27 00:00:00.000
+2025-02-26 22:08:50,249 INFO 23612 [Timer] C:\Users\Lzk\Desktop\pyAI learning\cursor test\app-develop-test\backend\node_modules\egg-logrotator\app\schedule\rotate_by_file.js next time will execute after 6670751ms at 2025-02-27 00:00:01.000
+2025-02-26 22:08:50,129 INFO 26228 [egg-schedule]: register schedule C:\Users\Lzk\Desktop\pyAI learning\cursor test\app-develop-test\backend\node_modules\egg-multipart\app\schedule\clean_tmpdir.js
+2025-02-26 22:08:50,129 INFO 26228 [egg-schedule]: register schedule C:\Users\Lzk\Desktop\pyAI learning\cursor test\app-develop-test\backend\node_modules\egg-logrotator\app\schedule\clean_log.js
+2025-02-26 22:08:50,129 INFO 26228 [egg-schedule]: register schedule C:\Users\Lzk\Desktop\pyAI learning\cursor test\app-develop-test\backend\node_modules\egg-logrotator\app\schedule\rotate_by_file.js

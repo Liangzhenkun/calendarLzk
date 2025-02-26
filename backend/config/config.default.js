@@ -1,3 +1,6 @@
+const dotenv = require('dotenv');
+dotenv.config();
+
 module.exports = appInfo => {
   const config = exports = {};
 
@@ -10,9 +13,17 @@ module.exports = appInfo => {
       host: 'localhost',
       port: '3306',
       user: 'root',
-      password: '964213444lzk',  // 更新为你设置的新密码
+      password: '964213444lzk',
       database: 'calendar'
     },
+  };
+
+  // 日志配置
+  config.logger = {
+    dir: 'logs',
+    appLogName: 'calendar-server-web.log',
+    level: 'DEBUG',
+    consoleLevel: 'DEBUG',
   };
 
   // 安全配置
@@ -20,24 +31,26 @@ module.exports = appInfo => {
     csrf: {
       enable: false,
     },
-    domainWhiteList: ['http://localhost:3000'], // 前端域名
+    domainWhiteList: ['http://localhost:3000'],
   };
 
   // CORS 配置
   config.cors = {
     origin: '*',
     allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH',
+    credentials: true
   };
 
   // JWT配置
   config.jwt = {
-    secret: process.env.JWT_SECRET || 'your-jwt-secret',
+    secret: 'your-jwt-secret',
+    expiresIn: '7d'
   };
 
   // 端口配置
   config.cluster = {
     listen: {
-      port: process.env.PORT || 3001,
+      port: 3001,
     },
   };
 
