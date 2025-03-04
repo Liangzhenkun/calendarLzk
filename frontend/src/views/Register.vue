@@ -16,6 +16,10 @@
           <el-input v-model="form.username" />
         </el-form-item>
         
+        <el-form-item label="邮箱" prop="email">
+          <el-input v-model="form.email" type="email" />
+        </el-form-item>
+        
         <el-form-item label="密码" prop="password">
           <el-input
             v-model="form.password"
@@ -65,6 +69,7 @@ const loading = ref(false)
 
 const form = reactive({
   username: '',
+  email: '',
   password: '',
   confirmPassword: ''
 })
@@ -95,6 +100,10 @@ const rules = {
     { required: true, message: '请输入用户名', trigger: 'blur' },
     { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }
   ],
+  email: [
+    { required: true, message: '请输入邮箱', trigger: 'blur' },
+    { type: 'email', message: '请输入正确的邮箱格式', trigger: 'blur' }
+  ],
   password: [
     { required: true, validator: validatePass, trigger: 'blur' },
     { min: 6, message: '密码长度不能小于6个字符', trigger: 'blur' }
@@ -111,13 +120,14 @@ const handleSubmit = async () => {
     await formRef.value.validate()
     loading.value = true
     
-    const { username, password } = form
-    await authStore.register({ username, password })
+    const { username, email, password } = form
+    await authStore.register({ username, email, password })
     
     ElMessage.success('注册成功')
     router.push('/login')
   } catch (error) {
-    ElMessage.error(error.message || '注册失败')
+    ElMessage.error(error.response?.data?.message || '注册失败')
+    formRef.value.resetFields()
   } finally {
     loading.value = false
   }

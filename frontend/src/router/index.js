@@ -1,74 +1,77 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { useAuthStore } from '@/stores/auth'
+import MainLayout from '@/layouts/MainLayout.vue'
+
+const routes = [
+  {
+    path: '/',
+    component: MainLayout,
+    children: [
+      {
+        path: '',
+        redirect: '/calendar'
+      },
+      {
+        path: '/calendar',
+        name: 'Calendar',
+        component: () => import('@/views/Calendar.vue'),
+        meta: { requiresAuth: true }
+      }
+    ]
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: () => import('@/views/Login.vue'),
+    meta: { guest: true }
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    component: () => import('@/views/Register.vue'),
+    meta: { guest: true }
+  }
+]
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [
-    {
-      path: '/',
-      component: () => import('@/layouts/MainLayout.vue'),
-      meta: { requiresAuth: true },
-      children: [
-        {
-          path: '',
-          name: 'Home',
-          redirect: '/calendar'
-        },
-        {
-          path: 'calendar',
-          name: 'Calendar',
-          component: () => import('@/views/Calendar.vue')
-        },
-        {
-          path: 'diary',
-          name: 'Diary',
-          component: () => import('@/views/Diary.vue')
-        }
-      ]
-    },
-    {
-      path: '/login',
-      name: 'Login',
-      component: () => import('@/views/Login.vue'),
-      meta: { guest: true }
-    },
-    {
-      path: '/register',
-      name: 'Register',
-      component: () => import('@/views/Register.vue'),
-      meta: { guest: true }
-    }
-  ]
+  history: createWebHistory(),
+  routes
 })
 
-// 导航守卫
+// 路由守卫
 router.beforeEach((to, from, next) => {
-  const authStore = useAuthStore()
-  const isAuthenticated = authStore.isAuthenticated
-  
-  // 如果是访客页面（登录/注册）
-  if (to.matched.some(record => record.meta.guest)) {
-    if (isAuthenticated) {
-      // 已登录用户访问登录/注册页面，重定向到首页
-      next('/calendar')
-    } else {
-      next()
-    }
-  }
-  // 如果需要认证
-  else if (to.matched.some(record => record.meta.requiresAuth)) {
+  const isAuthenticated = !!sessionStorage.getItem('access_token')
+  console.log('路由守卫:', {
+    to: to.path,
+    from: from.path,
+    isAuthenticated,
+    requiresAuth: to.matched.some(record => record.meta.requiresAuth)
+  });
+
+  // 需要认证的路由
+  if (to.matched.some(record => record.meta.requiresAuth)) {
     if (!isAuthenticated) {
-      // 静默重定向到登录页，不显示错误提示
+      console.log('未认证，重定向到登录页面');
       next({
         path: '/login',
         query: { redirect: to.fullPath }
-      })
+      });
     } else {
-      next()
+      next();
     }
-  } else {
-    next()
   }
-})
+  // 访客路由（登录、注册）
+  else if (to.matched.some(record => record.meta.guest)) {
+    if (isAuthenticated) {
+      console.log('已认证，重定向到日历页面');
+      next('/calendar');
+    } else {
+      next();
+    }
+  }
+  // 其他路由
+  else {
+    next();
+  }
+});
 
 export default router 

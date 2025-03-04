@@ -222,14 +222,13 @@
     },
     "cors": {
       "origin": "*",
-      "allowMethods": "GET,HEAD,PUT,POST,DELETE,PATCH",
-      "credentials": true,
+      "allowMethods": "GET,HEAD,PUT,POST,DELETE,PATCH,OPTIONS",
       "hasCustomOriginHandler": true
     },
     "jwt": {
-      "secret": "<String len: 15>",
+      "secret": "<String len: 28>",
       "enable": false,
-      "expiresIn": "7d"
+      "expiresIn": "15m"
     },
     "env": "local",
     "name": "calendar-server",
@@ -382,11 +381,12 @@
       "responseTimeout": 60000
     },
     "onClientError": null,
-    "coreMiddlewares": "~config~coreMiddleware",
-    "appMiddlewares": [
+    "middleware": [
       "jwt"
     ],
-    "appMiddleware": "~config~appMiddlewares"
+    "coreMiddlewares": "~config~coreMiddleware",
+    "appMiddlewares": "~config~middleware",
+    "appMiddleware": "~config~middleware"
   },
   "plugins": {
     "onerror": {

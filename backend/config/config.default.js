@@ -1,20 +1,69 @@
 const dotenv = require('dotenv');
-dotenv.config();
+const path = require('path');
 
+// 加载 .env 文件
+const envPath = path.join(__dirname, '../.env');
+const result = dotenv.config({ path: envPath });
+
+if (result.error) {
+  console.error('Error loading .env file:', result.error);
+  process.exit(1);
+}
+
+/* eslint valid-jsdoc: "off" */
+
+'use strict';
+
+/**
+ * @param {Egg.EggAppInfo} appInfo app info
+ */
 module.exports = appInfo => {
+  /**
+   * built-in config
+   * @type {Egg.EggAppConfig}
+   **/
   const config = exports = {};
 
   // use for cookie sign key, should change to your own and keep security
   config.keys = appInfo.name + '_1234567890';
 
-  // 数据库配置
+  // add your middleware config here
+  config.middleware = [];
+
+  // JWT 配置
+  const jwtSecret = process.env.JWT_SECRET;
+  if (!jwtSecret) {
+    console.error('JWT_SECRET environment variable is not set');
+    process.exit(1);
+  }
+
+  config.jwt = {
+    secret: jwtSecret,
+    expiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN || '24h',
+  };
+
+  // 关闭 CSRF
+  config.security = {
+    csrf: {
+      enable: false,
+    },
+    domainWhiteList: [process.env.CORS_ORIGIN || 'http://localhost:3000'], // 允许跨域的域名
+  };
+
+  // 配置 CORS
+  config.cors = {
+    origin: '*',
+    allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH,OPTIONS',
+  };
+
+  // MySQL 配置
   config.mysql = {
     client: {
-      host: 'localhost',
-      port: '3306',
-      user: 'root',
-      password: '964213444lzk',
-      database: 'calendar'
+      host: process.env.DB_HOST || 'localhost',
+      port: process.env.DB_PORT || '3306',
+      user: process.env.DB_USER || 'root',
+      password: process.env.DB_PASSWORD || '964213444lzk',
+      database: process.env.DB_NAME || 'calendar',
     },
   };
 
@@ -22,37 +71,18 @@ module.exports = appInfo => {
   config.logger = {
     dir: 'logs',
     appLogName: 'calendar-server-web.log',
-    level: 'DEBUG',
-    consoleLevel: 'DEBUG',
-  };
-
-  // 安全配置
-  config.security = {
-    csrf: {
-      enable: false,
-    },
-    domainWhiteList: ['http://localhost:3000'],
-  };
-
-  // CORS 配置
-  config.cors = {
-    origin: '*',
-    allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH',
-    credentials: true
-  };
-
-  // JWT配置
-  config.jwt = {
-    secret: 'your-jwt-secret',
-    expiresIn: '7d'
+    level: process.env.LOG_LEVEL || 'DEBUG',
+    consoleLevel: process.env.LOG_LEVEL || 'DEBUG',
   };
 
   // 端口配置
   config.cluster = {
     listen: {
-      port: 3001,
+      port: parseInt(process.env.PORT || '3001', 10),
     },
   };
 
-  return config;
+  return {
+    ...config,
+  };
 }; 

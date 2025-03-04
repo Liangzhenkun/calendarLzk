@@ -1,17 +1,79 @@
 const Service = require('egg').Service;
 
+const TABLE_NAME = 'diary';
+
 class DiaryService extends Service {
-  async create(data) {
+  async create(diary) {
     const { app } = this;
     try {
-      const result = await app.mysql.insert('Diary', {
-        ...data,
-        createdAt: app.mysql.literals.now,
-        updatedAt: app.mysql.literals.now
+      this.ctx.logger.info('创建日记，接收到的数据:', diary);
+      
+      // 检查数据库连接
+      try {
+        const tables = await app.mysql.query('SHOW TABLES');
+        this.ctx.logger.info('当前数据库中的表:', tables);
+        
+        const dbName = await app.mysql.query('SELECT DATABASE()');
+        this.ctx.logger.info('当前连接的数据库:', dbName);
+      } catch (e) {
+        this.ctx.logger.error('数据库连接检查失败:', e);
+      }
+      
+      // 格式化日期
+      let formattedDate;
+      try {
+        const dateObj = new Date(diary.date);
+        if (!isNaN(dateObj.getTime())) {
+          const year = dateObj.getFullYear();
+          const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+          const day = String(dateObj.getDate()).padStart(2, '0');
+          formattedDate = `${year}-${month}-${day}`;
+        } else {
+          throw new Error('无效的日期格式');
+        }
+      } catch (e) {
+        this.ctx.logger.error('日期格式化失败:', e);
+        throw new Error('日期格式化失败');
+      }
+
+      // 检查是否存在同一天的日记
+      const existingDiary = await app.mysql.get(TABLE_NAME, {
+        user_id: diary.userId,
+        date: formattedDate
       });
-      return { ...data, id: result.insertId };
+      
+      const data = {
+        user_id: diary.userId,
+        title: diary.title,
+        date: formattedDate,
+        content: diary.content,
+        mood: diary.mood || 3,
+        weather: diary.weather,
+        type: diary.type || 'normal'
+      };
+      
+      this.ctx.logger.info('准备处理数据:', {
+        isUpdate: !!existingDiary,
+        data
+      });
+      
+      let result;
+      if (existingDiary) {
+        // 更新已存在的日记
+        result = await app.mysql.update(TABLE_NAME, {
+          ...data,
+          updated_at: app.mysql.literals.now
+        }, {
+          where: { id: existingDiary.id }
+        });
+        return { ...diary, id: existingDiary.id };
+      } else {
+        // 创建新日记
+        result = await app.mysql.insert(TABLE_NAME, data);
+        return { ...diary, id: result.insertId };
+      }
     } catch (error) {
-      this.ctx.logger.error('创建日记失败:', error);
+      this.ctx.logger.error('创建/更新日记失败:', error);
       throw error;
     }
   }
@@ -19,9 +81,9 @@ class DiaryService extends Service {
   async list(userId) {
     const { app } = this;
     try {
-      return await app.mysql.select('Diary', {
-        where: { userId },
-        orders: [['createdAt', 'desc']]
+      return await app.mysql.select(TABLE_NAME, {
+        where: { user_id: userId },
+        orders: [['date', 'desc']],
       });
     } catch (error) {
       this.ctx.logger.error('获取日记列表失败:', error);
@@ -32,7 +94,7 @@ class DiaryService extends Service {
   async detail(userId, id) {
     const { app } = this;
     try {
-      return await app.mysql.get('Diary', { id, userId });
+      return await app.mysql.get(TABLE_NAME, { id, user_id: userId });
     } catch (error) {
       this.ctx.logger.error('获取日记详情失败:', error);
       throw error;
@@ -42,12 +104,52 @@ class DiaryService extends Service {
   async update(userId, id, data) {
     const { app } = this;
     try {
-      const result = await app.mysql.update('Diary', {
-        ...data,
-        updatedAt: app.mysql.literals.now
-      }, {
-        where: { id, userId }
+      this.ctx.logger.info('更新日记，接收到的数据:', { userId, id, data });
+      
+      // 转换字段名和格式化日期
+      const updateData = {
+        title: data.title,
+        content: data.content,
+        mood: data.mood || 3,
+        weather: data.weather,
+        type: data.type || 'normal',
+        updated_at: app.mysql.literals.now
+      };
+
+      // 如果有日期字段，确保正确格式化
+      if (data.date) {
+        try {
+          const dateObj = new Date(data.date);
+          if (!isNaN(dateObj.getTime())) {
+            // 使用 YYYY-MM-DD 格式
+            const year = dateObj.getFullYear();
+            const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+            const day = String(dateObj.getDate()).padStart(2, '0');
+            updateData.date = `${year}-${month}-${day}`;
+          }
+        } catch (e) {
+          this.ctx.logger.error('日期格式化失败:', e);
+        }
+      }
+      
+      // 移除未定义的字段
+      Object.keys(updateData).forEach(key => {
+        if (updateData[key] === undefined || updateData[key] === null) {
+          delete updateData[key];
+        }
       });
+      
+      this.ctx.logger.info('准备更新数据:', updateData);
+      
+      const result = await app.mysql.update(TABLE_NAME, updateData, {
+        where: { id, user_id: userId }
+      });
+      
+      this.ctx.logger.info('日记更新结果:', {
+        affectedRows: result.affectedRows,
+        changedRows: result.changedRows
+      });
+      
       return result.affectedRows > 0;
     } catch (error) {
       this.ctx.logger.error('更新日记失败:', error);
@@ -58,9 +160,9 @@ class DiaryService extends Service {
   async delete(userId, id) {
     const { app } = this;
     try {
-      const result = await app.mysql.delete('Diary', {
+      const result = await app.mysql.delete(TABLE_NAME, {
         id,
-        userId
+        user_id: userId
       });
       return result.affectedRows > 0;
     } catch (error) {
