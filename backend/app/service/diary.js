@@ -8,17 +8,6 @@ class DiaryService extends Service {
     try {
       this.ctx.logger.info('创建日记，接收到的数据:', diary);
       
-      // 检查数据库连接
-      try {
-        const tables = await app.mysql.query('SHOW TABLES');
-        this.ctx.logger.info('当前数据库中的表:', tables);
-        
-        const dbName = await app.mysql.query('SELECT DATABASE()');
-        this.ctx.logger.info('当前连接的数据库:', dbName);
-      } catch (e) {
-        this.ctx.logger.error('数据库连接检查失败:', e);
-      }
-      
       // 格式化日期
       let formattedDate;
       try {
@@ -106,13 +95,19 @@ class DiaryService extends Service {
     try {
       this.ctx.logger.info('更新日记，接收到的数据:', { userId, id, data });
       
+      // 首先检查日记是否存在
+      const existingDiary = await app.mysql.get(TABLE_NAME, { id, user_id: userId });
+      if (!existingDiary) {
+        throw new Error('日记不存在');
+      }
+      
       // 转换字段名和格式化日期
       const updateData = {
         title: data.title,
         content: data.content,
-        mood: data.mood || 3,
-        weather: data.weather,
-        type: data.type || 'normal',
+        mood: data.mood || existingDiary.mood,
+        weather: data.weather || existingDiary.weather,
+        type: data.type || existingDiary.type,
         updated_at: app.mysql.literals.now
       };
 
@@ -121,20 +116,36 @@ class DiaryService extends Service {
         try {
           const dateObj = new Date(data.date);
           if (!isNaN(dateObj.getTime())) {
-            // 使用 YYYY-MM-DD 格式
             const year = dateObj.getFullYear();
             const month = String(dateObj.getMonth() + 1).padStart(2, '0');
             const day = String(dateObj.getDate()).padStart(2, '0');
-            updateData.date = `${year}-${month}-${day}`;
+            const newDate = `${year}-${month}-${day}`;
+            
+            // 检查新日期是否与其他日记冲突
+            if (newDate !== existingDiary.date) {
+              const conflictDiary = await app.mysql.get(TABLE_NAME, {
+                user_id: userId,
+                date: newDate
+              });
+              
+              if (conflictDiary && conflictDiary.id !== id) {
+                throw new Error('该日期已存在日记');
+              }
+              
+              updateData.date = newDate;
+            }
+          } else {
+            throw new Error('无效的日期格式');
           }
         } catch (e) {
           this.ctx.logger.error('日期格式化失败:', e);
+          throw new Error('日期格式化失败');
         }
       }
       
       // 移除未定义的字段
       Object.keys(updateData).forEach(key => {
-        if (updateData[key] === undefined || updateData[key] === null) {
+        if (updateData[key] === undefined) {
           delete updateData[key];
         }
       });

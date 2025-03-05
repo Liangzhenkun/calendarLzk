@@ -128,16 +128,20 @@ export const useDiaryStore = defineStore('diary', {
       }
 
       try {
-        const dateStr = diary.date.toISOString().split('T')[0];
+        const dateStr = new Date(diary.date).toISOString().split('T')[0];
         const data = {
           ...diary,
           date: dateStr
         };
         
         let response;
-        if (this.diaries.has(dateStr)) {
-          response = await diaryApi.updateDiary(dateStr, data);
+        const existingDiary = await this.getDiaryByDate(new Date(dateStr));
+        
+        if (existingDiary) {
+          // 如果存在，使用 PUT 方法更新
+          response = await diaryApi.updateDiary(existingDiary.id, data);
         } else {
+          // 如果不存在，使用 POST 方法创建
           response = await diaryApi.createDiary(data);
         }
         
