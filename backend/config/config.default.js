@@ -42,6 +42,9 @@ module.exports = appInfo => {
     expiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN || '24h',
   };
 
+  // 配置路径前缀
+  config.prefix = '/api';  // 添加 API 路径前缀
+
   // 关闭 CSRF
   config.security = {
     csrf: {
@@ -52,8 +55,11 @@ module.exports = appInfo => {
 
   // 配置 CORS
   config.cors = {
-    origin: '*',
+    origin: ctx => ctx.get('origin'),  // 动态匹配 origin
     allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH,OPTIONS',
+    credentials: true,
+    allowHeaders: 'Content-Type,Authorization',
+    maxAge: 86400,  // 预检请求缓存时间
   };
 
   // MySQL 配置

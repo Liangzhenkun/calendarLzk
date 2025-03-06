@@ -5,7 +5,7 @@ import { useAuthStore } from '@/stores/auth';
 
 // 创建 axios 实例
 const instance = axios.create({
-    baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3001',  // 修改为后端实际运行的端口
+    baseURL: import.meta.env.VITE_API_URL || '/api',  // 修改为相对路径
     timeout: 5000,
     headers: {
         'Content-Type': 'application/json'
