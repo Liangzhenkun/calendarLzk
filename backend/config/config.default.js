@@ -38,6 +38,7 @@ module.exports = appInfo => {
   }
 
   config.jwt = {
+    ignore: ['/api/test'] // 将测试接口加入忽略列表
     secret: jwtSecret,
     expiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN || '24h',
   };
@@ -77,9 +78,10 @@ module.exports = appInfo => {
 
   // 端口配置
   config.cluster = {
-    listen: {
-      port: parseInt(process.env.PORT || '3001', 10),
-    },
+      listen: {
+      path: '',
+      port: 7001,
+      hostname: '0.0.0.0', },
   };
 
   return {
