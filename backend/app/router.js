@@ -6,6 +6,9 @@ module.exports = app => {
   router.post('/api/auth/login', controller.auth.login);
   router.post('/api/auth/register', controller.auth.register);
 
+  //测试路由
+  router.get('/api/test', controller.test.index);
+
   // 日历相关路由
   router.get('/api/calendar/records', jwt, controller.calendar.getRecords);
   router.post('/api/calendar/record', jwt, controller.calendar.createOrUpdate);
