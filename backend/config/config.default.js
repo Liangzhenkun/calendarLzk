@@ -45,21 +45,25 @@ module.exports = appInfo => {
   // 配置路径前缀
   config.prefix = '/api';  // 添加 API 路径前缀
 
+  // 从环境变量获取允许的域名列表
+  const corsOrigins = (process.env.CORS_ORIGIN || '').split(' ').filter(Boolean);
+
   // 关闭 CSRF
   config.security = {
     csrf: {
       enable: false,
     },
-    domainWhiteList: [process.env.CORS_ORIGIN || 'http://localhost:3000'], // 允许跨域的域名
+    // 使用环境变量中的域名列表
+    domainWhiteList: corsOrigins,
   };
 
   // 配置 CORS
   config.cors = {
-    origin: ctx => ctx.get('origin'),  // 动态匹配 origin
-    allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH,OPTIONS',
+    origin: ['http://localhost:3000'],  // 明确指定允许的源
     credentials: true,
-    allowHeaders: 'Content-Type,Authorization',
-    maxAge: 86400,  // 预检请求缓存时间
+    allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH,OPTIONS',
+    allowHeaders: ['Content-Type', 'Authorization'],
+    maxAge: 86400
   };
 
   // MySQL 配置
@@ -82,10 +86,10 @@ module.exports = appInfo => {
   };
 
   // 端口配置
-  config.cluster = {
-    listen: {
-      port: parseInt(process.env.PORT || '3001', 10),
-    },
+config.cluster = {
+  listen: {
+    port: 7001, // 直接硬编码为 7001，不使用环境变量
+  },
   };
 
   return {

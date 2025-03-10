@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const instance = axios.create({
-  baseURL: import.meta.env.VITE_APP_API_URL,
+  baseURL: '',
   timeout: 10000,
   withCredentials: true
 })
@@ -25,7 +25,7 @@ instance.interceptors.response.use(
     if (error.response?.status === 401) {
       localStorage.removeItem('token')
       localStorage.removeItem('user')
-      window.location.href = '/auth/login'
+      window.location.href = '/login'
     }
     return Promise.reject(error.response?.data || error)
   }
@@ -33,12 +33,12 @@ instance.interceptors.response.use(
 
 export const api = {
   auth: {
-    login: (data) => instance.post('/auth/login', data),
-    register: (data) => instance.post('/auth/register', data)
+    login: (data) => instance.post('/api/auth/login', data),
+    register: (data) => instance.post('/api/auth/register', data)
   },
   calendar: {
-    getRecords: () => instance.get('/calendar/records'),
-    createOrUpdate: (data) => instance.post('/calendar/record', data)
+    getRecords: () => instance.get('/api/calendar/records'),
+    createOrUpdate: (data) => instance.post('/api/calendar/record', data)
   }
 }
 

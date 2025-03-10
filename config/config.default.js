@@ -1,5 +1,5 @@
 config.cluster = {
   listen: {
-    port: 3001,
+    port: 7001,
   },
 }; 
