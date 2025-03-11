@@ -1,7 +1,12 @@
 import axios from 'axios'
 
+// 根据环境判断 baseURL
+const baseURL = import.meta.env.PROD 
+  ? import.meta.env.VITE_APP_API_URL  // 生产环境使用配置的 API URL
+  : ''                                // 开发环境使用代理
+
 const instance = axios.create({
-  baseURL: '',
+  baseURL,
   timeout: 10000,
   withCredentials: true
 })
@@ -9,6 +14,11 @@ const instance = axios.create({
 // 请求拦截器
 instance.interceptors.request.use(
   config => {
+    // 移除重复的 /api 前缀
+    if (config.url.startsWith('/api/api/')) {
+      config.url = config.url.replace('/api/api/', '/api/')
+    }
+    
     const token = localStorage.getItem('token')
     if (token) {
       config.headers.Authorization = `Bearer ${token}`

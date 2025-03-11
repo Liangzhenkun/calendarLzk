@@ -59,7 +59,20 @@ module.exports = appInfo => {
 
   // 配置 CORS
   config.cors = {
-    origin: ['http://localhost:3000'],  // 明确指定允许的源
+    origin: ctx => {
+      const requestOrigin = ctx.get('origin');
+      // 允许的域名列表
+      const allowedOrigins = [
+        'https://seefu.cn',
+        'https://www.seefu.cn',
+        'http://localhost:3000'
+      ];
+      
+      if (allowedOrigins.includes(requestOrigin)) {
+        return requestOrigin;
+      }
+      return false;
+    },
     credentials: true,
     allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH,OPTIONS',
     allowHeaders: ['Content-Type', 'Authorization'],
