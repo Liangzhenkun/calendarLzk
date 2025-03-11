@@ -38,6 +38,11 @@
       <div class="notebook-content">
         <router-view></router-view>
       </div>
+      
+      <!-- ICP备案信息 -->
+      <div class="icp-info">
+        <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">浙ICP备2025155032号-1</a>
+      </div>
     </div>
   </div>
 </template>
@@ -290,5 +295,26 @@ const handleLogout = async () => {
   to {
     transform: rotateY(-160deg);
   }
+}
+
+/* ICP备案信息样式 */
+.icp-info {
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  padding: 10px;
+  font-size: 12px;
+}
+
+.icp-info a {
+  color: #666;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.icp-info a:hover {
+  color: #333;
 }
 </style> 
