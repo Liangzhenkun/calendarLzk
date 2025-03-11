@@ -3,17 +3,17 @@ module.exports = app => {
   const jwt = middleware.auth();
 
   // 公开路由
-  router.post('/api/auth/login', controller.auth.login);
-  router.post('/api/auth/register', controller.auth.register);
+  router.post('/auth/login', controller.auth.login);
+  router.post('/auth/register', controller.auth.register);
 
   // 日历相关路由
-  router.get('/api/calendar/records', jwt, controller.calendar.getRecords);
-  router.post('/api/calendar/record', jwt, controller.calendar.createOrUpdate);
+  router.get('/calendar/records', jwt, controller.calendar.getRecords);
+  router.post('/calendar/record', jwt, controller.calendar.createOrUpdate);
 
   // 日记相关路由
-  router.post('/api/diary/create', jwt, controller.diary.create);
-  router.get('/api/diary/list', jwt, controller.diary.list);
-  router.get('/api/diary/:id', jwt, controller.diary.detail);
-  router.put('/api/diary/:id', jwt, controller.diary.update);
-  router.delete('/api/diary/:id', jwt, controller.diary.delete);
+  router.post('/diary/create', jwt, controller.diary.create);
+  router.get('/diary/list', jwt, controller.diary.list);
+  router.get('/diary/:id', jwt, controller.diary.detail);
+  router.put('/diary/:id', jwt, controller.diary.update);
+  router.delete('/diary/:id', jwt, controller.diary.delete);
 }; 

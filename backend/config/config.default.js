@@ -99,10 +99,11 @@ module.exports = appInfo => {
   };
 
   // 端口配置
-config.cluster = {
-  listen: {
-    port: 7001, // 直接硬编码为 7001，不使用环境变量
-  },
+  config.cluster = {
+    listen: {
+      port: 7001,
+      hostname: '0.0.0.0',  // 添加 hostname 配置
+    },
   };
 
   return {
