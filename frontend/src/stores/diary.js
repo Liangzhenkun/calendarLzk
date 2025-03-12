@@ -1,11 +1,16 @@
 import { defineStore } from 'pinia';
-import * as diaryApi from '@/api/diary';
+import { createDiary, getDiaryList, getDiaryDetail, updateDiary, deleteDiary, getMetrics, getMetricsStats, getMetricsTrend } from '@/api/diary';
 
 export const useDiaryStore = defineStore('diary', {
   state: () => ({
     diaries: new Map(), // 使用 Map 存储日记，key 为日期字符串
     loading: false,
-    error: null
+    error: null,
+    metrics: {
+      current: null,
+      stats: null,
+      trend: null
+    }
   }),
 
   getters: {
@@ -18,7 +23,12 @@ export const useDiaryStore = defineStore('diary', {
         }
       });
       return result;
-    }
+    },
+
+    // 新增指标相关的getter
+    getCurrentMetrics: (state) => state.metrics.current,
+    getMetricsStats: (state) => state.metrics.stats,
+    getMetricsTrend: (state) => state.metrics.trend
   },
 
   actions: {
@@ -27,7 +37,7 @@ export const useDiaryStore = defineStore('diary', {
       this.loading = true;
       this.error = null;
       try {
-        const response = await diaryApi.getDiaryList();
+        const response = await getDiaryList();
         
         // 清除所有现有数据
         this.diaries.clear();
@@ -58,7 +68,7 @@ export const useDiaryStore = defineStore('diary', {
       try {
         const year = date.getFullYear();
         const month = date.getMonth() + 1;
-        const response = await diaryApi.getDiaryList({ year, month });
+        const response = await getDiaryList({ year, month });
         
         // 清除当前月份的日记数据
         this.clearMonthDiaries(year, month);
@@ -98,7 +108,7 @@ export const useDiaryStore = defineStore('diary', {
       }
 
       try {
-        const response = await diaryApi.getDiaryDetail(dateStr);
+        const response = await getDiaryDetail(dateStr);
         if (response.data) {
           this.diaries.set(dateStr, response.data);
           return response.data;
@@ -128,7 +138,17 @@ export const useDiaryStore = defineStore('diary', {
       }
 
       try {
-        const dateStr = new Date(diary.date).toISOString().split('T')[0];
+        // 确保日期格式正确
+        const date = new Date(diary.date);
+        if (isNaN(date.getTime())) {
+          throw new Error('无效的日期格式');
+        }
+        
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const dateStr = `${year}-${month}-${day}`;
+        
         const data = {
           ...diary,
           date: dateStr
@@ -139,10 +159,10 @@ export const useDiaryStore = defineStore('diary', {
         
         if (existingDiary) {
           // 如果存在，使用 PUT 方法更新
-          response = await diaryApi.updateDiary(existingDiary.id, data);
+          response = await updateDiary(existingDiary.id, data);
         } else {
           // 如果不存在，使用 POST 方法创建
-          response = await diaryApi.createDiary(data);
+          response = await createDiary(data);
         }
         
         if (response.data) {
@@ -160,11 +180,59 @@ export const useDiaryStore = defineStore('diary', {
       }
     },
 
+    // 获取指标数据
+    async fetchMetricsData(metric, range = 'week') {
+      this.loading = true;
+      this.error = null;
+      try {
+        const response = await getMetrics(metric, range);
+        this.metrics.current = response.data;
+        return response.data;
+      } catch (error) {
+        this.error = error.response?.data?.message || '获取指标数据失败';
+        throw error;
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    // 获取指标统计数据
+    async fetchMetricsStats(startDate, endDate) {
+      this.loading = true;
+      this.error = null;
+      try {
+        const response = await getMetricsStats(startDate, endDate);
+        this.metrics.stats = response.data;
+        return response.data;
+      } catch (error) {
+        this.error = error.response?.data?.message || '获取指标统计失败';
+        throw error;
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    // 获取指标趋势数据
+    async fetchMetricsTrend(metric, period = 'week') {
+      this.loading = true;
+      this.error = null;
+      try {
+        const response = await getMetricsTrend(metric, period);
+        this.metrics.trend = response.data;
+        return response.data;
+      } catch (error) {
+        this.error = error.response?.data?.message || '获取指标趋势失败';
+        throw error;
+      } finally {
+        this.loading = false;
+      }
+    },
+
     // 删除日记
     async deleteDiary(date) {
       const dateStr = date.toISOString().split('T')[0];
       try {
-        await diaryApi.deleteDiary(dateStr);
+        await deleteDiary(dateStr);
         this.diaries.delete(dateStr);
       } catch (error) {
         console.error('Error deleting diary:', error);

@@ -27,4 +27,32 @@
 .icp-info a:hover {
   color: #333;
 }
+
+/* 响应式设计 */
+/* 手机屏幕 (小于 768px) */
+@media screen and (max-width: 767px) {
+  .icp-info {
+    font-size: 10px;
+    padding: 8px;
+    margin-top: 15px;
+  }
+}
+
+/* 平板屏幕 (768px - 1024px) */
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  .icp-info {
+    font-size: 11px;
+    padding: 10px;
+    margin-top: 18px;
+  }
+}
+
+/* 大屏幕 (大于 1024px) */
+@media screen and (min-width: 1025px) {
+  .icp-info {
+    font-size: 12px;
+    padding: 10px;
+    margin-top: 20px;
+  }
+}
 </style> 

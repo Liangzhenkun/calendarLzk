@@ -99,7 +99,7 @@
     "onerror": {
       "errorPageUrl": "",
       "appErrorFilter": null,
-      "templatePath": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-onerror\\lib\\onerror_page.mustache"
+      "templatePath": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-onerror\\lib\\onerror_page.mustache"
     },
     "i18n": {
       "defaultLocale": "en_US",
@@ -112,8 +112,8 @@
     "watcher": {
       "type": "development",
       "eventSources": {
-        "default": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-watcher\\lib\\event-sources\\default",
-        "development": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-watcher\\lib\\event-sources\\development"
+        "default": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-watcher\\lib\\event-sources\\default",
+        "development": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-watcher\\lib\\event-sources\\development"
       }
     },
     "customLogger": {
@@ -138,7 +138,7 @@
       "fileExtensions": [],
       "whitelist": null,
       "allowArrayField": false,
-      "tmpdir": "C:\\Users\\Administrator\\AppData\\Local\\Temp\\egg-multipart-tmp\\calendar-server",
+      "tmpdir": "C:\\Users\\Lzk\\AppData\\Local\\Temp\\egg-multipart-tmp\\calendar-server",
       "cleanSchedule": {
         "cron": "0 30 4 * * *",
         "disable": false
@@ -163,14 +163,14 @@
     },
     "static": {
       "prefix": "/public/",
-      "dir": "E:\\cursor\\clanderLzk\\backend\\app\\public",
+      "dir": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\app\\public",
       "dynamic": true,
       "preload": false,
       "buffer": false,
       "maxFiles": 1000
     },
     "view": {
-      "root": "E:\\cursor\\clanderLzk\\backend\\app\\view",
+      "root": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\app\\view",
       "cache": false,
       "defaultExtension": ".html",
       "defaultViewEngine": "",
@@ -246,9 +246,9 @@
         "cov": "egg-bin cov"
       }
     },
-    "baseDir": "E:\\cursor\\clanderLzk\\backend",
-    "HOME": "C:\\Users\\Administrator",
-    "rundir": "E:\\cursor\\clanderLzk\\backend\\run",
+    "baseDir": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend",
+    "HOME": "C:\\Users\\Lzk",
+    "rundir": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\run",
     "dump": {
       "ignore": "<Set>",
       "timing": {
@@ -343,7 +343,7 @@
       "listen": {
         "path": "",
         "port": 7001,
-        "hostname": ""
+        "hostname": "0.0.0.0"
       }
     },
     "clusterClient": {
@@ -367,8 +367,8 @@
         "jsonp"
       ],
       "env": [],
-      "from": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\plugin.js",
-      "path": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-onerror",
+      "from": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\plugin.js",
+      "path": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-onerror",
       "version": "2.4.0"
     },
     "session": {
@@ -378,8 +378,8 @@
       "dependencies": [],
       "optionalDependencies": [],
       "env": [],
-      "from": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\plugin.js",
-      "path": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-session",
+      "from": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\plugin.js",
+      "path": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-session",
       "version": "3.3.0"
     },
     "i18n": {
@@ -389,8 +389,8 @@
       "dependencies": [],
       "optionalDependencies": [],
       "env": [],
-      "from": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\plugin.js",
-      "path": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-i18n",
+      "from": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\plugin.js",
+      "path": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-i18n",
       "version": "2.1.1"
     },
     "watcher": {
@@ -400,8 +400,8 @@
       "dependencies": [],
       "optionalDependencies": [],
       "env": [],
-      "from": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\plugin.js",
-      "path": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-watcher",
+      "from": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\plugin.js",
+      "path": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-watcher",
       "version": "3.1.1",
       "dependents": [
         "development"
@@ -416,8 +416,8 @@
         "schedule"
       ],
       "env": [],
-      "from": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\plugin.js",
-      "path": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-multipart",
+      "from": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\plugin.js",
+      "path": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-multipart",
       "version": "3.5.0"
     },
     "security": {
@@ -429,8 +429,8 @@
         "session"
       ],
       "env": [],
-      "from": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\plugin.js",
-      "path": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security",
+      "from": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\plugin.js",
+      "path": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-security",
       "version": "3.7.0"
     },
     "development": {
@@ -444,8 +444,8 @@
       "env": [
         "local"
       ],
-      "from": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\plugin.js",
-      "path": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-development",
+      "from": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\plugin.js",
+      "path": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-development",
       "version": "3.0.2"
     },
     "logrotator": {
@@ -457,8 +457,8 @@
       ],
       "optionalDependencies": [],
       "env": [],
-      "from": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\plugin.js",
-      "path": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-logrotator",
+      "from": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\plugin.js",
+      "path": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-logrotator",
       "version": "3.2.0"
     },
     "schedule": {
@@ -468,8 +468,8 @@
       "dependencies": [],
       "optionalDependencies": [],
       "env": [],
-      "from": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\plugin.js",
-      "path": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-schedule",
+      "from": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\plugin.js",
+      "path": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-schedule",
       "version": "4.0.1",
       "dependents": [
         "logrotator"
@@ -482,8 +482,8 @@
       "dependencies": [],
       "optionalDependencies": [],
       "env": [],
-      "from": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\plugin.js",
-      "path": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-static",
+      "from": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\plugin.js",
+      "path": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-static",
       "version": "2.3.1"
     },
     "jsonp": {
@@ -495,8 +495,8 @@
         "security"
       ],
       "env": [],
-      "from": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\plugin.js",
-      "path": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-jsonp",
+      "from": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\plugin.js",
+      "path": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-jsonp",
       "version": "2.0.0"
     },
     "view": {
@@ -506,8 +506,8 @@
       "dependencies": [],
       "optionalDependencies": [],
       "env": [],
-      "from": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\plugin.js",
-      "path": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-view",
+      "from": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\plugin.js",
+      "path": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-view",
       "version": "2.1.4"
     },
     "mysql": {
@@ -517,8 +517,8 @@
       "dependencies": [],
       "optionalDependencies": [],
       "env": [],
-      "from": "E:\\cursor\\clanderLzk\\backend\\config\\plugin.js",
-      "path": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-mysql",
+      "from": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\config\\plugin.js",
+      "path": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-mysql",
       "version": "4.0.0"
     },
     "cors": {
@@ -528,8 +528,8 @@
       "dependencies": [],
       "optionalDependencies": [],
       "env": [],
-      "from": "E:\\cursor\\clanderLzk\\backend\\config\\plugin.js",
-      "path": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-cors",
+      "from": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\config\\plugin.js",
+      "path": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-cors",
       "version": "2.2.4"
     },
     "jwt": {
@@ -541,17 +541,17 @@
         "onerror"
       ],
       "env": [],
-      "from": "E:\\cursor\\clanderLzk\\backend\\config\\plugin.js",
-      "path": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-jwt",
+      "from": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\config\\plugin.js",
+      "path": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-jwt",
       "version": "3.1.7"
     }
   },
   "appInfo": {
     "name": "calendar-server",
-    "baseDir": "E:\\cursor\\clanderLzk\\backend",
+    "baseDir": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend",
     "env": "local",
     "scope": "",
-    "HOME": "C:\\Users\\Administrator",
+    "HOME": "C:\\Users\\Lzk",
     "pkg": {
       "name": "calendar-server",
       "version": "1.0.0",
@@ -582,6 +582,6 @@
         "cov": "egg-bin cov"
       }
     },
-    "root": "E:\\cursor\\clanderLzk\\backend"
+    "root": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend"
   }
 }

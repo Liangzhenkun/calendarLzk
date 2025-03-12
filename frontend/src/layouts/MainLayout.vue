@@ -87,6 +87,7 @@ const handleLogout = async () => {
   align-items: center;
   background: #f0e6d9;
   perspective: 2000px;
+  overflow-x: hidden; /* 防止横向滚动 */
 }
 
 /* 书签样式 */
@@ -289,6 +290,116 @@ const handleLogout = async () => {
   }
   to {
     transform: rotateY(-160deg);
+  }
+}
+
+/* 响应式设计 */
+/* 手机屏幕 (小于 768px) */
+@media screen and (max-width: 767px) {
+  .notebook-cover {
+    width: 95%;
+    height: 90vh;
+  }
+
+  .cover-design h1 {
+    font-size: 2em;
+  }
+
+  .bookmark {
+    right: 20px;
+    width: 30px;
+    height: 90px;
+  }
+
+  .clip {
+    width: 30px;
+    height: 10px;
+  }
+
+  .notebook-tabs {
+    padding: 10px;
+  }
+
+  .tab {
+    padding: 8px 15px;
+    font-size: 14px;
+  }
+
+  .notebook-content {
+    padding: 15px;
+  }
+}
+
+/* 平板屏幕 (768px - 1024px) */
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  .notebook-cover {
+    width: 90%;
+    height: 85vh;
+  }
+
+  .cover-design h1 {
+    font-size: 2.5em;
+  }
+
+  .bookmark {
+    right: 50px;
+    width: 35px;
+    height: 100px;
+  }
+}
+
+/* 笔记本屏幕 (1025px - 1366px) */
+@media screen and (min-width: 1025px) and (max-width: 1366px) {
+  .notebook-cover {
+    width: 85%;
+    max-width: 1000px;
+  }
+}
+
+/* 大屏幕 (大于 1366px) */
+@media screen and (min-width: 1367px) {
+  .notebook-cover {
+    width: 80%;
+    max-width: 1200px;
+  }
+}
+
+/* 横屏模式优化 */
+@media screen and (orientation: landscape) and (max-height: 600px) {
+  .notebook-cover {
+    height: 95vh;
+  }
+
+  .bookmark {
+    height: 80px;
+  }
+
+  .notebook-tabs {
+    padding: 5px 15px;
+  }
+}
+
+/* 深色模式支持 */
+@media (prefers-color-scheme: dark) {
+  .notebook-container {
+    background: #2c3e50;
+  }
+
+  .notebook-pages {
+    background: #34495e;
+  }
+
+  .notebook-tabs {
+    background: #2c3e50;
+    border-bottom-color: #34495e;
+  }
+
+  .tab {
+    color: #ecf0f1;
+  }
+
+  .tab:hover {
+    background: #34495e;
   }
 }
 </style> 

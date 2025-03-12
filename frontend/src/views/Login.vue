@@ -167,6 +167,7 @@ const handleLogin = async () => {
   justify-content: center;
   align-items: center;
   background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+  padding: 20px;  /* 添加内边距防止在小屏幕上贴边 */
 }
 
 .login-box {
@@ -182,6 +183,7 @@ h2 {
   text-align: center;
   margin-bottom: 30px;
   color: #409EFF;
+  font-size: 24px;  /* 设置基准字体大小 */
 }
 
 .submit-btn {
@@ -204,10 +206,91 @@ h2 {
   text-decoration: underline;
 }
 
-@media (max-width: 480px) {
+/* 响应式设计 */
+/* 手机屏幕 (小于 480px) */
+@media screen and (max-width: 480px) {
   .login-box {
-    margin: 20px;
+    margin: 10px;
     padding: 20px;
+  }
+
+  h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+
+  .submit-btn {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  :deep(.el-form-item) {
+    margin-bottom: 15px;
+  }
+
+  :deep(.el-input) {
+    font-size: 14px;
+  }
+}
+
+/* 平板屏幕 (481px - 768px) */
+@media screen and (min-width: 481px) and (max-width: 768px) {
+  .login-box {
+    max-width: 360px;
+    padding: 30px;
+  }
+}
+
+/* 深色模式支持 */
+@media (prefers-color-scheme: dark) {
+  .login-container {
+    background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+  }
+
+  .login-box {
+    background: #34495e;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  }
+
+  h2 {
+    color: #3498db;
+  }
+
+  :deep(.el-input) {
+    background-color: #2c3e50;
+  }
+
+  :deep(.el-input__inner) {
+    background-color: #2c3e50;
+    color: #ecf0f1;
+    border-color: #3498db;
+  }
+
+  :deep(.el-checkbox__label) {
+    color: #ecf0f1;
+  }
+
+  .register-link a {
+    color: #3498db;
+  }
+}
+
+/* 横屏模式优化 */
+@media screen and (orientation: landscape) and (max-height: 480px) {
+  .login-container {
+    padding: 10px;
+  }
+
+  .login-box {
+    padding: 15px;
+  }
+
+  h2 {
+    margin-bottom: 15px;
+  }
+
+  :deep(.el-form-item) {
+    margin-bottom: 10px;
   }
 }
 </style> 

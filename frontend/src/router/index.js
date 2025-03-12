@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import MainLayout from '@/layouts/MainLayout.vue'
+import Calendar from '@/views/Calendar.vue'
+import MetricsView from '@/views/MetricsView.vue'
 
 const routes = [
   {
@@ -13,7 +15,13 @@ const routes = [
       {
         path: '/calendar',
         name: 'Calendar',
-        component: () => import('@/views/Calendar.vue'),
+        component: Calendar,
+        meta: { requiresAuth: true }
+      },
+      {
+        path: '/metrics',
+        name: 'metrics',
+        component: MetricsView,
         meta: { requiresAuth: true }
       }
     ]

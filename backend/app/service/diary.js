@@ -55,10 +55,68 @@ class DiaryService extends Service {
         }, {
           where: { id: existingDiary.id }
         });
+
+        // 更新或创建个性化指标
+        if (diary.metrics) {
+          const metricsData = {
+            user_id: diary.userId,
+            diary_id: existingDiary.id,
+            date: formattedDate,
+            sleep_quality: diary.metrics.sleepQuality || 3,
+            energy_level: diary.metrics.energyLevel || 3,
+            stress_level: diary.metrics.stressLevel || 3,
+            productivity: diary.metrics.productivity || 3,
+            exercise_minutes: diary.metrics.exerciseMinutes || 0,
+            water_cups: diary.metrics.waterCups || 0,
+            mood_score: diary.metrics.moodScore || 5,
+            social_satisfaction: diary.metrics.socialSatisfaction || 5,
+            family_index: diary.metrics.familyIndex || 5,
+            health_score: diary.metrics.healthScore || 5
+          };
+
+          // 检查是否存在指标记录
+          const existingMetrics = await app.mysql.get('personal_metrics', {
+            diary_id: existingDiary.id
+          });
+
+          if (existingMetrics) {
+            await app.mysql.update('personal_metrics', {
+              ...metricsData,
+              updated_at: app.mysql.literals.now
+            }, {
+              where: { id: existingMetrics.id }
+            });
+          } else {
+            await app.mysql.insert('personal_metrics', metricsData);
+          }
+        }
+
         return { ...diary, id: existingDiary.id };
       } else {
         // 创建新日记
         result = await app.mysql.insert(TABLE_NAME, data);
+        
+        // 创建个性化指标
+        if (diary.metrics) {
+          const metricsData = {
+            user_id: diary.userId,
+            diary_id: result.insertId,
+            date: formattedDate,
+            sleep_quality: diary.metrics.sleepQuality || 3,
+            energy_level: diary.metrics.energyLevel || 3,
+            stress_level: diary.metrics.stressLevel || 3,
+            productivity: diary.metrics.productivity || 3,
+            exercise_minutes: diary.metrics.exerciseMinutes || 0,
+            water_cups: diary.metrics.waterCups || 0,
+            mood_score: diary.metrics.moodScore || 5,
+            social_satisfaction: diary.metrics.socialSatisfaction || 5,
+            family_index: diary.metrics.familyIndex || 5,
+            health_score: diary.metrics.healthScore || 5
+          };
+          
+          await app.mysql.insert('personal_metrics', metricsData);
+        }
+
         return { ...diary, id: result.insertId };
       }
     } catch (error) {

@@ -11,6 +11,7 @@ import ExportAuth = require('../../../app/service/auth');
 import ExportCalendar = require('../../../app/service/calendar');
 import ExportDiary = require('../../../app/service/diary');
 import ExportIndex = require('../../../app/service/index');
+import ExportMetrics = require('../../../app/service/metrics');
 import ExportUser = require('../../../app/service/user');
 
 declare module 'egg' {
@@ -19,6 +20,7 @@ declare module 'egg' {
     calendar: AutoInstanceType<typeof ExportCalendar>;
     diary: AutoInstanceType<typeof ExportDiary>;
     index: AutoInstanceType<typeof ExportIndex>;
+    metrics: AutoInstanceType<typeof ExportMetrics>;
     user: AutoInstanceType<typeof ExportUser>;
   }
 }
