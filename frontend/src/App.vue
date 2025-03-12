@@ -6,6 +6,7 @@
           <component :is="Component" />
         </transition>
       </router-view>
+      <IcpInfo />
     </div>
   </el-config-provider>
 </template>
@@ -13,12 +14,15 @@
 <script setup>
 import { ElConfigProvider } from 'element-plus';
 import zhCn from 'element-plus/dist/locale/zh-cn.mjs';
+import IcpInfo from '@/components/IcpInfo.vue'
 </script>
 
 <style>
 .app {
   min-height: 100vh;
   background-color: #f5f7fa;
+  position: relative;
+  padding-bottom: 40px; /* 为 ICP 信息预留空间 */
 }
 
 .fade-enter-active,
