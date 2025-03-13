@@ -51,6 +51,7 @@ class DiaryService extends Service {
         // 更新已存在的日记
         result = await app.mysql.update(TABLE_NAME, {
           ...data,
+          date: formattedDate,
           updated_at: app.mysql.literals.now
         }, {
           where: { id: existingDiary.id }

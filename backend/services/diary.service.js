@@ -370,11 +370,12 @@ class DiaryService {
               SET content = ?,
                   mood = ?,
                   weather = ?,
+                  date = ?,
                   updated_at = CURRENT_TIMESTAMP
               WHERE id = ?
             `;
             
-            await db.query(query, [content, mood, weather, existingDiary.id]);
+            await db.query(query, [content, mood, weather, date, existingDiary.id]);
             return { id: existingDiary.id };
           } else {
             // 创建新日记
