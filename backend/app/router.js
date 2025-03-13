@@ -18,7 +18,7 @@ module.exports = app => {
   router.delete('/diary/:id', jwt, controller.diary.delete);
 
   // 指标相关路由
-  router.get('/api/diary/metrics/:metric', jwt, controller.metrics.getData);
-  router.get('/api/diary/metrics/stats', jwt, controller.metrics.getStats);
-  router.get('/api/diary/metrics/trend/:metric', jwt, controller.metrics.getTrend);
+  router.get('/diary/metrics/:metric', jwt, controller.metrics.getData);
+  router.get('/diary/metrics/stats', jwt, controller.metrics.getStats);
+  router.get('/diary/metrics/trend/:metric', jwt, controller.metrics.getTrend);
 }; 

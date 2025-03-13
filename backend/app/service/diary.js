@@ -211,6 +211,50 @@ class DiaryService extends Service {
         where: { id, user_id: userId }
       });
       
+      // 更新个性化指标
+      if (data.metrics) {
+        try {
+          // 格式化日期
+          let formattedDate = existingDiary.date;
+          if (updateData.date) {
+            formattedDate = updateData.date;
+          }
+          
+          const metricsData = {
+            user_id: userId,
+            diary_id: id,
+            date: formattedDate,
+            sleep_quality: data.metrics.sleepQuality || 3,
+            energy_level: data.metrics.energyLevel || 3,
+            stress_level: data.metrics.stressLevel || 3,
+            productivity: data.metrics.productivity || 3,
+            mood_score: data.metrics.moodScore || 5,
+            social_satisfaction: data.metrics.socialSatisfaction || 5,
+            family_index: data.metrics.familyIndex || 5,
+            health_score: data.metrics.healthScore || 5
+          };
+
+          // 检查是否存在指标记录
+          const existingMetrics = await app.mysql.get('personal_metrics', {
+            diary_id: id
+          });
+
+          if (existingMetrics) {
+            await app.mysql.update('personal_metrics', {
+              ...metricsData,
+              updated_at: app.mysql.literals.now
+            }, {
+              where: { id: existingMetrics.id }
+            });
+          } else {
+            await app.mysql.insert('personal_metrics', metricsData);
+          }
+        } catch (e) {
+          this.ctx.logger.error('更新个性化指标失败:', e);
+          // 不抛出异常，避免影响主流程
+        }
+      }
+      
       this.ctx.logger.info('日记更新结果:', {
         affectedRows: result.affectedRows,
         changedRows: result.changedRows
