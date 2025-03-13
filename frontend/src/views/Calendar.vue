@@ -120,31 +120,6 @@
               </el-form-item>
             </el-col>
           </el-row>
-
-          <el-row :gutter="20">
-            <el-col :span="12">
-              <el-form-item label="运动时长">
-                <el-input-number
-                  v-model="diaryForm.metrics.exerciseMinutes"
-                  :min="0"
-                  :max="480"
-                  :step="5"
-                  placeholder="运动时长（分钟）"
-                ></el-input-number>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="喝水杯数">
-                <el-input-number
-                  v-model="diaryForm.metrics.waterCups"
-                  :min="0"
-                  :max="20"
-                  :step="1"
-                  placeholder="喝水杯数"
-                ></el-input-number>
-              </el-form-item>
-            </el-col>
-          </el-row>
           
           <el-row :gutter="20">
             <el-col :span="12">
@@ -334,31 +309,6 @@
               </el-form-item>
             </el-col>
           </el-row>
-
-          <el-row :gutter="20">
-            <el-col :span="12">
-              <el-form-item label="运动时长">
-                <el-input-number
-                  v-model="diaryForm.metrics.exerciseMinutes"
-                  :min="0"
-                  :max="480"
-                  :step="5"
-                  placeholder="运动时长（分钟）"
-                ></el-input-number>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="喝水杯数">
-                <el-input-number
-                  v-model="diaryForm.metrics.waterCups"
-                  :min="0"
-                  :max="20"
-                  :step="1"
-                  placeholder="喝水杯数"
-                ></el-input-number>
-              </el-form-item>
-            </el-col>
-          </el-row>
           
           <el-row :gutter="20">
             <el-col :span="12">
@@ -487,8 +437,10 @@ const diaryForm = ref({
     energyLevel: 3,
     stressLevel: 3,
     productivity: 3,
-    exerciseMinutes: 0,
-    waterCups: 0
+    moodScore: 5,
+    socialSatisfaction: 5,
+    familyIndex: 5,
+    healthScore: 5
   }
 });
 
@@ -566,8 +518,6 @@ const openDiaryDialog = async ({ date, hasDiary }) => {
         energyLevel: 3,
         stressLevel: 3,
         productivity: 3,
-        exerciseMinutes: 0,
-        waterCups: 0,
         moodScore: 5,
         socialSatisfaction: 5,
         familyIndex: 5,
@@ -581,9 +531,20 @@ const openDiaryDialog = async ({ date, hasDiary }) => {
 // 保存日记
 const saveDiary = async () => {
   try {
-    await diaryStore.saveDiary(diaryForm.value);
+    // 确保使用正确的日期格式
+    const date = new Date(diaryForm.value.date);
+    const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+    
+    await diaryStore.saveDiary({
+      ...diaryForm.value,
+      date: formattedDate
+    });
+    
     editDialogVisible.value = false;
     ElMessage.success('日记保存成功');
+    
+    // 刷新当月数据
+    await diaryStore.fetchMonthDiaries(currentDate.value);
   } catch (error) {
     ElMessage.error('保存失败: ' + error.message);
   }

@@ -92,16 +92,7 @@ const handleLogout = async () => {
 
 /* 书签样式 */
 .bookmark {
-  position: absolute;
-  top: -20px;
-  right: 100px;
-  width: 40px;
-  height: 120px;
-  background: #e74c3c;
-  transform-origin: bottom;
-  transform: rotate(0deg);
-  transition: transform 0.5s ease;
-  z-index: 100;
+  display: none; /* 隐藏书签装饰 */
 }
 
 .bookmark-open {
