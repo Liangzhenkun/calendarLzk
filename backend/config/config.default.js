@@ -43,7 +43,7 @@ module.exports = appInfo => {
   };
 
   // 配置路径前缀
-  config.prefix = '/api';  // 添加 API 路径前缀
+  // config.prefix = '/api';  // 注释掉这一行，避免重复添加前缀
 
   // 从环境变量获取允许的域名列表
   const corsOrigins = (process.env.CORS_ORIGIN || '').split(' ').filter(Boolean);
