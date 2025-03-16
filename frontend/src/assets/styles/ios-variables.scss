@@ -1,0 +1,174 @@
+// iOS 风格基础变量
+:root {
+  // 主要颜色
+  --ios-primary: #E60012;
+  --ios-secondary: #FFB61E;
+  --ios-background: #FFFFFF;
+  --ios-background-secondary: #FAFAFA;
+  --ios-text-primary: #000000;
+  --ios-text-secondary: #666666;
+  --ios-border: #F5F5F5;
+  
+  // 功能色
+  --ios-success: #34C759;
+  --ios-warning: #FF9500;
+  --ios-error: #FF3B30;
+  --ios-info: #007AFF;
+  
+  // 圆角
+  --ios-radius-sm: 8px;
+  --ios-radius-md: 12px;
+  --ios-radius-lg: 20px;
+  
+  // 阴影
+  --ios-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --ios-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --ios-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+  
+  // 字体
+  --ios-font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+  
+  // 动画
+  --ios-transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --ios-transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --ios-transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  // 间距
+  --ios-spacing-xs: 4px;
+  --ios-spacing-sm: 8px;
+  --ios-spacing-md: 16px;
+  --ios-spacing-lg: 24px;
+  --ios-spacing-xl: 32px;
+  
+  // 模糊效果
+  --ios-blur-sm: blur(4px);
+  --ios-blur-md: blur(8px);
+  --ios-blur-lg: blur(16px);
+  
+  // z-index 层级
+  --ios-z-index-modal: 1000;
+  --ios-z-index-popup: 900;
+  --ios-z-index-header: 800;
+  --ios-z-index-mask: 700;
+}
+
+// 全局基础样式
+body {
+  font-family: var(--ios-font-family);
+  background-color: var(--ios-background);
+  color: var(--ios-text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+// 基础动画
+@keyframes ios-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes ios-scale-in {
+  from { 
+    opacity: 0; 
+    transform: scale(0.95);
+  }
+  to { 
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes ios-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ios-slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// 通用过渡效果
+.ios-fade-enter-active,
+.ios-fade-leave-active {
+  transition: opacity var(--ios-transition-normal);
+}
+
+.ios-fade-enter-from,
+.ios-fade-leave-to {
+  opacity: 0;
+}
+
+.ios-scale-enter-active,
+.ios-scale-leave-active {
+  transition: all var(--ios-transition-normal);
+}
+
+.ios-scale-enter-from,
+.ios-scale-leave-to {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+// 响应式断点
+$breakpoints: (
+  'sm': 576px,
+  'md': 768px,
+  'lg': 992px,
+  'xl': 1200px,
+  'xxl': 1400px
+);
+
+@mixin respond-to($breakpoint) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    @media (max-width: map-get($breakpoints, $breakpoint)) {
+      @content;
+    }
+  }
+}
+
+// 毛玻璃效果混合器
+@mixin ios-glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: var(--ios-blur-md);
+  -webkit-backdrop-filter: var(--ios-blur-md);
+}
+
+// 阴影效果混合器
+@mixin ios-shadow($level: 'md') {
+  @if $level == 'sm' {
+    box-shadow: var(--ios-shadow-sm);
+  } @else if $level == 'lg' {
+    box-shadow: var(--ios-shadow-lg);
+  } @else {
+    box-shadow: var(--ios-shadow-md);
+  }
+}
+
+// 禁用状态混合器
+@mixin ios-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+// 触摸反馈混合器
+@mixin ios-touch-feedback {
+  &:active {
+    transform: scale(0.98);
+    opacity: 0.8;
+  }
+} 

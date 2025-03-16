@@ -1,0 +1,238 @@
+/* Toast 通知 */
+.ios-message {
+  padding: 12px 20px;
+  border-radius: var(--ios-radius-lg);
+  backdrop-filter: var(--ios-blur-md);
+  -webkit-backdrop-filter: var(--ios-blur-md);
+  box-shadow: var(--ios-shadow-lg);
+  font-family: var(--ios-font-family);
+  font-size: 14px;
+  transition: all var(--ios-transition-normal);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  
+  &.el-message {
+    min-width: 240px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    .el-message__content {
+      color: var(--ios-text-primary);
+    }
+    
+    .el-message__icon {
+      margin-right: 10px;
+      font-size: 18px;
+    }
+  }
+  
+  &.el-message--success {
+    background: rgba(var(--ios-success-rgb), 0.9);
+    border-color: var(--ios-success);
+    
+    .el-message__content,
+    .el-message__icon {
+      color: #ffffff;
+    }
+  }
+  
+  &.el-message--warning {
+    background: rgba(var(--ios-warning-rgb), 0.9);
+    border-color: var(--ios-warning);
+    
+    .el-message__content,
+    .el-message__icon {
+      color: #ffffff;
+    }
+  }
+  
+  &.el-message--error {
+    background: rgba(var(--ios-error-rgb), 0.9);
+    border-color: var(--ios-error);
+    
+    .el-message__content,
+    .el-message__icon {
+      color: #ffffff;
+    }
+  }
+  
+  &.el-message--info {
+    background: rgba(var(--ios-info-rgb), 0.9);
+    border-color: var(--ios-info);
+    
+    .el-message__content,
+    .el-message__icon {
+      color: #ffffff;
+    }
+  }
+}
+
+/* 进度指示器 */
+.ios-progress {
+  &.el-progress {
+    --el-progress-color: var(--ios-primary);
+    
+    .el-progress-bar__outer {
+      background-color: var(--ios-border);
+      border-radius: var(--ios-radius-sm);
+      overflow: hidden;
+    }
+    
+    .el-progress-bar__inner {
+      transition: width var(--ios-transition-normal) ease-in-out;
+      border-radius: var(--ios-radius-sm);
+      background: linear-gradient(90deg, 
+        var(--ios-primary) 0%, 
+        var(--ios-secondary) 100%
+      );
+    }
+    
+    .el-progress__text {
+      color: var(--ios-text-secondary);
+      font-family: var(--ios-font-family);
+      font-size: 12px;
+    }
+  }
+  
+  &.el-progress--circle {
+    .el-progress-circle {
+      path:last-child {
+        stroke: var(--ios-primary);
+        transition: stroke-dasharray var(--ios-transition-normal) ease-in-out;
+      }
+    }
+  }
+  
+  &.el-progress--dashboard {
+    .el-progress-circle {
+      path:last-child {
+        stroke: var(--ios-secondary);
+      }
+    }
+  }
+}
+
+/* 加载中指示器 */
+.ios-loading {
+  &.el-loading-mask {
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: var(--ios-blur-sm);
+    -webkit-backdrop-filter: var(--ios-blur-sm);
+    
+    .el-loading-spinner {
+      .circular {
+        width: 40px;
+        height: 40px;
+        animation: ios-loading-rotate 1s linear infinite;
+      }
+      
+      .path {
+        stroke: var(--ios-primary);
+        stroke-width: 3;
+        stroke-linecap: round;
+        animation: ios-loading-dash 1.5s ease-in-out infinite;
+      }
+      
+      .el-loading-text {
+        color: var(--ios-text-secondary);
+        font-family: var(--ios-font-family);
+        font-size: 14px;
+        margin-top: 10px;
+      }
+    }
+  }
+}
+
+/* 加载动画关键帧 */
+@keyframes ios-loading-rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes ios-loading-dash {
+  0% {
+    stroke-dasharray: 1, 150;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -35;
+  }
+  100% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -124;
+  }
+}
+
+/* 深色模式支持 */
+@media (prefers-color-scheme: dark) {
+  .ios-message {
+    background: rgba(0, 0, 0, 0.8);
+    border-color: rgba(255, 255, 255, 0.1);
+    
+    &.el-message {
+      .el-message__content {
+        color: #ffffff;
+      }
+    }
+  }
+  
+  .ios-progress {
+    &.el-progress {
+      .el-progress-bar__outer {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+      
+      .el-progress__text {
+        color: rgba(255, 255, 255, 0.7);
+      }
+    }
+  }
+  
+  .ios-loading {
+    &.el-loading-mask {
+      background-color: rgba(0, 0, 0, 0.8);
+      
+      .el-loading-spinner {
+        .path {
+          stroke: var(--ios-secondary);
+        }
+        
+        .el-loading-text {
+          color: rgba(255, 255, 255, 0.7);
+        }
+      }
+    }
+  }
+}
+
+/* 移动端适配 */
+@media screen and (max-width: 480px) {
+  .ios-message {
+    &.el-message {
+      min-width: 180px;
+      padding: 10px 16px;
+      font-size: 13px;
+      
+      .el-message__icon {
+        font-size: 16px;
+      }
+    }
+  }
+  
+  .ios-loading {
+    &.el-loading-mask {
+      .el-loading-spinner {
+        .circular {
+          width: 32px;
+          height: 32px;
+        }
+        
+        .el-loading-text {
+          font-size: 13px;
+        }
+      }
+    }
+  }
+} 

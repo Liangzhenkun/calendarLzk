@@ -7,8 +7,11 @@ import App from './App.vue'
 import router from './router'
 import axios from 'axios'
 import i18n from './i18n'
+import Vue3TouchEvents from 'vue3-touch-events'
 
 // 导入样式
+import './assets/styles/ios-variables.scss'
+import './assets/styles/ios-element.scss'
 import './assets/main.css'
 import 'element-plus/theme-chalk/dark/css-vars.css'
 
@@ -50,5 +53,6 @@ app.use(i18n)
 app.use(ElementPlus, {
   locale: zhCn,
 })
+app.use(Vue3TouchEvents)
 
 app.mount('#app') 

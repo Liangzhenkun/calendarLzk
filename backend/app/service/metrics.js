@@ -57,58 +57,42 @@ class MetricsService extends Service {
     }
   }
 
+  // 获取指标字段名
+  getMetricField(metric) {
+    const metricMap = {
+      'sleep': 'sleep_quality',
+      'stress': 'stress_level',
+      'productivity': 'productivity'
+    };
+    return metricMap[metric];
+  }
+
   // 获取指标统计数据
-  async getStats(userId, startDate, endDate) {
+  async getStats(userId) {
     const { app } = this;
     try {
       const sql = `
         SELECT 
-          AVG(sleep_quality) as avg_sleep_quality,
-          AVG(energy_level) as avg_energy_level,
-          AVG(stress_level) as avg_stress_level,
-          AVG(productivity) as avg_productivity,
-          AVG(mood_score) as avg_mood_score,
-          AVG(social_satisfaction) as avg_social_satisfaction,
-          AVG(family_index) as avg_family_index,
-          AVG(health_score) as avg_health_score
+          AVG(sleep_quality) as avg_sleep,
+          AVG(stress_level) as avg_stress,
+          AVG(productivity) as avg_productivity
         FROM personal_metrics
         WHERE user_id = ?
-          AND date BETWEEN ? AND ?
+        AND date >= DATE_SUB(CURRENT_DATE, INTERVAL 30 DAY)
       `;
 
-      const [results] = await app.mysql.query(sql, [userId, startDate, endDate]);
+      const [results] = await app.mysql.query(sql, [userId]);
       return results;
     } catch (error) {
-      this.ctx.logger.error('获取指标统计数据失败:', error);
+      this.ctx.logger.error('获取指标统计失败:', error);
       throw error;
     }
   }
 
-  // 获取指标趋势数据
-  async getTrend(userId, metric, period = 'week') {
+  // 获取指标趋势
+  async getTrend(userId, metric) {
     const { app } = this;
     try {
-      let interval;
-      let startDate = new Date();
-
-      switch (period) {
-        case 'week':
-          interval = 'DAY';
-          startDate.setDate(startDate.getDate() - 7);
-          break;
-        case 'month':
-          interval = 'WEEK';
-          startDate.setMonth(startDate.getMonth() - 1);
-          break;
-        case 'year':
-          interval = 'MONTH';
-          startDate.setFullYear(startDate.getFullYear() - 1);
-          break;
-        default:
-          interval = 'DAY';
-          startDate.setDate(startDate.getDate() - 7);
-      }
-
       const metricField = this.getMetricField(metric);
       if (!metricField) {
         throw new Error('无效的指标类型');
@@ -116,50 +100,21 @@ class MetricsService extends Service {
 
       const sql = `
         SELECT 
-          DATE_FORMAT(date, 
-            CASE 
-              WHEN ? = 'DAY' THEN '%Y-%m-%d'
-              WHEN ? = 'WEEK' THEN '%Y-%u'
-              WHEN ? = 'MONTH' THEN '%Y-%m'
-            END
-          ) as time_period,
-          AVG(${metricField}) as value
+          DATE_FORMAT(date, '%Y-%m') as month,
+          AVG(${metricField}) as average
         FROM personal_metrics
         WHERE user_id = ?
-          AND date >= ?
-        GROUP BY time_period
-        ORDER BY time_period ASC
+        AND date >= DATE_SUB(CURRENT_DATE, INTERVAL 12 MONTH)
+        GROUP BY DATE_FORMAT(date, '%Y-%m')
+        ORDER BY month ASC
       `;
 
-      const results = await app.mysql.query(sql, [
-        interval,
-        interval,
-        interval,
-        userId,
-        startDate.toISOString().split('T')[0]
-      ]);
-
+      const results = await app.mysql.query(sql, [userId]);
       return results;
     } catch (error) {
-      this.ctx.logger.error('获取指标趋势数据失败:', error);
+      this.ctx.logger.error('获取指标趋势失败:', error);
       throw error;
     }
-  }
-
-  // 获取指标字段名
-  getMetricField(metric) {
-    const metricMap = {
-      sleep: 'sleep_quality',
-      energy: 'energy_level',
-      stress: 'stress_level',
-      productivity: 'productivity',
-      mood: 'mood_score',
-      social: 'social_satisfaction',
-      family: 'family_index',
-      health: 'health_score'
-    };
-
-    return metricMap[metric];
   }
 }
 

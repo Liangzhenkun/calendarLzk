@@ -1,35 +1,85 @@
 <template>
-  <div class="calendar">
-    <div class="calendar-header">
-      <div class="month-navigation">
-        <el-button @click="previousMonth">上个月</el-button>
-        <h2>{{ currentYear }}年{{ currentMonth + 1 }}月</h2>
-        <el-button @click="nextMonth">下个月</el-button>
-      </div>
+  <div 
+    class="calendar-container"
+    v-touch:swipe.left="nextMonth"
+    v-touch:swipe.right="previousMonth"
+    v-touch:pinch="handlePinch"
+    v-touch:longtap="handleLongTap"
+    v-touch:tap="handleTap"
+  >
+    <!-- Loading Overlay -->
+    <div v-if="loading" class="loading-overlay ios-glass">
+      <div class="loading-spinner"></div>
+      <span>加载中...</span>
     </div>
 
-    <div class="calendar-body">
-      <div class="weekdays">
-        <div v-for="day in weekDays" :key="day" class="weekday">{{ day }}</div>
+    <div class="calendar" :class="{ 
+      'month-changing': isMonthChanging,
+      'is-mobile': isMobile 
+    }">
+      <!-- 日历头部 -->
+      <div class="calendar-header">
+        <div class="month-navigation">
+          <el-button 
+            class="nav-button ios-button" 
+            text 
+            @click="previousMonth"
+            :disabled="isMonthChanging"
+          >
+            <el-icon><ArrowLeft /></el-icon>
+          </el-button>
+          <transition name="month-title" mode="out-in">
+            <h2 class="month-title" :key="currentYear + '-' + currentMonth">
+              {{ currentYear }}年{{ currentMonth + 1 }}月
+            </h2>
+          </transition>
+          <el-button 
+            class="nav-button ios-button" 
+            text 
+            @click="nextMonth"
+            :disabled="isMonthChanging"
+          >
+            <el-icon><ArrowRight /></el-icon>
+          </el-button>
+        </div>
       </div>
-      
-      <div class="days">
-        <div
-          v-for="{ date, isCurrentMonth, hasDiary } in calendarDays"
-          :key="date.toISOString()"
-          class="day"
-          :class="{
-            'other-month': !isCurrentMonth,
-            'has-diary': hasDiary,
-            'is-today': isToday(date)
-          }"
-          @dblclick="openDiaryDialog({ date, hasDiary })"
-        >
-          <span class="day-number">{{ date.getDate() }}</span>
-          <div class="day-content" v-if="hasDiary">
-            <i class="el-icon-notebook-2"></i>
+
+      <!-- 日历主体 -->
+      <div class="calendar-body">
+        <!-- 星期栏 -->
+        <div class="weekdays">
+          <div v-for="day in weekDays" :key="day" class="weekday">
+            {{ isMobile ? day.charAt(0) : day }}
           </div>
         </div>
+        
+        <!-- 日期网格 -->
+        <transition-group 
+          name="calendar-days" 
+          tag="div" 
+          class="days"
+          @before-enter="onBeforeEnter"
+          @enter="onEnter"
+          @leave="onLeave"
+        >
+          <div
+            v-for="({ date, isCurrentMonth, hasDiary }, index) in calendarDays"
+            :key="date.toISOString()"
+            class="day"
+            :class="{
+              'other-month': !isCurrentMonth,
+              'has-diary': hasDiary,
+              'is-today': isToday(date)
+            }"
+            :data-index="index"
+            @click="openDiaryDialog({ date, hasDiary })"
+          >
+            <span class="day-number">{{ date.getDate() }}</span>
+            <transition name="diary-dot">
+              <div v-if="hasDiary" class="diary-indicator"></div>
+            </transition>
+          </div>
+        </transition-group>
       </div>
     </div>
 
@@ -37,29 +87,45 @@
     <el-dialog
       v-model="diaryDialogVisible"
       :title="dialogTitle"
-      width="50%"
+      width="90%"
+      custom-class="diary-dialog ios-dialog"
       :close-on-click-modal="false"
+      destroy-on-close
+      ref="dialogLazyLoad"
     >
-      <div class="diary-form">
+      <div class="diary-form ios-form">
         <el-form :model="diaryForm" label-width="80px">
           <el-form-item label="标题">
             <el-input
               v-model="diaryForm.title"
               placeholder="请输入日记标题..."
-            ></el-input>
+              class="ios-input"
+              prefix-icon="Edit"
+            />
           </el-form-item>
           
           <el-form-item label="心情">
-            <el-rate
-              v-model="diaryForm.mood"
-              :colors="moodColors"
-              :texts="moodTexts"
-              show-text
-            ></el-rate>
+            <div class="mood-selector">
+              <el-rate
+                v-model="diaryForm.mood"
+                :colors="moodColors"
+                :texts="moodTexts"
+                show-text
+                class="ios-rate"
+              >
+                <template #icon="{ item }">
+                  <span class="mood-emoji">{{ moodEmoji[item.value - 1] }}</span>
+                </template>
+              </el-rate>
+            </div>
           </el-form-item>
           
           <el-form-item label="天气">
-            <el-select v-model="diaryForm.weather" placeholder="选择天气">
+            <el-select 
+              v-model="diaryForm.weather" 
+              placeholder="选择天气"
+              class="ios-select"
+            >
               <el-option
                 v-for="item in weatherOptions"
                 :key="item.value"
@@ -73,103 +139,54 @@
           </el-form-item>
           
           <!-- 个性化数值记录 -->
-          <el-divider>个性化指标记录</el-divider>
-          
-          <el-row :gutter="20">
-            <el-col :span="12">
-              <el-form-item label="睡眠质量">
-                <el-rate
-                  v-model="diaryForm.metrics.sleepQuality"
-                  :colors="metricColors"
-                  :texts="sleepQualityTexts"
-                  show-text
-                ></el-rate>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="能量水平">
-                <el-rate
-                  v-model="diaryForm.metrics.energyLevel"
-                  :colors="metricColors"
-                  :texts="energyLevelTexts"
-                  show-text
-                ></el-rate>
-              </el-form-item>
-            </el-col>
-          </el-row>
+          <div class="metrics-section">
+            <el-divider>个性化指标记录</el-divider>
+            
+            <el-row :gutter="20">
+              <el-col :span="24">
+                <el-form-item label="睡眠质量">
+                  <el-rate
+                    v-model="diaryForm.metrics.sleepQuality"
+                    :max="10"
+                    :colors="metricColors"
+                    :texts="sleepQualityTexts"
+                    show-text
+                    class="ios-rate"
+                  />
+                </el-form-item>
+              </el-col>
+            </el-row>
 
-          <el-row :gutter="20">
-            <el-col :span="12">
-              <el-form-item label="压力水平">
-                <el-rate
-                  v-model="diaryForm.metrics.stressLevel"
-                  :colors="metricColors.slice().reverse()"
-                  :texts="stressLevelTexts"
-                  show-text
-                ></el-rate>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="工作效率">
-                <el-rate
-                  v-model="diaryForm.metrics.productivity"
-                  :colors="metricColors"
-                  :texts="productivityTexts"
-                  show-text
-                ></el-rate>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          
-          <el-row :gutter="20">
-            <el-col :span="12">
-              <el-form-item label="心情指数">
-                <el-rate
-                  v-model="diaryForm.metrics.moodScore"
-                  :max="10"
-                  :colors="metricColors"
-                  :texts="moodScoreTexts"
-                  show-text
-                ></el-rate>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="社交满意度">
-                <el-rate
-                  v-model="diaryForm.metrics.socialSatisfaction"
-                  :max="10"
-                  :colors="metricColors"
-                  :texts="socialSatisfactionTexts"
-                  show-text
-                ></el-rate>
-              </el-form-item>
-            </el-col>
-          </el-row>
+            <el-row :gutter="20">
+              <el-col :span="24">
+                <el-form-item label="压力水平">
+                  <el-rate
+                    v-model="diaryForm.metrics.stressLevel"
+                    :max="10"
+                    :colors="metricColors.slice().reverse()"
+                    :texts="stressLevelTexts"
+                    show-text
+                    class="ios-rate"
+                  />
+                </el-form-item>
+              </el-col>
+            </el-row>
 
-          <el-row :gutter="20">
-            <el-col :span="12">
-              <el-form-item label="家庭指数">
-                <el-rate
-                  v-model="diaryForm.metrics.familyIndex"
-                  :max="10"
-                  :colors="metricColors"
-                  :texts="familyIndexTexts"
-                  show-text
-                ></el-rate>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="健康指数">
-                <el-rate
-                  v-model="diaryForm.metrics.healthScore"
-                  :max="10"
-                  :colors="metricColors"
-                  :texts="healthScoreTexts"
-                  show-text
-                ></el-rate>
-              </el-form-item>
-            </el-col>
-          </el-row>
+            <el-row :gutter="20">
+              <el-col :span="24">
+                <el-form-item label="工作效率">
+                  <el-rate
+                    v-model="diaryForm.metrics.productivity"
+                    :max="10"
+                    :colors="metricColors"
+                    :texts="productivityTexts"
+                    show-text
+                    class="ios-rate"
+                  />
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </div>
           
           <el-form-item label="内容">
             <el-input
@@ -177,14 +194,15 @@
               type="textarea"
               :rows="6"
               placeholder="写下今天的故事..."
-            ></el-input>
+              class="ios-input diary-content"
+            />
           </el-form-item>
         </el-form>
       </div>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="diaryDialogVisible = false">取消</el-button>
-          <el-button type="primary" @click="saveDiary">保存</el-button>
+          <el-button class="ios-button" @click="diaryDialogVisible = false">取消</el-button>
+          <el-button type="primary" class="ios-button" @click="saveDiary">保存</el-button>
         </span>
       </template>
     </el-dialog>
@@ -193,20 +211,28 @@
     <el-dialog
       v-model="readDialogVisible"
       :title="dialogTitle"
-      width="50%"
+      width="90%"
+      custom-class="diary-dialog ios-dialog"
       :close-on-click-modal="false"
     >
       <div class="diary-read">
         <div class="diary-header">
           <h3>{{ diaryForm.title }}</h3>
           <div class="diary-meta">
-            <el-rate
-              v-model="diaryForm.mood"
-              :colors="moodColors"
-              :texts="moodTexts"
-              show-text
-              disabled
-            ></el-rate>
+            <div class="mood-display">
+              <el-rate
+                v-model="diaryForm.mood"
+                :colors="moodColors"
+                :texts="moodTexts"
+                show-text
+                disabled
+                class="ios-rate"
+              >
+                <template #icon="{ item }">
+                  <span class="mood-emoji">{{ moodEmoji[item.value - 1] }}</span>
+                </template>
+              </el-rate>
+            </div>
             <div class="weather-display">
               <i :class="getWeatherIcon(diaryForm.weather)"></i>
               {{ getWeatherLabel(diaryForm.weather) }}
@@ -216,8 +242,55 @@
         <div class="diary-content">
           {{ diaryForm.content }}
         </div>
+        <div class="diary-metrics">
+          <el-divider>个性化指标</el-divider>
+          <el-row :gutter="20">
+            <el-col :span="24">
+              <div class="metric-item">
+                <span class="metric-label">睡眠质量</span>
+                <el-rate
+                  v-model="diaryForm.metrics.sleepQuality"
+                  :max="10"
+                  :colors="metricColors"
+                  :texts="sleepQualityTexts"
+                  show-text
+                  disabled
+                  class="ios-rate"
+                />
+              </div>
+            </el-col>
+            <el-col :span="24">
+              <div class="metric-item">
+                <span class="metric-label">压力水平</span>
+                <el-rate
+                  v-model="diaryForm.metrics.stressLevel"
+                  :max="10"
+                  :colors="metricColors.slice().reverse()"
+                  :texts="stressLevelTexts"
+                  show-text
+                  disabled
+                  class="ios-rate"
+                />
+              </div>
+            </el-col>
+            <el-col :span="24">
+              <div class="metric-item">
+                <span class="metric-label">工作效率</span>
+                <el-rate
+                  v-model="diaryForm.metrics.productivity"
+                  :max="10"
+                  :colors="metricColors"
+                  :texts="productivityTexts"
+                  show-text
+                  disabled
+                  class="ios-rate"
+                />
+              </div>
+            </el-col>
+          </el-row>
+        </div>
         <div class="diary-actions">
-          <el-button type="primary" @click="switchToEditMode">编辑日记</el-button>
+          <el-button type="primary" class="ios-button" @click="switchToEditMode">编辑日记</el-button>
         </div>
       </div>
     </el-dialog>
@@ -262,103 +335,51 @@
           </el-form-item>
           
           <!-- 个性化数值记录 -->
-          <el-divider>个性化指标记录</el-divider>
-          
-          <el-row :gutter="20">
-            <el-col :span="12">
-              <el-form-item label="睡眠质量">
-                <el-rate
-                  v-model="diaryForm.metrics.sleepQuality"
-                  :colors="metricColors"
-                  :texts="sleepQualityTexts"
-                  show-text
-                ></el-rate>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="能量水平">
-                <el-rate
-                  v-model="diaryForm.metrics.energyLevel"
-                  :colors="metricColors"
-                  :texts="energyLevelTexts"
-                  show-text
-                ></el-rate>
-              </el-form-item>
-            </el-col>
-          </el-row>
+          <div class="metrics-section">
+            <el-divider>个性化指标记录</el-divider>
+            
+            <el-row :gutter="20">
+              <el-col :span="24">
+                <el-form-item label="睡眠质量">
+                  <el-rate
+                    v-model="diaryForm.metrics.sleepQuality"
+                    :max="10"
+                    :colors="metricColors"
+                    :texts="sleepQualityTexts"
+                    show-text
+                  ></el-rate>
+                </el-form-item>
+              </el-col>
+            </el-row>
 
-          <el-row :gutter="20">
-            <el-col :span="12">
-              <el-form-item label="压力水平">
-                <el-rate
-                  v-model="diaryForm.metrics.stressLevel"
-                  :colors="metricColors.slice().reverse()"
-                  :texts="stressLevelTexts"
-                  show-text
-                ></el-rate>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="工作效率">
-                <el-rate
-                  v-model="diaryForm.metrics.productivity"
-                  :colors="metricColors"
-                  :texts="productivityTexts"
-                  show-text
-                ></el-rate>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          
-          <el-row :gutter="20">
-            <el-col :span="12">
-              <el-form-item label="心情指数">
-                <el-rate
-                  v-model="diaryForm.metrics.moodScore"
-                  :max="10"
-                  :colors="metricColors"
-                  :texts="moodScoreTexts"
-                  show-text
-                ></el-rate>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="社交满意度">
-                <el-rate
-                  v-model="diaryForm.metrics.socialSatisfaction"
-                  :max="10"
-                  :colors="metricColors"
-                  :texts="socialSatisfactionTexts"
-                  show-text
-                ></el-rate>
-              </el-form-item>
-            </el-col>
-          </el-row>
+            <el-row :gutter="20">
+              <el-col :span="24">
+                <el-form-item label="压力水平">
+                  <el-rate
+                    v-model="diaryForm.metrics.stressLevel"
+                    :max="10"
+                    :colors="metricColors.slice().reverse()"
+                    :texts="stressLevelTexts"
+                    show-text
+                  ></el-rate>
+                </el-form-item>
+              </el-col>
+            </el-row>
 
-          <el-row :gutter="20">
-            <el-col :span="12">
-              <el-form-item label="家庭指数">
-                <el-rate
-                  v-model="diaryForm.metrics.familyIndex"
-                  :max="10"
-                  :colors="metricColors"
-                  :texts="familyIndexTexts"
-                  show-text
-                ></el-rate>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="健康指数">
-                <el-rate
-                  v-model="diaryForm.metrics.healthScore"
-                  :max="10"
-                  :colors="metricColors"
-                  :texts="healthScoreTexts"
-                  show-text
-                ></el-rate>
-              </el-form-item>
-            </el-col>
-          </el-row>
+            <el-row :gutter="20">
+              <el-col :span="24">
+                <el-form-item label="工作效率">
+                  <el-rate
+                    v-model="diaryForm.metrics.productivity"
+                    :max="10"
+                    :colors="metricColors"
+                    :texts="productivityTexts"
+                    show-text
+                  ></el-rate>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </div>
           
           <el-form-item label="内容">
             <el-input
@@ -397,14 +418,23 @@ const selectedDate = ref(null);
 
 // 个性化指标配置
 const metricColors = ['#F56C6C', '#E6A23C', '#909399', '#67C23A', '#409EFF'];
-const sleepQualityTexts = ['很差', '一般', '正常', '不错', '很好'];
-const energyLevelTexts = ['疲惫', '低落', '一般', '充沛', '满满'];
-const stressLevelTexts = ['极高', '偏高', '一般', '轻松', '无压'];
-const productivityTexts = ['很低', '一般', '正常', '高效', '超高'];
+const sleepQualityTexts = [
+  '非常差', '很差', '较差', '一般', '还行',
+  '不错', '良好', '优质', '很好', '极佳'
+];
+const stressLevelTexts = [
+  '极度紧张', '很大压力', '较大压力', '有些压力', '一般压力',
+  '较为轻松', '比较轻松', '很轻松', '基本无压', '完全无压'
+];
+const productivityTexts = [
+  '效率极低', '效率很低', '效率较低', '效率一般', '效率还行',
+  '效率不错', '效率良好', '效率优秀', '效率极高', '效率满分'
+];
 
 // 心情相关配置
-const moodColors = ['#99A9BF', '#F7BA2A', '#FF9900', '#FF6666', '#FF0000'];
-const moodTexts = ['失落', '平静', '还好', '开心', '超棒'];
+const moodColors = ['#99A9BF', '#FFB61E', '#FF9900', '#FF6666', '#E60012']
+const moodTexts = ['失落', '平静', '还好', '开心', '超棒']
+const moodEmoji = ['😢', '😐', '🙂', '😄', '😍']
 
 // 天气选项
 const weatherOptions = [
@@ -433,48 +463,71 @@ const diaryForm = ref({
   weather: 'sunny',
   content: '',
   metrics: {
-    sleepQuality: 3,
-    energyLevel: 3,
-    stressLevel: 3,
-    productivity: 3,
-    moodScore: 5,
-    socialSatisfaction: 5,
-    familyIndex: 5,
-    healthScore: 5
+    sleepQuality: 5,
+    stressLevel: 5,
+    productivity: 5
   }
 });
 
 // 计算属性
-const currentYear = computed(() => currentDate.value.getFullYear());
-const currentMonth = computed(() => currentDate.value.getMonth());
+const currentYear = computed(() => currentDate.value.getFullYear())
+const currentMonth = computed(() => currentDate.value.getMonth())
 const dialogTitle = computed(() => {
-  const date = selectedDate.value;
-  return date ? `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日的日记` : '';
-});
+  const date = selectedDate.value
+  if (!date) return ''
+  return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日的日记`
+})
 
-// 日历数据
+// 添加性能优化相关的代码
+const isDialogMounted = ref(false)
+const dialogLazyLoad = ref(null)
+
+// 使用 Intersection Observer 优化对话框加载
+useIntersectionObserver(
+  dialogLazyLoad,
+  ([{ isIntersecting }]) => {
+    if (isIntersecting && !isDialogMounted.value) {
+      isDialogMounted.value = true
+    }
+  }
+)
+
+// 优化计算属性的性能
 const calendarDays = computed(() => {
-  const year = currentDate.value.getFullYear();
-  const month = currentDate.value.getMonth();
-  const firstDay = new Date(year, month, 1);
-  const lastDay = new Date(year, month + 1, 0);
+  // 使用 WeakMap 缓存日期计算结果
+  const cache = new WeakMap()
+  const year = currentDate.value.getFullYear()
+  const month = currentDate.value.getMonth()
   
-  const days = [];
-  const startDay = new Date(firstDay);
-  startDay.setDate(startDay.getDate() - startDay.getDay());
+  if (cache.has(currentDate.value)) {
+    return cache.get(currentDate.value)
+  }
+  
+  const days = calculateDays(year, month)
+  cache.set(currentDate.value, days)
+  return days
+})
+
+// 分离日期计算逻辑
+const calculateDays = (year, month) => {
+  const firstDay = new Date(year, month, 1)
+  const lastDay = new Date(year, month + 1, 0)
+  const days = []
+  const startDay = new Date(firstDay)
+  startDay.setDate(startDay.getDate() - startDay.getDay())
   
   while (days.length < 42) {
-    const date = new Date(startDay);
+    const date = new Date(startDay)
     days.push({
       date,
       isCurrentMonth: date.getMonth() === month,
       hasDiary: diaryStore.hasDiaryOnDate(date)
-    });
-    startDay.setDate(startDay.getDate() + 1);
+    })
+    startDay.setDate(startDay.getDate() + 1)
   }
   
   return days;
-});
+};
 
 // 切换到编辑模式
 const switchToEditMode = () => {
@@ -514,14 +567,9 @@ const openDiaryDialog = async ({ date, hasDiary }) => {
       weather: 'sunny',
       content: '',
       metrics: {
-        sleepQuality: 3,
-        energyLevel: 3,
-        stressLevel: 3,
-        productivity: 3,
-        moodScore: 5,
-        socialSatisfaction: 5,
-        familyIndex: 5,
-        healthScore: 5
+        sleepQuality: 5,
+        stressLevel: 5,
+        productivity: 5
       }
     };
     editDialogVisible.value = true;
@@ -530,6 +578,7 @@ const openDiaryDialog = async ({ date, hasDiary }) => {
 
 // 保存日记
 const saveDiary = async () => {
+  saving.value = true
   try {
     // 确保使用正确的日期格式
     const date = new Date(diaryForm.value.date);
@@ -546,26 +595,54 @@ const saveDiary = async () => {
     // 刷新当月数据
     await diaryStore.fetchMonthDiaries(currentDate.value);
   } catch (error) {
-    ElMessage.error('保存失败: ' + error.message);
+    ElMessage({
+      type: 'error',
+      message: '保存失败: ' + error.message,
+      customClass: 'ios-message'
+    })
+  } finally {
+    saving.value = false
   }
-};
+}
 
 // 日历导航方法
-const previousMonth = () => {
-  const newDate = new Date(currentDate.value);
-  newDate.setMonth(newDate.getMonth() - 1);
-  currentDate.value = newDate;
-};
+const previousMonth = async () => {
+  if (isMonthChanging.value) return
+  isMonthChanging.value = true
+  
+  const newDate = new Date(currentDate.value)
+  newDate.setMonth(newDate.getMonth() - 1)
+  currentDate.value = newDate
+  
+  try {
+    await fetchMonthDiaries()
+  } finally {
+    setTimeout(() => {
+      isMonthChanging.value = false
+    }, 300)
+  }
+}
 
-const nextMonth = () => {
-  const newDate = new Date(currentDate.value);
-  newDate.setMonth(newDate.getMonth() + 1);
-  currentDate.value = newDate;
-};
+const nextMonth = async () => {
+  if (isMonthChanging.value) return
+  isMonthChanging.value = true
+  
+  const newDate = new Date(currentDate.value)
+  newDate.setMonth(newDate.getMonth() + 1)
+  currentDate.value = newDate
+  
+  try {
+    await fetchMonthDiaries()
+  } finally {
+    setTimeout(() => {
+      isMonthChanging.value = false
+    }, 300)
+  }
+}
 
 // 判断是否是今天
 const isToday = (date) => {
-  const today = new Date();
+  const today = new Date()
   return date.getDate() === today.getDate() &&
     date.getMonth() === today.getMonth() &&
     date.getFullYear() === today.getFullYear();
@@ -576,41 +653,153 @@ onMounted(async () => {
   await diaryStore.fetchDiaries();
 });
 
-// 在script部分添加新的文本配置
-const moodScoreTexts = [
-  '非常低落', '很不开心', '不太开心', '一般般', '还可以',
-  '比较好', '开心', '很开心', '非常开心', '极其愉悦'
-];
+// 获取指标标签
+const getMetricLabel = (key) => {
+  const labels = {
+    sleepQuality: '睡眠质量',
+    stressLevel: '压力水平',
+    productivity: '工作效率'
+  };
+  return labels[key] || key;
+};
 
-const socialSatisfactionTexts = [
-  '极不满意', '很不满意', '不太满意', '一般般', '还可以',
-  '比较满意', '满意', '很满意', '非常满意', '极其满意'
-];
+// 动画相关
+const onBeforeEnter = (el) => {
+  el.style.opacity = 0;
+  el.style.transform = 'translateY(30px)';
+};
 
-const familyIndexTexts = [
-  '非常糟糕', '很不理想', '不太好', '一般般', '还可以',
-  '比较好', '和谐', '很和谐', '非常和谐', '完美和谐'
-];
+const onEnter = (el, done) => {
+  const delay = el.dataset.index * 50;
+  setTimeout(() => {
+    el.style.transition = 'all var(--ios-transition-normal)';
+    el.style.opacity = 1;
+    el.style.transform = 'translateY(0)';
+  }, delay);
+};
 
-const healthScoreTexts = [
-  '非常差', '很不好', '不太好', '一般般', '还可以',
-  '比较好', '健康', '很健康', '非常健康', '极其健康'
-];
+const onLeave = (el, done) => {
+  const delay = el.dataset.index * 50;
+  setTimeout(() => {
+    el.style.transition = 'all var(--ios-transition-normal)';
+    el.style.opacity = 0;
+    el.style.transform = 'translateY(-30px)';
+  }, delay);
+};
+
+// 手势处理
+const handlePinch = (e) => {
+  ElMessage({
+    message: '缩放功能即将推出',
+    type: 'info',
+    customClass: 'ios-message ios-message-info',
+    duration: 2000
+  });
+};
+
+const handleLongTap = (e) => {
+  // 添加触觉反馈（如果支持）
+  if (navigator.vibrate) {
+    navigator.vibrate(50);
+  }
+  
+  const date = new Date();
+  openDiaryDialog({ 
+    date, 
+    hasDiary: diaryStore.hasDiaryOnDate(date) 
+  });
+};
+
+const handleTap = (e) => {
+  if (e.target.classList.contains('day')) {
+    // 添加水波纹效果
+    const ripple = document.createElement('div');
+    ripple.className = 'ripple';
+    e.target.appendChild(ripple);
+    
+    // 计算水波纹位置
+    const rect = e.target.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    ripple.style.left = `${x}px`;
+    ripple.style.top = `${y}px`;
+    
+    // 动画结束后移除水波纹
+    setTimeout(() => {
+      ripple.remove();
+    }, 600);
+    
+    e.target.style.transform = 'scale(0.95)';
+    setTimeout(() => {
+      e.target.style.transform = '';
+    }, 200);
+  }
+};
+
+// 移动设备检测
+const isMobile = ref(window.innerWidth <= 768);
+const isMonthChanging = ref(false);
+
+// 监听窗口大小变化
+onMounted(() => {
+  window.addEventListener('resize', () => {
+    isMobile.value = window.innerWidth <= 768;
+  });
+});
+
+// 优化性能的保存状态
+const saving = ref(false);
+
+// 月份切换动画
+const monthTransition = ref('next');
+
+// 异步加载月份数据
+const loading = ref(false);
+
+// 优化异步加载月份数据
+const fetchMonthDiaries = async () => {
+  loading.value = true;
+  try {
+    await diaryStore.fetchMonthDiaries(currentDate.value);
+  } catch (error) {
+    ElMessage({
+      type: 'error',
+      message: '加载月份数据失败',
+      customClass: 'ios-message ios-message-error',
+      duration: 3000,
+      customClass: 'ios-message'
+    });
+  } finally {
+    loading.value = false;
+  }
+};
 </script>
 
-<style scoped>
-.calendar {
+<style lang="scss" scoped>
+@import '@/assets/styles/ios-mixins.scss';
+
+.calendar-container {
   padding: 20px;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: var(--ios-radius-lg);
+  @include ios-shadow('lg');
+  backdrop-filter: var(--ios-blur-md);
+  -webkit-backdrop-filter: var(--ios-blur-md);
   position: relative;
   max-width: 1200px;
   margin: 0 auto;
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .calendar-header {
-  margin-bottom: 20px;
+  padding: 24px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  @include ios-glass;
+  border-top-left-radius: var(--ios-radius-lg);
+  border-top-right-radius: var(--ios-radius-lg);
+  position: sticky;
+  top: 0;
+  z-index: var(--ios-z-index-header);
 }
 
 .month-navigation {
@@ -618,83 +807,158 @@ const healthScoreTexts = [
   justify-content: space-between;
   align-items: center;
   padding: 0 20px;
+  
+  .nav-button {
+    color: var(--ios-primary);
+    transition: all var(--ios-transition-fast);
+    
+    &:hover {
+      transform: translateY(-1px);
+      opacity: 0.9;
+    }
+    
+    &:active {
+      transform: translateY(0);
+    }
+    
+    &:disabled {
+      opacity: 0.5;
+    }
+  }
 }
 
-.month-navigation h2 {
+.month-title {
   font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--ios-primary);
   margin: 0;
-}
-
-.calendar-body {
-  margin-top: 20px;
+  font-family: var(--ios-font-family);
+  transition: all var(--ios-transition-normal);
 }
 
 .weekdays {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  text-align: center;
-  font-weight: bold;
-  gap: 5px;
-  margin-bottom: 10px;
+  padding: 12px 0;
+  background: rgba(0, 0, 0, 0.02);
+  border-bottom: 1px solid var(--ios-border);
+  position: sticky;
+  top: 80px;
+  z-index: var(--ios-z-index-header);
+  backdrop-filter: var(--ios-blur-sm);
+  -webkit-backdrop-filter: var(--ios-blur-sm);
 }
 
 .weekday {
+  text-align: center;
+  font-weight: 500;
+  color: var(--ios-text-secondary);
+  font-family: var(--ios-font-family);
   padding: 10px;
-  background: #f5f7fa;
-  border-radius: 4px;
+  font-size: 0.9rem;
 }
 
 .days {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 5px;
+  gap: 1px;
+  background: rgba(0, 0, 0, 0.04);
+  padding: 1px;
 }
 
 .day {
   aspect-ratio: 1;
   padding: 5px;
-  border: 1px solid #ebeef5;
-  border-radius: 4px;
+  border: 1px solid var(--ios-border);
+  border-radius: var(--ios-radius-sm);
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all var(--ios-transition-fast);
   display: flex;
   flex-direction: column;
-}
-
-.day:hover {
-  background: #f5f7fa;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.7);
+  position: relative;
+  overflow: hidden;
+  
+  &:hover {
+    transform: translateY(-1px);
+    @include ios-shadow('sm');
+    background: rgba(255, 255, 255, 0.9);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+  
+  &.other-month {
+    opacity: 0.5;
+  }
+  
+  &.has-diary {
+    background: rgba(var(--ios-primary-rgb), 0.1);
+    border-color: var(--ios-primary);
+    
+    .diary-indicator {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--ios-primary);
+      position: absolute;
+      bottom: 4px;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: ios-scale-in var(--ios-transition-fast);
+    }
+  }
+  
+  &.is-today {
+    background: rgba(var(--ios-secondary-rgb), 0.1);
+    border-color: var(--ios-secondary);
+    font-weight: 600;
+    
+    .day-number {
+      color: var(--ios-secondary);
+    }
+  }
 }
 
 .day-number {
   font-size: 1.1em;
   margin-bottom: 5px;
+  font-weight: 500;
+  color: var(--ios-text-primary);
+  font-family: var(--ios-font-family);
 }
 
-.day-content {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.other-month {
-  opacity: 0.5;
-}
-
-.has-diary {
-  background: #ecf5ff;
-  border-color: #409eff;
-}
-
-.is-today {
-  background: #fff3e6;
-  border-color: #ff9900;
+/* 对话框样式 */
+.diary-dialog {
+  .el-dialog__header {
+    padding: var(--ios-spacing-lg);
+    margin: 0;
+    border-bottom: 1px solid var(--ios-border);
+    @include ios-glass;
+    
+    .el-dialog__title {
+      font-weight: 600;
+      color: var(--ios-text-primary);
+      font-family: var(--ios-font-family);
+    }
+  }
+  
+  .el-dialog__body {
+    padding: var(--ios-spacing-lg);
+  }
+  
+  .el-dialog__footer {
+    padding: var(--ios-spacing-md) var(--ios-spacing-lg);
+    border-top: 1px solid var(--ios-border);
+    @include ios-glass;
+  }
 }
 
 /* 响应式设计 */
-/* 手机屏幕 (小于 480px) */
 @media screen and (max-width: 480px) {
-  .calendar {
+  .calendar-container {
     padding: 10px;
     margin: 10px;
   }
@@ -703,13 +967,13 @@ const healthScoreTexts = [
     padding: 0 10px;
   }
 
-  .month-navigation h2 {
+  .month-title {
     font-size: 1.2rem;
   }
 
   .weekday {
     padding: 5px;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
   }
 
   .day {
@@ -730,14 +994,14 @@ const healthScoreTexts = [
   }
 }
 
-/* 平板屏幕 (481px - 768px) */
+/* 平板屏幕 */
 @media screen and (min-width: 481px) and (max-width: 768px) {
-  .calendar {
+  .calendar-container {
     padding: 15px;
     margin: 15px;
   }
 
-  .month-navigation h2 {
+  .month-title {
     font-size: 1.3rem;
   }
 
@@ -746,140 +1010,387 @@ const healthScoreTexts = [
   }
 }
 
-/* 笔记本屏幕 (769px - 1024px) */
-@media screen and (min-width: 769px) and (max-width: 1024px) {
-  .calendar {
-    padding: 20px;
-    margin: 20px auto;
-    max-width: 900px;
+/* 深色模式支持 */
+@media (prefers-color-scheme: dark) {
+  .calendar-container {
+    background: rgba(44, 62, 80, 0.8);
+  }
+
+  .calendar-header {
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .weekday {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .day {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.1);
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+    
+    &.has-diary {
+      background: rgba(var(--ios-primary-rgb), 0.2);
+    }
+    
+    &.is-today {
+      background: rgba(var(--ios-secondary-rgb), 0.2);
+    }
+    
+    .day-number {
+      color: #ffffff;
+    }
+  }
+}
+
+/* 动画效果 */
+.month-title-enter-active,
+.month-title-leave-active {
+  transition: all var(--ios-transition-normal);
+}
+
+.month-title-enter-from,
+.month-title-leave-to {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.calendar-days-enter-active {
+  transition: all var(--ios-transition-normal);
+}
+
+.calendar-days-leave-active {
+  transition: all var(--ios-transition-normal);
+  position: absolute;
+}
+
+.calendar-days-enter-from {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+.calendar-days-leave-to {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+.diary-dot-enter-active,
+.diary-dot-leave-active {
+  transition: all var(--ios-transition-fast);
+}
+
+.diary-dot-enter-from,
+.diary-dot-leave-to {
+  opacity: 0;
+  transform: scale(0);
+}
+
+/* 日记对话框样式 */
+.diary-dialog {
+  .diary-form {
+    padding: var(--ios-spacing-md);
+  }
+  
+  .mood-selector {
+    display: flex;
+    align-items: center;
+    gap: var(--ios-spacing-md);
+  }
+  
+  .mood-emoji {
+    font-size: 1.5rem;
+  }
+  
+  .metrics-section {
+    background: rgba(0, 0, 0, 0.02);
+    border-radius: var(--ios-radius-md);
+    padding: var(--ios-spacing-md);
+    margin: var(--ios-spacing-md) 0;
+  }
+  
+  .diary-content {
+    font-family: var(--ios-font-family);
+    line-height: 1.6;
+    
+    &::placeholder {
+      color: var(--ios-text-secondary);
+    }
+  }
+}
+
+/* 阅读模式样式 */
+.diary-read {
+  padding: var(--ios-spacing-lg);
+  
+  .diary-header {
+    margin-bottom: var(--ios-spacing-lg);
+    
+    h3 {
+      margin: 0 0 var(--ios-spacing-md) 0;
+      color: var(--ios-primary);
+      font-size: 1.5rem;
+      font-weight: 600;
+      font-family: var(--ios-font-family);
+    }
+  }
+  
+  .diary-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--ios-spacing-lg);
+    margin-bottom: var(--ios-spacing-md);
+  }
+  
+  .weather-display {
+    display: flex;
+    align-items: center;
+    gap: var(--ios-spacing-sm);
+    color: var(--ios-text-secondary);
+    font-size: 0.9rem;
+    
+    i {
+      font-size: 1.2rem;
+    }
+  }
+  
+  .diary-content {
+    padding: var(--ios-spacing-lg);
+    background: rgba(0, 0, 0, 0.02);
+    border-radius: var(--ios-radius-md);
+    min-height: 100px;
+    white-space: pre-wrap;
+    line-height: 1.6;
+    margin-bottom: var(--ios-spacing-lg);
+    font-family: var(--ios-font-family);
+    color: var(--ios-text-primary);
+  }
+  
+  .diary-metrics {
+    margin-top: var(--ios-spacing-lg);
+    
+    .metric-item {
+      display: flex;
+      flex-direction: column;
+      gap: var(--ios-spacing-sm);
+      margin-bottom: var(--ios-spacing-md);
+      
+      .metric-label {
+        color: var(--ios-text-secondary);
+        font-size: 0.9rem;
+      }
+    }
+  }
+  
+  .diary-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--ios-spacing-md);
+    margin-top: var(--ios-spacing-lg);
   }
 }
 
 /* 深色模式支持 */
 @media (prefers-color-scheme: dark) {
-  .calendar {
-    background: #2c3e50;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+  .diary-dialog {
+    .metrics-section {
+      background: rgba(255, 255, 255, 0.05);
+    }
+    
+    .diary-content {
+      background: rgba(255, 255, 255, 0.05);
+      color: #ffffff;
+      
+      &::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+      }
+    }
   }
-
-  .weekday {
-    background: #34495e;
-    color: #ecf0f1;
-  }
-
-  .day {
-    border-color: #34495e;
-    color: #ecf0f1;
-  }
-
-  .day:hover {
-    background: #34495e;
-  }
-
-  .has-diary {
-    background: #2980b9;
-    border-color: #3498db;
-  }
-
-  .is-today {
-    background: #d35400;
-    border-color: #e67e22;
-  }
-
-  .other-month {
-    opacity: 0.3;
-  }
-
+  
   .diary-read {
-    background: #2c3e50;
-    color: #ecf0f1;
+    .diary-header h3 {
+      color: var(--ios-secondary);
+    }
+    
+    .diary-content {
+      background: rgba(255, 255, 255, 0.05);
+      color: #ffffff;
+    }
+    
+    .diary-meta,
+    .metric-label {
+      color: rgba(255, 255, 255, 0.7);
+    }
   }
 }
 
-/* 横屏模式优化 */
-@media screen and (orientation: landscape) and (max-height: 600px) {
-  .calendar {
-    padding: 10px;
-    margin: 10px;
+/* 响应式设计 */
+@media screen and (max-width: 480px) {
+  .diary-dialog {
+    .diary-form {
+      padding: var(--ios-spacing-sm);
+    }
+    
+    .metrics-section {
+      padding: var(--ios-spacing-sm);
+    }
   }
+  
+  .diary-read {
+    padding: var(--ios-spacing-md);
+    
+    .diary-header h3 {
+      font-size: 1.2rem;
+    }
+    
+    .diary-meta {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--ios-spacing-sm);
+    }
+    
+    .diary-content {
+      padding: var(--ios-spacing-md);
+      font-size: 0.9rem;
+    }
+  }
+}
 
-  .month-navigation {
+/* 加载动画 */
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.8);
+  z-index: var(--ios-z-index-overlay);
+  animation: ios-fade-in var(--ios-transition-fast);
+  
+  .loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--ios-primary);
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: ios-spin 1s linear infinite;
     margin-bottom: 10px;
   }
-
-  .weekday {
-    padding: 5px;
-  }
-
-  .day {
-    aspect-ratio: auto;
-    height: 50px;
+  
+  span {
+    color: var(--ios-text-secondary);
+    font-family: var(--ios-font-family);
+    font-size: 14px;
   }
 }
 
-/* 日记阅读模式样式 */
-.diary-read {
-  padding: 20px;
+/* 水波纹效果 */
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(var(--ios-primary-rgb), 0.2);
+  transform: scale(0);
+  animation: ios-ripple 0.6s linear;
+  pointer-events: none;
 }
 
-.diary-header {
-  margin-bottom: 20px;
-}
-
-.diary-header h3 {
-  margin: 0 0 15px 0;
-  color: #409EFF;
-  font-size: 1.5em;
-}
-
-.diary-meta {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  margin-bottom: 15px;
-}
-
-.weather-display {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.diary-content {
-  padding: 15px;
-  background: #f5f7fa;
-  border-radius: 4px;
-  min-height: 100px;
-  white-space: pre-wrap;
-  line-height: 1.6;
-  margin-bottom: 20px;
-}
-
-.diary-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-}
-
-/* 响应式设计补充 */
+/* 移动端优化 */
 @media screen and (max-width: 480px) {
-  .diary-read {
-    padding: 10px;
+  .diary-dialog {
+    &.el-dialog {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      margin: 0 !important;
+      max-height: 90vh;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+      transform: translateY(100%);
+      transition: transform var(--ios-transition-normal);
+      
+      &.dialog-fade-enter-active,
+      &.dialog-fade-leave-active {
+        transition: transform var(--ios-transition-normal);
+      }
+      
+      &.dialog-fade-enter-to,
+      &.dialog-fade-leave-from {
+        transform: translateY(0);
+      }
+      
+      .el-dialog__header {
+        padding: 16px;
+        position: relative;
+        
+        &::after {
+          content: '';
+          position: absolute;
+          top: 8px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 40px;
+          height: 4px;
+          background: var(--ios-border);
+          border-radius: 2px;
+        }
+      }
+      
+      .el-dialog__body {
+        max-height: calc(90vh - 120px);
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+    }
   }
+}
 
-  .diary-header h3 {
-    font-size: 1.2em;
+/* 动画关键帧 */
+@keyframes ios-spin {
+  to {
+    transform: rotate(360deg);
   }
+}
 
-  .diary-meta {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
+@keyframes ios-ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
   }
+}
 
-  .diary-content {
-    padding: 10px;
-    font-size: 0.9em;
+@keyframes ios-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* 深色模式支持 */
+@media (prefers-color-scheme: dark) {
+  .loading-overlay {
+    background: rgba(0, 0, 0, 0.8);
+    
+    .loading-spinner {
+      border-color: var(--ios-secondary);
+      border-top-color: transparent;
+    }
+    
+    span {
+      color: rgba(255, 255, 255, 0.7);
+    }
+  }
+  
+  .ripple {
+    background: rgba(255, 255, 255, 0.2);
   }
 }
 </style> 

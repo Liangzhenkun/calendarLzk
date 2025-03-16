@@ -168,8 +168,8 @@
         "pattern": "[^\\/]+?"
       }
     ],
-    "path": "/api/diary/metrics/:metric",
-    "regexp": "/^\\/api\\/diary\\/metrics\\/((?:[^\\/]+?))(?:\\/(?=$))?$/",
+    "path": "/diary/metrics/:metric",
+    "regexp": "/^\\/diary\\/metrics\\/((?:[^\\/]+?))(?:\\/(?=$))?$/",
     "stack": [
       "auth",
       "wrappedController"
@@ -182,8 +182,8 @@
       "GET"
     ],
     "paramNames": [],
-    "path": "/api/diary/metrics/stats",
-    "regexp": "/^\\/api\\/diary\\/metrics\\/stats(?:\\/(?=$))?$/",
+    "path": "/diary/metrics/stats",
+    "regexp": "/^\\/diary\\/metrics\\/stats(?:\\/(?=$))?$/",
     "stack": [
       "auth",
       "wrappedController"
@@ -207,8 +207,8 @@
         "pattern": "[^\\/]+?"
       }
     ],
-    "path": "/api/diary/metrics/trend/:metric",
-    "regexp": "/^\\/api\\/diary\\/metrics\\/trend\\/((?:[^\\/]+?))(?:\\/(?=$))?$/",
+    "path": "/diary/metrics/trend/:metric",
+    "regexp": "/^\\/diary\\/metrics\\/trend\\/((?:[^\\/]+?))(?:\\/(?=$))?$/",
     "stack": [
       "auth",
       "wrappedController"

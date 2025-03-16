@@ -63,14 +63,9 @@ class DiaryService extends Service {
             user_id: diary.userId,
             diary_id: existingDiary.id,
             date: formattedDate,
-            sleep_quality: diary.metrics.sleepQuality || 3,
-            energy_level: diary.metrics.energyLevel || 3,
-            stress_level: diary.metrics.stressLevel || 3,
-            productivity: diary.metrics.productivity || 3,
-            mood_score: diary.metrics.moodScore || 5,
-            social_satisfaction: diary.metrics.socialSatisfaction || 5,
-            family_index: diary.metrics.familyIndex || 5,
-            health_score: diary.metrics.healthScore || 5
+            sleep_quality: diary.metrics.sleepQuality || 5,
+            stress_level: diary.metrics.stressLevel || 5,
+            productivity: diary.metrics.productivity || 5
           };
 
           // 检查是否存在指标记录
@@ -101,14 +96,9 @@ class DiaryService extends Service {
             user_id: diary.userId,
             diary_id: result.insertId,
             date: formattedDate,
-            sleep_quality: diary.metrics.sleepQuality || 3,
-            energy_level: diary.metrics.energyLevel || 3,
-            stress_level: diary.metrics.stressLevel || 3,
-            productivity: diary.metrics.productivity || 3,
-            mood_score: diary.metrics.moodScore || 5,
-            social_satisfaction: diary.metrics.socialSatisfaction || 5,
-            family_index: diary.metrics.familyIndex || 5,
-            health_score: diary.metrics.healthScore || 5
+            sleep_quality: diary.metrics.sleepQuality || 5,
+            stress_level: diary.metrics.stressLevel || 5,
+            productivity: diary.metrics.productivity || 5
           };
           
           await app.mysql.insert('personal_metrics', metricsData);
@@ -224,14 +214,9 @@ class DiaryService extends Service {
             user_id: userId,
             diary_id: id,
             date: formattedDate,
-            sleep_quality: data.metrics.sleepQuality || 3,
-            energy_level: data.metrics.energyLevel || 3,
-            stress_level: data.metrics.stressLevel || 3,
-            productivity: data.metrics.productivity || 3,
-            mood_score: data.metrics.moodScore || 5,
-            social_satisfaction: data.metrics.socialSatisfaction || 5,
-            family_index: data.metrics.familyIndex || 5,
-            health_score: data.metrics.healthScore || 5
+            sleep_quality: data.metrics.sleepQuality || 5,
+            stress_level: data.metrics.stressLevel || 5,
+            productivity: data.metrics.productivity || 5
           };
 
           // 检查是否存在指标记录

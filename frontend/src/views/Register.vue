@@ -1,23 +1,30 @@
 <template>
   <div class="register-container">
-    <el-card class="register-card">
-      <template #header>
-        <h2>注册</h2>
-      </template>
-      
+    <div class="register-box ios-glass">
+      <h2>注册</h2>
       <el-form
         ref="formRef"
         :model="form"
         :rules="rules"
         label-position="top"
+        class="ios-form"
         @submit.prevent="handleSubmit"
       >
         <el-form-item label="用户名" prop="username">
-          <el-input v-model="form.username" />
+          <el-input 
+            v-model="form.username" 
+            class="ios-input"
+            prefix-icon="User"
+          />
         </el-form-item>
         
         <el-form-item label="邮箱" prop="email">
-          <el-input v-model="form.email" type="email" />
+          <el-input 
+            v-model="form.email" 
+            type="email" 
+            class="ios-input"
+            prefix-icon="Message"
+          />
         </el-form-item>
         
         <el-form-item label="密码" prop="password">
@@ -25,6 +32,8 @@
             v-model="form.password"
             type="password"
             show-password
+            class="ios-input"
+            prefix-icon="Lock"
           />
         </el-form-item>
         
@@ -33,6 +42,8 @@
             v-model="form.confirmPassword"
             type="password"
             show-password
+            class="ios-input"
+            prefix-icon="Lock"
           />
         </el-form-item>
         
@@ -41,7 +52,7 @@
             type="primary"
             native-type="submit"
             :loading="loading"
-            class="submit-btn"
+            class="submit-btn ios-button"
           >
             注册
           </el-button>
@@ -49,10 +60,10 @@
         
         <div class="login-link">
           已有账号？
-          <router-link to="/login">立即登录</router-link>
+          <router-link to="/login" class="ios-link">立即登录</router-link>
         </div>
       </el-form>
-    </el-card>
+    </div>
   </div>
 </template>
 
@@ -134,30 +145,154 @@ const handleSubmit = async () => {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import '@/assets/styles/ios-mixins.scss';
+
 .register-container {
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  background-color: #f5f7fa;
+  background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%);
+  padding: 20px;
 }
 
-.register-card {
+.register-box {
   width: 100%;
   max-width: 400px;
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: var(--ios-radius-lg);
+  @include ios-shadow('lg');
+  backdrop-filter: var(--ios-blur-md);
+  -webkit-backdrop-filter: var(--ios-blur-md);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  animation: ios-scale-in var(--ios-transition-normal);
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: var(--ios-primary);
+  font-size: 24px;
+  font-weight: 600;
+  font-family: var(--ios-font-family);
 }
 
 .submit-btn {
   width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  background: var(--ios-primary);
+  border-color: var(--ios-primary);
+  transition: all var(--ios-transition-fast);
+  
+  &:hover {
+    transform: translateY(-1px);
+    opacity: 0.9;
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
 }
 
 .login-link {
   text-align: center;
-  margin-top: 16px;
+  margin-top: 20px;
+  
+  a {
+    color: var(--ios-secondary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all var(--ios-transition-fast);
+    
+    &:hover {
+      color: var(--ios-primary);
+    }
+  }
 }
 
-:deep(.el-card__header) {
-  text-align: center;
+/* 响应式设计 */
+@media screen and (max-width: 480px) {
+  .register-box {
+    margin: 10px;
+    padding: 20px;
+  }
+
+  h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+
+  .submit-btn {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  :deep(.el-form-item) {
+    margin-bottom: 15px;
+  }
+
+  :deep(.el-input) {
+    font-size: 14px;
+  }
+}
+
+/* 平板屏幕 */
+@media screen and (min-width: 481px) and (max-width: 768px) {
+  .register-box {
+    max-width: 360px;
+    padding: 30px;
+  }
+}
+
+/* 深色模式支持 */
+@media (prefers-color-scheme: dark) {
+  .register-container {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2c3e50 100%);
+  }
+
+  .register-box {
+    background: rgba(44, 62, 80, 0.8);
+  }
+
+  h2 {
+    color: var(--ios-secondary);
+  }
+
+  :deep(.el-input__inner) {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.2);
+    
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+  }
+
+  .login-link {
+    color: #ffffff;
+    
+    a {
+      color: var(--ios-secondary);
+      
+      &:hover {
+        color: var(--ios-primary);
+      }
+    }
+  }
+}
+
+/* 动画效果 */
+@keyframes ios-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 </style> 

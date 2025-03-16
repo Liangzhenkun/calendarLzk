@@ -1,0 +1,235 @@
+@import './ios-variables.scss';
+@import './ios-mixins.scss';
+
+// 按钮样式
+.el-button {
+  &.ios-button {
+    border-radius: var(--ios-radius-md);
+    font-weight: 500;
+    transition: all var(--ios-transition-fast);
+    @include ios-shadow('sm');
+    
+    &:hover {
+      transform: translateY(-1px);
+      @include ios-shadow('md');
+    }
+    
+    &:active {
+      transform: translateY(0);
+    }
+    
+    &--primary {
+      background: var(--ios-primary);
+      border-color: var(--ios-primary);
+      
+      &:hover {
+        opacity: 0.9;
+        background: var(--ios-primary);
+        border-color: var(--ios-primary);
+      }
+    }
+  }
+}
+
+// 输入框样式
+.el-input {
+  &.ios-input {
+    .el-input__wrapper {
+      border-radius: var(--ios-radius-md);
+      background: var(--ios-background-secondary);
+      box-shadow: none;
+      transition: all var(--ios-transition-fast);
+      
+      &:hover, &.is-focus {
+        background: var(--ios-background);
+        @include ios-shadow('sm');
+      }
+      
+      .el-input__inner {
+        color: var(--ios-text-primary);
+        &::placeholder {
+          color: var(--ios-text-secondary);
+        }
+      }
+    }
+  }
+}
+
+// 对话框样式
+.el-dialog {
+  &.ios-dialog {
+    border-radius: var(--ios-radius-lg);
+    overflow: hidden;
+    @include ios-shadow('lg');
+    
+    .el-dialog__header {
+      padding: var(--ios-spacing-lg);
+      margin: 0;
+      border-bottom: 1px solid var(--ios-border);
+      @include ios-glass;
+      
+      .el-dialog__title {
+        font-weight: 600;
+        color: var(--ios-text-primary);
+      }
+    }
+    
+    .el-dialog__body {
+      padding: var(--ios-spacing-lg);
+    }
+    
+    .el-dialog__footer {
+      padding: var(--ios-spacing-md) var(--ios-spacing-lg);
+      border-top: 1px solid var(--ios-border);
+      @include ios-glass;
+    }
+  }
+}
+
+// 表单样式
+.el-form {
+  &.ios-form {
+    .el-form-item__label {
+      font-weight: 500;
+      color: var(--ios-text-primary);
+    }
+    
+    .el-form-item__error {
+      color: var(--ios-error);
+      font-size: 0.9rem;
+      animation: ios-slide-up var(--ios-transition-fast);
+    }
+  }
+}
+
+// 消息提示样式
+.el-message {
+  &.ios-message {
+    border-radius: var(--ios-radius-md);
+    border: none;
+    @include ios-glass;
+    @include ios-shadow('md');
+    
+    &.el-message--success {
+      background-color: rgba(52, 199, 89, 0.1);
+      border-left: 4px solid var(--ios-success);
+    }
+    
+    &.el-message--warning {
+      background-color: rgba(255, 149, 0, 0.1);
+      border-left: 4px solid var(--ios-warning);
+    }
+    
+    &.el-message--error {
+      background-color: rgba(255, 59, 48, 0.1);
+      border-left: 4px solid var(--ios-error);
+    }
+    
+    .el-message__content {
+      color: var(--ios-text-primary);
+    }
+  }
+}
+
+// 加载样式
+.el-loading-mask {
+  &.ios-loading {
+    @include ios-glass;
+    
+    .el-loading-spinner {
+      .circular {
+        animation: ios-spin 1s linear infinite;
+      }
+      
+      .el-loading-text {
+        color: var(--ios-text-secondary);
+        margin-top: var(--ios-spacing-md);
+      }
+    }
+  }
+}
+
+@keyframes ios-spin {
+  to { transform: rotate(360deg); }
+}
+
+// 下拉菜单样式
+.el-select {
+  &.ios-select {
+    .el-input {
+      @extend .ios-input;
+    }
+  }
+}
+
+.el-select-dropdown {
+  &.ios-select-dropdown {
+    border-radius: var(--ios-radius-md);
+    border: none;
+    @include ios-shadow('lg');
+    @include ios-glass;
+    
+    .el-select-dropdown__item {
+      &.selected {
+        color: var(--ios-primary);
+        font-weight: 500;
+      }
+      
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.04);
+      }
+    }
+  }
+}
+
+// 标签样式
+.el-tag {
+  &.ios-tag {
+    border-radius: var(--ios-radius-sm);
+    border: none;
+    
+    &--primary {
+      background-color: var(--ios-primary);
+      color: white;
+    }
+    
+    &--success {
+      background-color: var(--ios-success);
+      color: white;
+    }
+    
+    &--warning {
+      background-color: var(--ios-warning);
+      color: white;
+    }
+    
+    &--error {
+      background-color: var(--ios-error);
+      color: white;
+    }
+  }
+}
+
+// 移动端适配
+@include respond-to('md') {
+  .el-dialog.ios-dialog {
+    width: 90% !important;
+    margin: var(--ios-spacing-sm) auto !important;
+    
+    &.is-fullscreen {
+      width: 100% !important;
+      margin: 0 !important;
+      border-radius: 0;
+    }
+  }
+  
+  .el-message.ios-message {
+    width: 90%;
+    min-width: auto;
+  }
+  
+  .el-select-dropdown.ios-select-dropdown {
+    width: 90% !important;
+    margin: 0 auto !important;
+  }
+} 

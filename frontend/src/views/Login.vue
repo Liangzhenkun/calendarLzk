@@ -1,12 +1,13 @@
 <template>
   <div class="login-container">
-    <div class="login-box">
+    <div class="login-box ios-glass">
       <h2>{{ t('login.title') }}</h2>
       <el-form
         ref="formRef"
         :model="form"
         :rules="rules"
         label-position="top"
+        class="ios-form"
         @keyup.enter="handleLogin"
       >
         <el-form-item :label="t('login.username')" prop="username">
@@ -14,6 +15,7 @@
             v-model="form.username"
             :placeholder="t('login.usernameRequired')"
             prefix-icon="User"
+            class="ios-input"
           />
         </el-form-item>
         
@@ -24,18 +26,21 @@
             :placeholder="t('login.passwordRequired')"
             prefix-icon="Lock"
             show-password
+            class="ios-input"
           />
         </el-form-item>
 
         <el-form-item>
-          <el-checkbox v-model="form.remember">{{ t('login.rememberMe') }}</el-checkbox>
+          <el-checkbox v-model="form.remember" class="ios-checkbox">
+            {{ t('login.rememberMe') }}
+          </el-checkbox>
         </el-form-item>
 
         <el-form-item>
           <el-button
             type="primary"
             :loading="loading"
-            class="submit-btn"
+            class="submit-btn ios-button"
             @click="handleLogin"
           >
             {{ t('login.submit') }}
@@ -43,7 +48,7 @@
         </el-form-item>
 
         <div class="register-link">
-          <router-link to="/register">{{ t('login.register') }}</router-link>
+          <router-link to="/register" class="ios-link">{{ t('login.register') }}</router-link>
         </div>
       </el-form>
     </div>
@@ -160,54 +165,75 @@ const handleLogin = async () => {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import '@/assets/styles/ios-mixins.scss';
+
 .login-container {
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
-  padding: 20px;  /* 添加内边距防止在小屏幕上贴边 */
+  background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%);
+  padding: 20px;
 }
 
 .login-box {
   width: 100%;
   max-width: 400px;
   padding: 40px;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: var(--ios-radius-lg);
+  @include ios-shadow('lg');
+  backdrop-filter: var(--ios-blur-md);
+  -webkit-backdrop-filter: var(--ios-blur-md);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  animation: ios-scale-in var(--ios-transition-normal);
 }
 
 h2 {
   text-align: center;
   margin-bottom: 30px;
-  color: #409EFF;
-  font-size: 24px;  /* 设置基准字体大小 */
+  color: var(--ios-primary);
+  font-size: 24px;
+  font-weight: 600;
+  font-family: var(--ios-font-family);
 }
 
 .submit-btn {
   width: 100%;
   padding: 12px;
   font-size: 16px;
+  background: var(--ios-primary);
+  border-color: var(--ios-primary);
+  transition: all var(--ios-transition-fast);
+  
+  &:hover {
+    transform: translateY(-1px);
+    opacity: 0.9;
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
 }
 
 .register-link {
   text-align: center;
   margin-top: 20px;
-}
-
-.register-link a {
-  color: #409EFF;
-  text-decoration: none;
-}
-
-.register-link a:hover {
-  text-decoration: underline;
+  
+  a {
+    color: var(--ios-secondary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all var(--ios-transition-fast);
+    
+    &:hover {
+      color: var(--ios-primary);
+    }
+  }
 }
 
 /* 响应式设计 */
-/* 手机屏幕 (小于 480px) */
 @media screen and (max-width: 480px) {
   .login-box {
     margin: 10px;
@@ -233,7 +259,7 @@ h2 {
   }
 }
 
-/* 平板屏幕 (481px - 768px) */
+/* 平板屏幕 */
 @media screen and (min-width: 481px) and (max-width: 768px) {
   .login-box {
     max-width: 360px;
@@ -244,53 +270,49 @@ h2 {
 /* 深色模式支持 */
 @media (prefers-color-scheme: dark) {
   .login-container {
-    background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+    background: linear-gradient(135deg, #1a1a1a 0%, #2c3e50 100%);
   }
 
   .login-box {
-    background: #34495e;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    background: rgba(44, 62, 80, 0.8);
   }
 
   h2 {
-    color: #3498db;
-  }
-
-  :deep(.el-input) {
-    background-color: #2c3e50;
+    color: var(--ios-secondary);
   }
 
   :deep(.el-input__inner) {
-    background-color: #2c3e50;
-    color: #ecf0f1;
-    border-color: #3498db;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.2);
+    
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
   }
 
   :deep(.el-checkbox__label) {
-    color: #ecf0f1;
+    color: #ffffff;
   }
 
   .register-link a {
-    color: #3498db;
+    color: var(--ios-secondary);
+    
+    &:hover {
+      color: var(--ios-primary);
+    }
   }
 }
 
-/* 横屏模式优化 */
-@media screen and (orientation: landscape) and (max-height: 480px) {
-  .login-container {
-    padding: 10px;
+/* 动画效果 */
+@keyframes ios-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
   }
-
-  .login-box {
-    padding: 15px;
-  }
-
-  h2 {
-    margin-bottom: 15px;
-  }
-
-  :deep(.el-form-item) {
-    margin-bottom: 10px;
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 </style> 
