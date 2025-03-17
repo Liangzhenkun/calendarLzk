@@ -404,6 +404,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { ElMessage } from 'element-plus';
+import { ArrowLeft, ArrowRight } from '@element-plus/icons-vue';
 import { useDiaryStore } from '@/stores/diary';
 import { useI18n } from 'vue-i18n';
 
@@ -481,16 +482,6 @@ const dialogTitle = computed(() => {
 // 添加性能优化相关的代码
 const isDialogMounted = ref(false)
 const dialogLazyLoad = ref(null)
-
-// 使用 Intersection Observer 优化对话框加载
-useIntersectionObserver(
-  dialogLazyLoad,
-  ([{ isIntersecting }]) => {
-    if (isIntersecting && !isDialogMounted.value) {
-      isDialogMounted.value = true
-    }
-  }
-)
 
 // 优化计算属性的性能
 const calendarDays = computed(() => {
@@ -593,7 +584,7 @@ const saveDiary = async () => {
     ElMessage.success('日记保存成功');
     
     // 刷新当月数据
-    await diaryStore.fetchMonthDiaries(currentDate.value);
+    await fetchMonthDiaries();
   } catch (error) {
     ElMessage({
       type: 'error',
@@ -648,9 +639,27 @@ const isToday = (date) => {
     date.getFullYear() === today.getFullYear();
 };
 
+// 获取当月日记数据
+const fetchMonthDiaries = async () => {
+  console.log('开始获取当月日记数据:', currentDate.value);
+  try {
+    await diaryStore.fetchMonthDiaries(currentDate.value);
+    console.log('日记数据获取成功:', diaryStore.diaries);
+  } catch (error) {
+    console.error('获取日记数据失败:', error);
+    ElMessage.error('获取日记数据失败');
+  }
+};
+
 // 组件挂载时初始化数据
 onMounted(async () => {
-  await diaryStore.fetchDiaries();
+  console.log('Calendar组件挂载');
+  try {
+    await fetchMonthDiaries();
+  } catch (error) {
+    console.error('初始化数据失败:', error);
+    ElMessage.error('初始化数据失败');
+  }
 });
 
 // 获取指标标签
@@ -755,24 +764,6 @@ const monthTransition = ref('next');
 
 // 异步加载月份数据
 const loading = ref(false);
-
-// 优化异步加载月份数据
-const fetchMonthDiaries = async () => {
-  loading.value = true;
-  try {
-    await diaryStore.fetchMonthDiaries(currentDate.value);
-  } catch (error) {
-    ElMessage({
-      type: 'error',
-      message: '加载月份数据失败',
-      customClass: 'ios-message ios-message-error',
-      duration: 3000,
-      customClass: 'ios-message'
-    });
-  } finally {
-    loading.value = false;
-  }
-};
 </script>
 
 <style lang="scss" scoped>

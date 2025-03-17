@@ -34,22 +34,22 @@ class DiaryController extends Controller {
     }
   }
 
-  async detail() {
+  async getByDate() {
     const { ctx, service } = this;
     const userId = ctx.state.user.id;
-    const diaryId = ctx.params.id;
+    const date = ctx.params.date;
 
     try {
-      ctx.logger.info('获取日记详情, userId:', userId, 'diaryId:', diaryId);
-      const diary = await service.diary.detail(userId, diaryId);
+      ctx.logger.info('按日期获取日记, userId:', userId, 'date:', date);
+      const diary = await service.diary.getByDate(userId, date);
       if (!diary) {
         ctx.status = 404;
-        ctx.body = { message: '日记不存在' };
+        ctx.body = { message: '该日期没有日记' };
         return;
       }
       ctx.body = diary;
     } catch (error) {
-      ctx.logger.error('获取日记详情失败:', error);
+      ctx.logger.error('获取日记失败:', error);
       ctx.status = 500;
       ctx.body = { message: error.message };
     }
@@ -58,12 +58,12 @@ class DiaryController extends Controller {
   async update() {
     const { ctx, service } = this;
     const userId = ctx.state.user.id;
-    const diaryId = ctx.params.id;
+    const date = ctx.params.date;
     const data = ctx.request.body;
 
     try {
-      ctx.logger.info('更新日记, userId:', userId, 'diaryId:', diaryId, 'data:', data);
-      const result = await service.diary.update(userId, diaryId, data);
+      ctx.logger.info('更新日记, userId:', userId, 'date:', date, 'data:', data);
+      const result = await service.diary.updateByDate(userId, date, data);
       if (!result) {
         ctx.status = 404;
         ctx.body = { message: '日记不存在' };
@@ -80,11 +80,11 @@ class DiaryController extends Controller {
   async delete() {
     const { ctx, service } = this;
     const userId = ctx.state.user.id;
-    const diaryId = ctx.params.id;
+    const date = ctx.params.date;
 
     try {
-      ctx.logger.info('删除日记, userId:', userId, 'diaryId:', diaryId);
-      const result = await service.diary.delete(userId, diaryId);
+      ctx.logger.info('删除日记, userId:', userId, 'date:', date);
+      const result = await service.diary.deleteByDate(userId, date);
       if (!result) {
         ctx.status = 404;
         ctx.body = { message: '日记不存在' };

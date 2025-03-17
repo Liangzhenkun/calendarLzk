@@ -13,9 +13,9 @@ module.exports = app => {
   // 日记相关路由
   router.post('/diary/create', jwt, controller.diary.create);
   router.get('/diary/list', jwt, controller.diary.list);
-  router.get('/diary/:id', jwt, controller.diary.detail);
-  router.put('/diary/:id', jwt, controller.diary.update);
-  router.delete('/diary/:id', jwt, controller.diary.delete);
+  router.get('/diary/:date', jwt, controller.diary.getByDate);
+  router.put('/diary/:date', jwt, controller.diary.update);
+  router.delete('/diary/:date', jwt, controller.diary.delete);
 
   // 指标相关路由
   router.get('/diary/metrics/:metric', jwt, controller.metrics.getData);

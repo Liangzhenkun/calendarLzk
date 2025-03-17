@@ -1706,6 +1706,11 @@ vue-router@^4.2.5:
     "@vue/server-renderer" "3.5.13"
     "@vue/shared" "3.5.13"
 
+vue3-touch-events@^5.0.13:
+  version "5.0.13"
+  resolved "https://registry.npmjs.org/vue3-touch-events/-/vue3-touch-events-5.0.13.tgz"
+  integrity sha512-VOprVhKsL5DaistDFU0+oLJz/LaFzVENeUzs4Hp3PeD0TVx1vNEgNgS/9WehUHlUIUuCdnmLm0TkmITjwVmUBQ==
+
 w3c-xmlserializer@^5.0.0:
   version "5.0.0"
   resolved "https://registry.npmjs.org/w3c-xmlserializer/-/w3c-xmlserializer-5.0.0.tgz"

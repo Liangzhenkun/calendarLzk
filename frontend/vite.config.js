@@ -26,7 +26,11 @@ export default defineConfig({
     assetsDir: 'assets',
     sourcemap: true,
     rollupOptions: {
-      external: ['vue3-touch-events']
+      output: {
+        manualChunks: {
+          'vendor': ['vue', 'vue-router', 'pinia', 'element-plus']
+        }
+      }
     }
   }
 }) 
