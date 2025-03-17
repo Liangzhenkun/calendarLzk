@@ -3,13 +3,17 @@ import { ElMessage } from 'element-plus';
 import router from '@/router';
 import { useAuthStore } from '@/stores/auth';
 
+// 使用当前域名作为 API 基础路径
+const baseURL = window.location.origin;  // 自动获取当前域名，包括协议和端口
+
 // 创建 axios 实例
 const instance = axios.create({
-    baseURL: '/api',  // 直接使用 /api，不使用环境变量
+    baseURL,
     timeout: 5000,
     headers: {
         'Content-Type': 'application/json'
-    }
+    },
+    withCredentials: true  // 允许跨域请求携带凭证
 });
 
 // 请求拦截器

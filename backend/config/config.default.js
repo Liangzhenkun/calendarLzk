@@ -43,7 +43,7 @@ module.exports = appInfo => {
   };
 
   // 配置路径前缀
-  // config.prefix = '/api';  // 注释掉这一行，避免重复添加前缀
+  config.prefix = '/api';
 
   // 从环境变量获取允许的域名列表
   const corsOrigins = (process.env.CORS_ORIGIN || '').split(' ').filter(Boolean);
@@ -54,28 +54,15 @@ module.exports = appInfo => {
       enable: false,
     },
     // 使用环境变量中的域名列表
-    domainWhiteList: corsOrigins,
+    domainWhiteList: ['*']  // 开发环境下允许所有域名
   };
 
   // 配置 CORS
   config.cors = {
-    origin: ctx => {
-      const requestOrigin = ctx.get('origin');
-      // 允许的域名列表
-      const allowedOrigins = [
-        'https://seefu.cn',
-        'https://www.seefu.cn',
-        'http://localhost:3000'
-      ];
-      
-      if (allowedOrigins.includes(requestOrigin)) {
-        return requestOrigin;
-      }
-      return false;
-    },
+    origin: '*',  // 开发环境下允许所有域名
     credentials: true,
     allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH,OPTIONS',
-    allowHeaders: ['Content-Type', 'Authorization'],
+    allowHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
     maxAge: 86400
   };
 
