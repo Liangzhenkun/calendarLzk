@@ -104,4 +104,4 @@ class UserService extends Service {
     }
 }
 
-module.exports = UserService; 
+module.exports = UserService;

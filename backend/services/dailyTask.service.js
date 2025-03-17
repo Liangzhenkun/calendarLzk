@@ -79,7 +79,7 @@ class DailyTaskService {
 
             // 奖励用户
             await db.query(
-                `UPDATE users 
+                `UPDATE user 
                 SET points = points + ?,
                     experience = experience + ?
                 WHERE id = ?`,
