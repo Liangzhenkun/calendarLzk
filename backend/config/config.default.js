@@ -42,8 +42,8 @@ module.exports = appInfo => {
     expiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN || '24h',
   };
 
-  // 配置路径前缀
-  config.prefix = '/api';
+  // 配置路径前缀 - 注释掉，不使用全局前缀
+  // config.prefix = '/api';
 
   // 从环境变量获取允许的域名列表
   const corsOrigins = (process.env.CORS_ORIGIN || '').split(' ').filter(Boolean);
@@ -59,7 +59,20 @@ module.exports = appInfo => {
 
   // 配置 CORS
   config.cors = {
-    origin: '*',  // 开发环境下允许所有域名
+    origin: ctx => {
+      const requestOrigin = ctx.get('origin');
+      // 允许的域名列表
+      const allowedOrigins = [
+        'https://seefu.cn',
+        'https://www.seefu.cn',
+        'http://localhost:3000'
+      ];
+      
+      if (allowedOrigins.includes(requestOrigin)) {
+        return requestOrigin;
+      }
+      return false;
+    },
     credentials: true,
     allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH,OPTIONS',
     allowHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
