@@ -16,7 +16,7 @@ import './assets/main.css'
 import 'element-plus/theme-chalk/dark/css-vars.css'
 
 // 配置 axios 默认值
-axios.defaults.baseURL = import.meta.env.VITE_API_URL || 'http://localhost:3000'
+axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 axios.defaults.headers.common['Content-Type'] = 'application/json'
 
 // 添加请求拦截器

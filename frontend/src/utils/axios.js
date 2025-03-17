@@ -3,8 +3,8 @@ import { ElMessage } from 'element-plus';
 import router from '@/router';
 import { useAuthStore } from '@/stores/auth';
 
-// 使用当前域名作为 API 基础路径
-const baseURL = window.location.origin;  // 自动获取当前域名，包括协议和端口
+// 使用环境变量配置API基础路径
+const baseURL = import.meta.env.VITE_API_URL || window.location.origin;
 
 // 创建 axios 实例
 const instance = axios.create({

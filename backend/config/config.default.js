@@ -72,7 +72,7 @@ module.exports = appInfo => {
       host: process.env.DB_HOST || 'localhost',
       port: process.env.DB_PORT || '3306',
       user: process.env.DB_USER || 'root',
-      password: process.env.DB_PASSWORD || '964213444lzk',
+      password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME || 'calendar',
     },
   };
@@ -88,8 +88,8 @@ module.exports = appInfo => {
   // 端口配置
   config.cluster = {
     listen: {
-      port: 7001,
-      hostname: '0.0.0.0',  // 添加 hostname 配置
+      port: process.env.PORT || 7001,
+      hostname: '0.0.0.0',
     },
   };
 

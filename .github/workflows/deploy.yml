@@ -1,0 +1,50 @@
+name: Deploy
+
+on:
+  push:
+    branches: [ main ]
+
+env:
+  NODE_ENV: production
+  PORT: 7001
+  API_PREFIX: /api
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '23'
+        
+    - name: Install Dependencies
+      run: |
+        cd /root/Bruce_liang/calendar/frontend
+        npm install
+        cd /root/Bruce_liang/calendar/backend
+        npm install
+        
+    - name: Build Frontend
+      env:
+        VITE_API_URL: ${{ secrets.VITE_API_URL }}
+        VITE_APP_VERSION: ${{ github.sha }}
+      run: |
+        cd /root/Bruce_liang/calendar/frontend
+        npm run build
+        
+    - name: Deploy to Server
+      env:
+        DB_HOST: ${{ secrets.DB_HOST }}
+        DB_PORT: ${{ secrets.DB_PORT }}
+        DB_USER: ${{ secrets.DB_USER }}
+        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        DB_NAME: ${{ secrets.DB_NAME }}
+        JWT_SECRET: ${{ secrets.JWT_SECRET }}
+        COOKIE_SIGN_KEY: ${{ secrets.COOKIE_SIGN_KEY }}
+      run: |
+        # Add your deployment commands here
+        echo "Deployment configuration complete" 
