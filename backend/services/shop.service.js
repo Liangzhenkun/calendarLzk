@@ -46,7 +46,7 @@ class ShopService {
 
             // 获取用户信息
             const [user] = await db.query(
-                'SELECT points FROM users WHERE id = ?',
+                'SELECT points FROM user WHERE id = ?',
                 [userId]
             );
 
@@ -61,7 +61,7 @@ class ShopService {
 
             // 扣除用户积分
             await db.query(
-                'UPDATE users SET points = points - ? WHERE id = ?',
+                'UPDATE user SET points = points - ? WHERE id = ?',
                 [item[0].price, userId]
             );
 

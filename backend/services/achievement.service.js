@@ -7,7 +7,7 @@ class AchievementService {
         try {
             // 获取用户数据
             const [user] = await db.query(
-                'SELECT * FROM users WHERE id = ?',
+                'SELECT * FROM user WHERE id = ?',
                 [userId]
             );
 
@@ -96,7 +96,7 @@ class AchievementService {
             const pointsGained = 50; // 基础积分
 
             await db.query(
-                `UPDATE users 
+                `UPDATE user 
                 SET experience = experience + ?, 
                     points = points + ? 
                 WHERE id = ?`,
@@ -105,13 +105,13 @@ class AchievementService {
 
             // 检查是否需要升级
             const [user] = await db.query(
-                'SELECT experience FROM users WHERE id = ?',
+                'SELECT experience FROM user WHERE id = ?',
                 [userId]
             );
 
             const newLevel = calculateLevel(user[0].experience);
             await db.query(
-                'UPDATE users SET level = ? WHERE id = ?',
+                'UPDATE user SET level = ? WHERE id = ?',
                 [newLevel, userId]
             );
 

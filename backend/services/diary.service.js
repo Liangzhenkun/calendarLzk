@@ -34,7 +34,7 @@ class DiaryService {
 
             // 更新用户经验值
             await db.query(
-                'UPDATE users SET experience = experience + ? WHERE id = ?',
+                'UPDATE user SET experience = experience + ? WHERE id = ?',
                 [experienceGained, userId]
             );
 
@@ -117,7 +117,7 @@ class DiaryService {
                     u.username as author_name,
                     u.avatar_url as author_avatar
                 FROM diaries d
-                JOIN users u ON d.user_id = u.id
+                JOIN user u ON d.user_id = u.id
                 WHERE d.id = ?`,
                 [diaryId]
             );
@@ -150,7 +150,7 @@ class DiaryService {
             const [collaborators] = await db.query(
                 `SELECT dc.*, u.username, u.avatar_url
                 FROM diary_collaborators dc
-                JOIN users u ON dc.user_id = u.id
+                JOIN user u ON dc.user_id = u.id
                 WHERE dc.diary_id = ?`,
                 [diaryId]
             );
@@ -312,7 +312,7 @@ class DiaryService {
                  COUNT(DISTINCT l.id) as likes_count,
                  COUNT(DISTINCT c.id) as comments_count
           FROM diaries d
-          LEFT JOIN users u ON d.user_id = u.id
+          LEFT JOIN user u ON d.user_id = u.id
           LEFT JOIN diary_likes l ON d.id = l.diary_id
           LEFT JOIN diary_comments c ON d.id = c.diary_id
           WHERE d.user_id = ?
@@ -338,7 +338,7 @@ class DiaryService {
                  COUNT(DISTINCT l.id) as likes_count,
                  COUNT(DISTINCT c.id) as comments_count
           FROM diaries d
-          LEFT JOIN users u ON d.user_id = u.id
+          LEFT JOIN user u ON d.user_id = u.id
           LEFT JOIN diary_likes l ON d.id = l.diary_id
           LEFT JOIN diary_comments c ON d.id = c.diary_id
           WHERE d.user_id = ?
