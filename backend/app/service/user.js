@@ -93,10 +93,10 @@ class UserService extends Service {
     async findAll() {
         const { app } = this;
         try {
-            const users = await app.mysql.select('user', {
+            const userList = await app.mysql.select('user', {
                 columns: ['id', 'username', 'email', 'avatar_url', 'experience', 'level', 'created_at', 'updated_at']
             });
-            return users;
+            return userList;
         } catch (error) {
             this.ctx.logger.error('获取所有用户失败:', error);
             throw error;

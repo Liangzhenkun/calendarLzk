@@ -189,7 +189,7 @@
       }
     },
     "cors": {
-      "origin": "*",
+      "origin": "<Function origin>",
       "credentials": true,
       "allowMethods": "GET,HEAD,PUT,POST,DELETE,PATCH,OPTIONS",
       "allowHeaders": [
@@ -353,7 +353,6 @@
     },
     "onClientError": null,
     "middleware": [],
-    "prefix": "/api",
     "coreMiddlewares": "~config~coreMiddleware",
     "appMiddlewares": "~config~middleware",
     "appMiddleware": "~config~middleware"

@@ -33,7 +33,4 @@ module.exports = app => {
   router.get('/diary/metrics/:metric', jwt, controller.metrics.getData);
   router.get('/diary/metrics/stats', jwt, controller.metrics.getStats);
   router.get('/diary/metrics/trend/:metric', jwt, controller.metrics.getTrend);
-  
-  // 反馈相关路由
-  router.post('/feedback', controller.feedback.submit); // 不需要登录也可以提交反馈
 }; 

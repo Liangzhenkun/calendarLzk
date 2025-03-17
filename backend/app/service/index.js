@@ -3,6 +3,5 @@ module.exports = {
   AuthService: require('./auth'),
   DiaryService: require('./diary'),
   CalendarService: require('./calendar'),
-  MetricsService: require('./metrics'),
-  FeedbackService: require('./feedback')
+  MetricsService: require('./metrics')
 }; 

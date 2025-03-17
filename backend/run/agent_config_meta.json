@@ -6,7 +6,6 @@
     "expiresIn": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\config\\config.default.js",
     "enable": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg-jwt\\config\\config.default.js"
   },
-  "prefix": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\config\\config.default.js",
   "security": {
     "csrf": {
       "enable": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\config\\config.default.js",

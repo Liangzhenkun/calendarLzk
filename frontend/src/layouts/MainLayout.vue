@@ -31,6 +31,13 @@
         >
           日历
         </div>
+        <div 
+          class="tab"
+          :class="{ active: currentRoute === '/metrics' }"
+          @click="router.push('/metrics')"
+        >
+          指标分析
+        </div>
         <div class="tab logout" @click="handleLogout">退出</div>
       </div>
 
@@ -58,22 +65,14 @@ const currentRoute = computed(() => route.path)
 // 在组件挂载时添加打开动画
 onMounted(() => {
   setTimeout(() => {
-    isOpen.value = true
-  }, 300)
+    document.querySelector('.notebook').classList.add('open');
+  }, 100);
 })
 
-const handleLogout = async () => {
-  try {
-    isOpen.value = false;
-    // 等待动画完成
-    await new Promise(resolve => setTimeout(resolve, 500));
-    // 调用 auth store 的登出方法
-    await authStore.logout();
-    ElMessage.success('已退出登录');
-  } catch (error) {
-    console.error('退出失败:', error);
-    ElMessage.error('退出失败，请重试');
-  }
+const handleLogout = () => {
+  authStore.logout();
+  router.push('/login');
+  ElMessage.success('已退出登录');
 };
 </script>
 
