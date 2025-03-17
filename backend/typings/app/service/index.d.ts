@@ -10,6 +10,7 @@ type AutoInstanceType<T, U = T extends CanExportFunc ? T : T extends AnyFunc ? R
 import ExportAuth = require('../../../app/service/auth');
 import ExportCalendar = require('../../../app/service/calendar');
 import ExportDiary = require('../../../app/service/diary');
+import ExportFeedback = require('../../../app/service/feedback');
 import ExportIndex = require('../../../app/service/index');
 import ExportMetrics = require('../../../app/service/metrics');
 import ExportUser = require('../../../app/service/user');
@@ -19,6 +20,7 @@ declare module 'egg' {
     auth: AutoInstanceType<typeof ExportAuth>;
     calendar: AutoInstanceType<typeof ExportCalendar>;
     diary: AutoInstanceType<typeof ExportDiary>;
+    feedback: AutoInstanceType<typeof ExportFeedback>;
     index: AutoInstanceType<typeof ExportIndex>;
     metrics: AutoInstanceType<typeof ExportMetrics>;
     user: AutoInstanceType<typeof ExportUser>;

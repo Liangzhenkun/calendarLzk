@@ -6,6 +6,7 @@ import 'egg';
 import ExportAuth = require('../../../app/controller/auth');
 import ExportCalendar = require('../../../app/controller/calendar');
 import ExportDiary = require('../../../app/controller/diary');
+import ExportFeedback = require('../../../app/controller/feedback');
 import ExportMetrics = require('../../../app/controller/metrics');
 
 declare module 'egg' {
@@ -13,6 +14,7 @@ declare module 'egg' {
     auth: ExportAuth;
     calendar: ExportCalendar;
     diary: ExportDiary;
+    feedback: ExportFeedback;
     metrics: ExportMetrics;
   }
 }
