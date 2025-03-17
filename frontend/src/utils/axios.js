@@ -38,7 +38,7 @@ instance.interceptors.response.use(
             status: response.status,
             data: response.data,
             hasData: !!response.data,
-            hasCode: 'code' in response.data
+            hasCode: typeof response.data === 'object' && response.data !== null ? 'code' in response.data : false
         });
 
         // 返回完整的响应对象
@@ -59,10 +59,15 @@ instance.interceptors.response.use(
         if (error.response) {
             const authStore = useAuthStore();
 
+            // 如果响应中包含具体错误信息，优先使用它
+            const errorMessage = typeof error.response.data === 'object' && error.response.data !== null
+                ? error.response.data.message || error.response.data.error || '请求失败'
+                : '请求失败';
+
             switch (error.response.status) {
                 case 401:
                     // 如果是 token 过期错误，尝试刷新 token
-                    if (error.response.data?.message === 'Token expired' && !error.config._retry) {
+                    if (errorMessage === 'Token expired' && !error.config._retry) {
                         error.config._retry = true;
                         try {
                             await authStore.refreshAccessToken();
@@ -85,10 +90,10 @@ instance.interceptors.response.use(
                     ElMessage.error('没有权限访问');
                     break;
                 case 404:
-                    ElMessage.error('请求的资源不存在');
+                    ElMessage.error(errorMessage);
                     break;
                 default:
-                    ElMessage.error(error.response.data?.message || '请求失败');
+                    ElMessage.error(errorMessage);
             }
         } else if (error.request) {
             ElMessage.error('网络错误，请检查网络连接');

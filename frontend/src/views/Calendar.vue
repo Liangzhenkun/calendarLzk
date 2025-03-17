@@ -42,6 +42,10 @@
             <el-icon><ArrowRight /></el-icon>
           </el-button>
         </div>
+        <div class="debug-tools" v-if="showDebugTools">
+          <el-button size="small" @click="checkAuthStatus">检查认证状态</el-button>
+          <el-button size="small" @click="testBackendConnection">测试后端连接</el-button>
+        </div>
       </div>
 
       <!-- 日历主体 -->
@@ -293,6 +297,33 @@
           <el-button type="primary" class="ios-button" @click="switchToEditMode">编辑日记</el-button>
         </div>
       </div>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button class="ios-button" type="danger" @click="confirmDeleteDiary">删除</el-button>
+          <el-button class="ios-button" @click="editDiary">编辑</el-button>
+          <el-button class="ios-button" @click="readDialogVisible = false">关闭</el-button>
+        </span>
+      </template>
+    </el-dialog>
+
+    <!-- 删除确认对话框 -->
+    <el-dialog
+      v-model="deleteConfirmVisible"
+      title="确认删除"
+      width="300px"
+      custom-class="delete-confirm-dialog ios-dialog"
+      :close-on-click-modal="false"
+      append-to-body
+    >
+      <div class="delete-confirm-content">
+        <p>确定要删除这篇日记吗？此操作不可恢复。</p>
+      </div>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button class="ios-button" @click="deleteConfirmVisible = false">取消</el-button>
+          <el-button class="ios-button" type="danger" @click="deleteDiary">确定删除</el-button>
+        </span>
+      </template>
     </el-dialog>
 
     <!-- 编辑模式对话框 -->
@@ -406,16 +437,20 @@ import { ref, computed, onMounted } from 'vue';
 import { ElMessage } from 'element-plus';
 import { ArrowLeft, ArrowRight } from '@element-plus/icons-vue';
 import { useDiaryStore } from '@/stores/diary';
+import { useAuthStore } from '@/stores/auth';
 import { useI18n } from 'vue-i18n';
+import axios from 'axios';
 
 const { t } = useI18n();
 const diaryStore = useDiaryStore();
+const authStore = useAuthStore();
 const weekDays = ['日', '一', '二', '三', '四', '五', '六'];
 const currentDate = ref(new Date());
 const diaryDialogVisible = ref(false);
 const readDialogVisible = ref(false);
 const editDialogVisible = ref(false);
 const selectedDate = ref(null);
+const showDebugTools = ref(true); // 开发环境显示调试工具
 
 // 个性化指标配置
 const metricColors = ['#F56C6C', '#E6A23C', '#909399', '#67C23A', '#409EFF'];
@@ -509,10 +544,12 @@ const calculateDays = (year, month) => {
   
   while (days.length < 42) {
     const date = new Date(startDay)
+    // 使用一致的日期格式化方法检查是否有日记
+    const hasDiary = diaryStore.hasDiaryOnDate(date)
     days.push({
       date,
       isCurrentMonth: date.getMonth() === month,
-      hasDiary: diaryStore.hasDiaryOnDate(date)
+      hasDiary
     })
     startDay.setDate(startDay.getDate() + 1)
   }
@@ -536,33 +573,55 @@ const openDiaryDialog = async ({ date, hasDiary }) => {
   selectedDate.value = date;
   const formattedDate = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
   
-  // 确保日期格式正确
+  // 确保日期格式正确 - 使用本地时间
   const isoDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
   
+  // 初始化默认的日记表单数据
+  const defaultDiaryForm = {
+    date: isoDate,
+    title: `${formattedDate}的日记`,
+    mood: 3,
+    weather: 'sunny',
+    content: '',
+    metrics: {
+      sleepQuality: 5,
+      stressLevel: 5,
+      productivity: 5
+    }
+  };
+  
   if (hasDiary) {
-    // 如果有日记，先获取内容并显示阅读模式
-    const diary = await diaryStore.getDiaryByDate(date);
-    if (diary) {
-      diaryForm.value = { 
-        ...diary,
-        date: isoDate
-      };
-      readDialogVisible.value = true;
+    try {
+      // 如果有日记，先获取内容并显示阅读模式
+      const diary = await diaryStore.getDiaryByDate(date);
+      if (diary) {
+        // 确保 metrics 对象存在
+        const metrics = diary.metrics || defaultDiaryForm.metrics;
+        
+        diaryForm.value = {
+          date: isoDate,
+          title: diary.title || defaultDiaryForm.title,
+          mood: diary.mood || defaultDiaryForm.mood,
+          weather: diary.weather || defaultDiaryForm.weather,
+          content: diary.content || '',
+          metrics: {
+            sleepQuality: metrics.sleepQuality || defaultDiaryForm.metrics.sleepQuality,
+            stressLevel: metrics.stressLevel || defaultDiaryForm.metrics.stressLevel,
+            productivity: metrics.productivity || defaultDiaryForm.metrics.productivity
+          }
+        };
+        readDialogVisible.value = true;
+      }
+    } catch (error) {
+      console.error('获取日记失败:', error);
+      ElMessage.error('获取日记失败');
+      // 如果获取失败，使用默认值
+      diaryForm.value = defaultDiaryForm;
+      editDialogVisible.value = true;
     }
   } else {
-    // 如果没有日记，直接显示编辑模式
-    diaryForm.value = {
-      date: isoDate,
-      title: `${formattedDate}的日记`,
-      mood: 3,
-      weather: 'sunny',
-      content: '',
-      metrics: {
-        sleepQuality: 5,
-        stressLevel: 5,
-        productivity: 5
-      }
-    };
+    // 如果没有日记，使用默认值
+    diaryForm.value = defaultDiaryForm;
     editDialogVisible.value = true;
   }
 };
@@ -571,9 +630,12 @@ const openDiaryDialog = async ({ date, hasDiary }) => {
 const saveDiary = async () => {
   saving.value = true
   try {
-    // 确保使用正确的日期格式
+    // 确保使用正确的日期格式 - 使用本地时间
     const date = new Date(diaryForm.value.date);
-    const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const formattedDate = `${year}-${month}-${day}`;
     
     await diaryStore.saveDiary({
       ...diaryForm.value,
@@ -764,6 +826,58 @@ const monthTransition = ref('next');
 
 // 异步加载月份数据
 const loading = ref(false);
+
+// 删除确认对话框的可见性
+const deleteConfirmVisible = ref(false);
+
+// 确认删除日记
+const confirmDeleteDiary = () => {
+  deleteConfirmVisible.value = true;
+};
+
+// 删除日记
+const deleteDiary = async () => {
+  try {
+    console.log('准备删除日记，日期:', diaryForm.value.date);
+    await diaryStore.deleteDiary(diaryForm.value.date);
+    deleteConfirmVisible.value = false;
+    readDialogVisible.value = false;
+    ElMessage.success('日记删除成功');
+    // 刷新当月数据
+    await fetchMonthDiaries();
+  } catch (error) {
+    ElMessage.error('删除失败: ' + error.message);
+  }
+};
+
+// 编辑日记
+const editDiary = () => {
+  readDialogVisible.value = false;
+  diaryDialogVisible.value = true;
+};
+
+// 调试工具方法
+const checkAuthStatus = () => {
+  const token = sessionStorage.getItem('access_token');
+  if (token) {
+    ElMessage.success(`Token 存在: ${token.substring(0, 15)}...`);
+  } else {
+    ElMessage.error('未找到 Token，请重新登录');
+  }
+};
+
+const testBackendConnection = async () => {
+  try {
+    const response = await axios.get('http://localhost:7001/api/health', {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
+      }
+    });
+    ElMessage.success(`后端连接成功: ${JSON.stringify(response.data)}`);
+  } catch (error) {
+    ElMessage.error(`后端连接失败: ${error.message}`);
+  }
+};
 </script>
 
 <style lang="scss" scoped>
@@ -1383,5 +1497,18 @@ const loading = ref(false);
   .ripple {
     background: rgba(255, 255, 255, 0.2);
   }
+}
+
+.delete-confirm-dialog {
+  .delete-confirm-content {
+    text-align: center;
+    padding: 20px 0;
+  }
+}
+
+.dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
 }
 </style> 

@@ -6,6 +6,7 @@
     "expiresIn": "E:\\cursor\\clanderLzk\\backend\\config\\config.default.js",
     "enable": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-jwt\\config\\config.default.js"
   },
+  "prefix": "E:\\cursor\\clanderLzk\\backend\\config\\config.default.js",
   "security": {
     "csrf": {
       "enable": "E:\\cursor\\clanderLzk\\backend\\config\\config.default.js",
@@ -228,6 +229,16 @@
     "egg": {
       "declarations": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js"
     },
+    "scripts": {
+      "start": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+      "stop": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+      "dev": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+      "debug": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+      "test": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+      "cov": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+      "start:prod": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
+      "start:dev": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js"
+    },
     "dependencies": {
       "bcryptjs": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
       "dotenv": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
@@ -238,16 +249,9 @@
       "egg-scripts": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js"
     },
     "devDependencies": {
+      "cross-env": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
       "egg-bin": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
       "egg-mock": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js"
-    },
-    "scripts": {
-      "start": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-      "stop": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-      "dev": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-      "debug": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-      "test": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",
-      "cov": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js"
     }
   },
   "baseDir": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg\\config\\config.default.js",

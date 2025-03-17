@@ -46,7 +46,12 @@ export const useDiaryStore = defineStore('diary', {
         if (Array.isArray(response.data)) {
           response.data.forEach(diary => {
             if (diary && diary.date) {
-              const dateStr = new Date(diary.date).toISOString().split('T')[0];
+              // 使用一致的日期格式化方法
+              const diaryDate = new Date(diary.date);
+              const year = diaryDate.getFullYear();
+              const month = String(diaryDate.getMonth() + 1).padStart(2, '0');
+              const day = String(diaryDate.getDate()).padStart(2, '0');
+              const dateStr = `${year}-${month}-${day}`;
               this.diaries.set(dateStr, diary);
             }
           });
@@ -77,7 +82,12 @@ export const useDiaryStore = defineStore('diary', {
         if (Array.isArray(response.data)) {
           response.data.forEach(diary => {
             if (diary && diary.date) {
-              const dateStr = new Date(diary.date).toISOString().split('T')[0];
+              // 使用一致的日期格式化方法
+              const diaryDate = new Date(diary.date);
+              const year = diaryDate.getFullYear();
+              const month = String(diaryDate.getMonth() + 1).padStart(2, '0');
+              const day = String(diaryDate.getDate()).padStart(2, '0');
+              const dateStr = `${year}-${month}-${day}`;
               this.diaries.set(dateStr, diary);
             }
           });
@@ -93,8 +103,11 @@ export const useDiaryStore = defineStore('diary', {
     // 清除指定月份的日记数据
     clearMonthDiaries(year, month) {
       this.diaries.forEach((_, dateStr) => {
-        const date = new Date(dateStr);
-        if (date.getFullYear() === year && date.getMonth() === month) {
+        // 从日期字符串解析年、月、日
+        const [y, m, d] = dateStr.split('-').map(num => parseInt(num, 10));
+        // 注意：JavaScript 中月份是从 0 开始的
+        const date = new Date(y, m - 1, d);
+        if (date.getFullYear() === year && date.getMonth() === month - 1) {
           this.diaries.delete(dateStr);
         }
       });
@@ -102,7 +115,12 @@ export const useDiaryStore = defineStore('diary', {
 
     // 根据日期获取日记
     async getDiaryByDate(date) {
-      const dateStr = date.toISOString().split('T')[0];
+      // 使用与 saveDiary 相同的日期格式化方法，确保一致性
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      const dateStr = `${year}-${month}-${day}`;
+      
       if (this.diaries.has(dateStr)) {
         return this.diaries.get(dateStr);
       }
@@ -123,7 +141,11 @@ export const useDiaryStore = defineStore('diary', {
     hasDiaryOnDate(date) {
       try {
         if (!date) return false;
-        const dateStr = date.toISOString().split('T')[0];
+        // 使用与 saveDiary 相同的日期格式化方法，确保一致性
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const dateStr = `${year}-${month}-${day}`;
         return this.diaries.has(dateStr);
       } catch (error) {
         console.error('Error checking diary existence:', error);
@@ -144,6 +166,7 @@ export const useDiaryStore = defineStore('diary', {
           throw new Error('无效的日期格式');
         }
         
+        // 使用本地时间，避免时区问题
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0');
         const day = String(date.getDate()).padStart(2, '0');
@@ -155,13 +178,13 @@ export const useDiaryStore = defineStore('diary', {
         };
         
         let response;
-        const existingDiary = await this.getDiaryByDate(new Date(dateStr));
+        const existingDiary = this.diaries.get(dateStr);
         
         if (existingDiary) {
-          // 如果存在，使用 PUT 方法更新
-          response = await updateDiary(existingDiary.id, data);
+          // 如果存在，使用日期更新
+          response = await updateDiary(dateStr, data);
         } else {
-          // 如果不存在，使用 POST 方法创建
+          // 如果不存在，创建新日记
           response = await createDiary(data);
         }
         
@@ -176,7 +199,7 @@ export const useDiaryStore = defineStore('diary', {
         return response.data;
       } catch (error) {
         console.error('Error saving diary:', error);
-        throw new Error(error.response?.data?.message || '保存日记失败');
+        throw error;
       }
     },
 
@@ -230,8 +253,20 @@ export const useDiaryStore = defineStore('diary', {
 
     // 删除日记
     async deleteDiary(date) {
-      const dateStr = date.toISOString().split('T')[0];
       try {
+        // 确保日期格式正确
+        const dateObj = new Date(date);
+        if (isNaN(dateObj.getTime())) {
+          throw new Error('无效的日期格式');
+        }
+        
+        // 使用本地时间，避免时区问题
+        const year = dateObj.getFullYear();
+        const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+        const day = String(dateObj.getDate()).padStart(2, '0');
+        const dateStr = `${year}-${month}-${day}`;
+        
+        console.log('删除日记，日期:', dateStr);
         await deleteDiary(dateStr);
         this.diaries.delete(dateStr);
       } catch (error) {

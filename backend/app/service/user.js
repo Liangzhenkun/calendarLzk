@@ -9,10 +9,10 @@ class UserService extends Service {
             this.ctx.logger.info('开始查找用户:', { username });
             
             // 添加 SQL 查询日志
-            const sql = `SELECT * FROM users WHERE username = ?`;
+            const sql = `SELECT * FROM user WHERE username = ?`;
             this.ctx.logger.info('执行 SQL 查询:', { sql, params: [username] });
             
-            const user = await app.mysql.get('users', { username });
+            const user = await app.mysql.get('user', { username });
             
             this.ctx.logger.info('查找用户结果:', { 
                 username, 
@@ -48,7 +48,7 @@ class UserService extends Service {
             const hashedPassword = await bcrypt.hash(password, 10);
             this.ctx.logger.info('密码加密完成');
             
-            const result = await app.mysql.insert('users', {
+            const result = await app.mysql.insert('user', {
                 username,
                 email,
                 password_hash: hashedPassword,
@@ -93,7 +93,7 @@ class UserService extends Service {
     async findAll() {
         const { app } = this;
         try {
-            const users = await app.mysql.select('users', {
+            const users = await app.mysql.select('user', {
                 columns: ['id', 'username', 'email', 'avatar_url', 'experience', 'level', 'created_at', 'updated_at']
             });
             return users;

@@ -327,8 +327,13 @@ class DiaryService extends Service {
       diary_id: diaryId,
       date: date,
       sleep_quality: metrics.sleepQuality || 5,
+      energy_level: metrics.energyLevel || 5,
       stress_level: metrics.stressLevel || 5,
-      productivity: metrics.productivity || 5
+      productivity: metrics.productivity || 5,
+      mood_score: metrics.moodScore || 5,
+      social_satisfaction: metrics.socialSatisfaction || 5,
+      family_index: metrics.familyIndex || 5,
+      health_score: metrics.healthScore || 5
     };
 
     const existingMetrics = await app.mysql.get('personal_metrics', {
@@ -336,8 +341,16 @@ class DiaryService extends Service {
     });
 
     if (existingMetrics) {
+      // 更新所有指标值和更新时间
       await app.mysql.update('personal_metrics', {
-        ...metricsData,
+        sleep_quality: metricsData.sleep_quality,
+        energy_level: metricsData.energy_level,
+        stress_level: metricsData.stress_level,
+        productivity: metricsData.productivity,
+        mood_score: metricsData.mood_score,
+        social_satisfaction: metricsData.social_satisfaction,
+        family_index: metricsData.family_index,
+        health_score: metricsData.health_score,
         updated_at: app.mysql.literals.now
       }, {
         where: { id: existingMetrics.id }

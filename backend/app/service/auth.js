@@ -95,7 +95,7 @@ class AuthService extends Service {
       const userId = await ctx.service.user.create({
         username,
         password,
-        email: email || `${username}@example.com`
+        email
       });
 
       // 生成 token
@@ -121,7 +121,7 @@ class AuthService extends Service {
           user: {
             id: userId,
             username,
-            email: email || `${username}@example.com`,
+            email,
             avatar_url: null,
             experience: 0,
             level: 1

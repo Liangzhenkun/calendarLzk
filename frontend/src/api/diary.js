@@ -2,7 +2,7 @@ import request from '@/utils/axios'
 
 export function createDiary(data) {
   return request({
-    url: '/diary/create',
+    url: '/api/diary/create',
     method: 'post',
     data
   })
@@ -10,37 +10,38 @@ export function createDiary(data) {
 
 export function getDiaryList(params) {
   return request({
-    url: '/diary/list',
+    url: '/api/diary/list',
     method: 'get',
     params
   })
 }
 
-export function getDiaryDetail(id) {
+export function getDiaryDetail(date) {
   return request({
-    url: `/diary/${id}`,
+    url: `/api/diary/${date}`,
     method: 'get'
   })
 }
 
-export function updateDiary(id, data) {
+export function updateDiary(date, data) {
   return request({
-    url: `/diary/${id}`,
+    url: `/api/diary/${date}`,
     method: 'put',
     data
   })
 }
 
-export function deleteDiary(id) {
+export function deleteDiary(date) {
+  console.log('API 调用 deleteDiary，日期:', date);
   return request({
-    url: `/diary/${id}`,
+    url: `/api/diary/${date}`,
     method: 'delete'
   })
 }
 
 export function getMetrics(metric, range) {
   return request({
-    url: `/diary/metrics/${metric}`,
+    url: `/api/diary/metrics/${metric}`,
     method: 'get',
     params: { range }
   })
@@ -48,7 +49,7 @@ export function getMetrics(metric, range) {
 
 export function getMetricsStats(startDate, endDate) {
   return request({
-    url: '/diary/metrics/stats',
+    url: '/api/diary/metrics/stats',
     method: 'get',
     params: { startDate, endDate }
   })
@@ -56,7 +57,7 @@ export function getMetricsStats(startDate, endDate) {
 
 export function getMetricsTrend(metric, period) {
   return request({
-    url: `/diary/metrics/trend/${metric}`,
+    url: `/api/diary/metrics/trend/${metric}`,
     method: 'get',
     params: { period }
   })

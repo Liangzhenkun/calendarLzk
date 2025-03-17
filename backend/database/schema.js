@@ -2,7 +2,7 @@ const { DataTypes } = require('sequelize');
 
 module.exports = {
   User: {
-    tableName: 'users',
+    tableName: 'user',
     attributes: {
       id: {
         type: DataTypes.INTEGER,
@@ -15,7 +15,7 @@ module.exports = {
         unique: true
       },
       email: {
-        type: DataTypes.STRING(100),
+        type: DataTypes.STRING(255),
         allowNull: false,
         unique: true
       },
@@ -30,6 +30,14 @@ module.exports = {
       refresh_token: {
         type: DataTypes.TEXT,
         allowNull: true
+      },
+      experience: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0
+      },
+      level: {
+        type: DataTypes.INTEGER,
+        defaultValue: 1
       },
       created_at: {
         type: DataTypes.DATE,
@@ -56,7 +64,7 @@ module.exports = {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: 'users',
+          model: 'user',
           key: 'id'
         },
         field: 'user_id'
@@ -80,6 +88,10 @@ module.exports = {
       weather: {
         type: DataTypes.STRING(20),
         allowNull: true
+      },
+      type: {
+        type: DataTypes.STRING(20),
+        defaultValue: 'normal'
       },
       created_at: {
         type: DataTypes.DATE,
@@ -141,7 +153,7 @@ module.exports = {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: 'diaries',
+          model: 'diary',
           key: 'id'
         },
         field: 'diary_id'
@@ -150,7 +162,7 @@ module.exports = {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: 'users',
+          model: 'user',
           key: 'id'
         },
         field: 'user_id'
@@ -181,7 +193,7 @@ module.exports = {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: 'diaries',
+          model: 'diary',
           key: 'id'
         },
         field: 'diary_id'
@@ -190,7 +202,7 @@ module.exports = {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: 'users',
+          model: 'user',
           key: 'id'
         },
         field: 'user_id'
@@ -203,41 +215,6 @@ module.exports = {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
         field: 'created_at'
-      }
-    }
-  },
-  
-  CalendarRecord: {
-    tableName: 'diary',
-    attributes: {
-      id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
-      },
-      userId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'user',
-          key: 'id'
-        }
-      },
-      date: {
-        type: DataTypes.DATEONLY,
-        allowNull: false
-      },
-      type: {
-        type: DataTypes.STRING,
-        allowNull: true
-      },
-      createdAt: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW
-      },
-      updatedAt: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW
       }
     }
   }

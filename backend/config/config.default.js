@@ -88,7 +88,7 @@ module.exports = appInfo => {
   // 端口配置
   config.cluster = {
     listen: {
-      port: process.env.PORT || 7001,
+      port: parseInt(process.env.PORT || '7001', 10),
       hostname: '0.0.0.0',
     },
   };

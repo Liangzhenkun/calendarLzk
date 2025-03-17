@@ -53,16 +53,27 @@ class AuthController extends Controller {
 
     try {
       // 验证请求参数
-      if (!userData.username || !userData.password) {
+      if (!userData.username || !userData.password || !userData.email) {
         ctx.body = {
           code: 1,
-          message: '用户名和密码不能为空',
+          message: '用户名、密码和邮箱不能为空',
           data: null
         };
         return;
       }
 
-      ctx.logger.info('用户尝试注册:', { username: userData.username });
+      // 验证邮箱格式
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(userData.email)) {
+        ctx.body = {
+          code: 1,
+          message: '邮箱格式不正确',
+          data: null
+        };
+        return;
+      }
+
+      ctx.logger.info('用户尝试注册:', { username: userData.username, email: userData.email });
       const result = await ctx.service.auth.register(userData);
       ctx.body = result;
     } catch (error) {

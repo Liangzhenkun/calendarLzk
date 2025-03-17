@@ -15,10 +15,7 @@
     },
     "security": {
       "domainWhiteList": [
-        "http://localhost:3000",
-        "https://www.seefu.cn",
-        "https://seefu.cn",
-        "http://localhost:7001"
+        "*"
       ],
       "protocolWhiteList": [],
       "defaultMiddleware": "csrf,hsts,methodnoallow,noopen,nosniff,csp,xssProtection,xframe,dta",
@@ -224,12 +221,13 @@
       }
     },
     "cors": {
-      "origin": "<Function origin>",
+      "origin": "*",
       "credentials": true,
       "allowMethods": "GET,HEAD,PUT,POST,DELETE,PATCH,OPTIONS",
       "allowHeaders": [
         "Content-Type",
-        "Authorization"
+        "Authorization",
+        "X-Requested-With"
       ],
       "maxAge": 86400,
       "hasCustomOriginHandler": true
@@ -257,6 +255,16 @@
       "egg": {
         "declarations": true
       },
+      "scripts": {
+        "start": "cross-env NODE_ENV=production egg-scripts start --title=calendar-server --daemon",
+        "stop": "egg-scripts stop --title=calendar-server",
+        "dev": "cross-env NODE_ENV=development egg-bin dev",
+        "debug": "cross-env NODE_ENV=development egg-bin debug",
+        "test": "cross-env NODE_ENV=test egg-bin test",
+        "cov": "cross-env NODE_ENV=test egg-bin cov",
+        "start:prod": "cross-env NODE_ENV=production egg-scripts start --title=calendar-server --daemon",
+        "start:dev": "cross-env NODE_ENV=development egg-bin dev"
+      },
       "dependencies": {
         "bcryptjs": "^2.4.3",
         "dotenv": "^16.4.7",
@@ -267,16 +275,9 @@
         "egg-scripts": "^2.17.0"
       },
       "devDependencies": {
+        "cross-env": "^7.0.3",
         "egg-bin": "^5.10.0",
         "egg-mock": "^5.10.0"
-      },
-      "scripts": {
-        "start": "egg-scripts start --title=calendar-server",
-        "stop": "egg-scripts stop --title=calendar-server",
-        "dev": "egg-bin dev",
-        "debug": "egg-bin debug",
-        "test": "egg-bin test",
-        "cov": "egg-bin cov"
       }
     },
     "baseDir": "E:\\cursor\\clanderLzk\\backend",
@@ -393,6 +394,7 @@
     "middleware": [
       "jwt"
     ],
+    "prefix": "/api",
     "coreMiddlewares": "~config~coreMiddleware",
     "appMiddlewares": "~config~middleware",
     "appMiddleware": "~config~middleware"
@@ -600,6 +602,16 @@
       "egg": {
         "declarations": true
       },
+      "scripts": {
+        "start": "cross-env NODE_ENV=production egg-scripts start --title=calendar-server --daemon",
+        "stop": "egg-scripts stop --title=calendar-server",
+        "dev": "cross-env NODE_ENV=development egg-bin dev",
+        "debug": "cross-env NODE_ENV=development egg-bin debug",
+        "test": "cross-env NODE_ENV=test egg-bin test",
+        "cov": "cross-env NODE_ENV=test egg-bin cov",
+        "start:prod": "cross-env NODE_ENV=production egg-scripts start --title=calendar-server --daemon",
+        "start:dev": "cross-env NODE_ENV=development egg-bin dev"
+      },
       "dependencies": {
         "bcryptjs": "^2.4.3",
         "dotenv": "^16.4.7",
@@ -610,16 +622,9 @@
         "egg-scripts": "^2.17.0"
       },
       "devDependencies": {
+        "cross-env": "^7.0.3",
         "egg-bin": "^5.10.0",
         "egg-mock": "^5.10.0"
-      },
-      "scripts": {
-        "start": "egg-scripts start --title=calendar-server",
-        "stop": "egg-scripts stop --title=calendar-server",
-        "dev": "egg-bin dev",
-        "debug": "egg-bin debug",
-        "test": "egg-bin test",
-        "cov": "egg-bin cov"
       }
     },
     "root": "E:\\cursor\\clanderLzk\\backend"

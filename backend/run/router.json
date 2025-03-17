@@ -2,11 +2,12 @@
   {
     "name": null,
     "methods": [
-      "POST"
+      "HEAD",
+      "GET"
     ],
     "paramNames": [],
-    "path": "/auth/login",
-    "regexp": "/^\\/auth\\/login(?:\\/(?=$))?$/",
+    "path": "/api/health",
+    "regexp": "/^\\/api\\/health(?:\\/(?=$))?$/",
     "stack": [
       "wrappedController"
     ]
@@ -17,8 +18,20 @@
       "POST"
     ],
     "paramNames": [],
-    "path": "/auth/register",
-    "regexp": "/^\\/auth\\/register(?:\\/(?=$))?$/",
+    "path": "/api/auth/login",
+    "regexp": "/^\\/api\\/auth\\/login(?:\\/(?=$))?$/",
+    "stack": [
+      "wrappedController"
+    ]
+  },
+  {
+    "name": null,
+    "methods": [
+      "POST"
+    ],
+    "paramNames": [],
+    "path": "/api/auth/register",
+    "regexp": "/^\\/api\\/auth\\/register(?:\\/(?=$))?$/",
     "stack": [
       "wrappedController"
     ]
@@ -30,8 +43,8 @@
       "GET"
     ],
     "paramNames": [],
-    "path": "/calendar/records",
-    "regexp": "/^\\/calendar\\/records(?:\\/(?=$))?$/",
+    "path": "/api/diary/list",
+    "regexp": "/^\\/api\\/diary\\/list(?:\\/(?=$))?$/",
     "stack": [
       "auth",
       "wrappedController"
@@ -43,35 +56,8 @@
       "POST"
     ],
     "paramNames": [],
-    "path": "/calendar/record",
-    "regexp": "/^\\/calendar\\/record(?:\\/(?=$))?$/",
-    "stack": [
-      "auth",
-      "wrappedController"
-    ]
-  },
-  {
-    "name": null,
-    "methods": [
-      "POST"
-    ],
-    "paramNames": [],
-    "path": "/diary/create",
-    "regexp": "/^\\/diary\\/create(?:\\/(?=$))?$/",
-    "stack": [
-      "auth",
-      "wrappedController"
-    ]
-  },
-  {
-    "name": null,
-    "methods": [
-      "HEAD",
-      "GET"
-    ],
-    "paramNames": [],
-    "path": "/diary/list",
-    "regexp": "/^\\/diary\\/list(?:\\/(?=$))?$/",
+    "path": "/api/diary/create",
+    "regexp": "/^\\/api\\/diary\\/create(?:\\/(?=$))?$/",
     "stack": [
       "auth",
       "wrappedController"
@@ -85,7 +71,7 @@
     ],
     "paramNames": [
       {
-        "name": "id",
+        "name": "metric",
         "prefix": "/",
         "delimiter": "/",
         "optional": false,
@@ -95,8 +81,72 @@
         "pattern": "[^\\/]+?"
       }
     ],
-    "path": "/diary/:id",
-    "regexp": "/^\\/diary\\/((?:[^\\/]+?))(?:\\/(?=$))?$/",
+    "path": "/api/diary/metrics/:metric",
+    "regexp": "/^\\/api\\/diary\\/metrics\\/((?:[^\\/]+?))(?:\\/(?=$))?$/",
+    "stack": [
+      "auth",
+      "wrappedController"
+    ]
+  },
+  {
+    "name": null,
+    "methods": [
+      "HEAD",
+      "GET"
+    ],
+    "paramNames": [],
+    "path": "/api/diary/metrics/stats",
+    "regexp": "/^\\/api\\/diary\\/metrics\\/stats(?:\\/(?=$))?$/",
+    "stack": [
+      "auth",
+      "wrappedController"
+    ]
+  },
+  {
+    "name": null,
+    "methods": [
+      "HEAD",
+      "GET"
+    ],
+    "paramNames": [
+      {
+        "name": "metric",
+        "prefix": "/",
+        "delimiter": "/",
+        "optional": false,
+        "repeat": false,
+        "partial": false,
+        "asterisk": false,
+        "pattern": "[^\\/]+?"
+      }
+    ],
+    "path": "/api/diary/metrics/trend/:metric",
+    "regexp": "/^\\/api\\/diary\\/metrics\\/trend\\/((?:[^\\/]+?))(?:\\/(?=$))?$/",
+    "stack": [
+      "auth",
+      "wrappedController"
+    ]
+  },
+  {
+    "name": null,
+    "methods": [
+      "HEAD",
+      "GET"
+    ],
+    "paramNames": [
+      {
+        "name": "date",
+        "prefix": "/",
+        "delimiter": "/",
+        "optional": false,
+        "repeat": false,
+        "partial": false,
+        "asterisk": false,
+        "pattern": "[^\\/]+?"
+      }
+    ],
+    "path": "/api/diary/:date",
+    "regexp": "/^\\/api\\/diary\\/((?:[^\\/]+?))(?:\\/(?=$))?$/",
     "stack": [
       "auth",
       "wrappedController"
@@ -109,7 +159,7 @@
     ],
     "paramNames": [
       {
-        "name": "id",
+        "name": "date",
         "prefix": "/",
         "delimiter": "/",
         "optional": false,
@@ -119,8 +169,8 @@
         "pattern": "[^\\/]+?"
       }
     ],
-    "path": "/diary/:id",
-    "regexp": "/^\\/diary\\/((?:[^\\/]+?))(?:\\/(?=$))?$/",
+    "path": "/api/diary/:date",
+    "regexp": "/^\\/api\\/diary\\/((?:[^\\/]+?))(?:\\/(?=$))?$/",
     "stack": [
       "auth",
       "wrappedController"
@@ -133,7 +183,7 @@
     ],
     "paramNames": [
       {
-        "name": "id",
+        "name": "date",
         "prefix": "/",
         "delimiter": "/",
         "optional": false,
@@ -143,33 +193,8 @@
         "pattern": "[^\\/]+?"
       }
     ],
-    "path": "/diary/:id",
-    "regexp": "/^\\/diary\\/((?:[^\\/]+?))(?:\\/(?=$))?$/",
-    "stack": [
-      "auth",
-      "wrappedController"
-    ]
-  },
-  {
-    "name": null,
-    "methods": [
-      "HEAD",
-      "GET"
-    ],
-    "paramNames": [
-      {
-        "name": "metric",
-        "prefix": "/",
-        "delimiter": "/",
-        "optional": false,
-        "repeat": false,
-        "partial": false,
-        "asterisk": false,
-        "pattern": "[^\\/]+?"
-      }
-    ],
-    "path": "/diary/metrics/:metric",
-    "regexp": "/^\\/diary\\/metrics\\/((?:[^\\/]+?))(?:\\/(?=$))?$/",
+    "path": "/api/diary/:date",
+    "regexp": "/^\\/api\\/diary\\/((?:[^\\/]+?))(?:\\/(?=$))?$/",
     "stack": [
       "auth",
       "wrappedController"
@@ -182,8 +207,8 @@
       "GET"
     ],
     "paramNames": [],
-    "path": "/diary/metrics/stats",
-    "regexp": "/^\\/diary\\/metrics\\/stats(?:\\/(?=$))?$/",
+    "path": "/api/calendar/records",
+    "regexp": "/^\\/api\\/calendar\\/records(?:\\/(?=$))?$/",
     "stack": [
       "auth",
       "wrappedController"
@@ -192,23 +217,11 @@
   {
     "name": null,
     "methods": [
-      "HEAD",
-      "GET"
+      "POST"
     ],
-    "paramNames": [
-      {
-        "name": "metric",
-        "prefix": "/",
-        "delimiter": "/",
-        "optional": false,
-        "repeat": false,
-        "partial": false,
-        "asterisk": false,
-        "pattern": "[^\\/]+?"
-      }
-    ],
-    "path": "/diary/metrics/trend/:metric",
-    "regexp": "/^\\/diary\\/metrics\\/trend\\/((?:[^\\/]+?))(?:\\/(?=$))?$/",
+    "paramNames": [],
+    "path": "/api/calendar/record",
+    "regexp": "/^\\/api\\/calendar\\/record(?:\\/(?=$))?$/",
     "stack": [
       "auth",
       "wrappedController"

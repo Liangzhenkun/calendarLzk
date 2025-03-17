@@ -5,6 +5,15 @@ module.exports = app => {
   // 配置路由前缀
   router.prefix('/api');
 
+  // 健康检查路由 - 无需认证
+  router.get('/health', ctx => {
+    ctx.body = {
+      status: 'ok',
+      timestamp: new Date().toISOString(),
+      message: '后端服务正常运行'
+    };
+  });
+
   // 公开路由
   router.post('/auth/login', controller.auth.login);
   router.post('/auth/register', controller.auth.register);
