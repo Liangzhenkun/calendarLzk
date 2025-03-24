@@ -13,7 +13,7 @@
     <div class="notebook-cover" :class="{ 'cover-open': isOpen }">
       <div class="cover-front">
         <div class="cover-design">
-          <h1>我的日记本</h1>
+          <h1>惜福记事</h1>
           <div class="cover-pattern"></div>
         </div>
       </div>

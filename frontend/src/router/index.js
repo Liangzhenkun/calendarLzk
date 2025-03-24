@@ -41,6 +41,18 @@ const routes = [
         name: 'Shop',
         component: () => import('@/components/Shop.vue'),
         meta: { requiresAuth: true }
+      },
+      {
+        path: '/diary',
+        name: 'Diary',
+        component: () => import('@/views/Diary.vue'),
+        meta: { requiresAuth: true }
+      },
+      {
+        path: '/profile',
+        name: 'Profile',
+        component: () => import('@/views/Profile.vue'),
+        meta: { requiresAuth: true }
       }
     ]
   },
@@ -55,16 +67,6 @@ const routes = [
     name: 'Register',
     component: () => import('@/views/Register.vue'),
     meta: { guest: true }
-  },
-  {
-    path: '/diary',
-    component: () => import('@/views/Diary.vue'),
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/profile',
-    component: () => import('@/views/Profile.vue'),
-    meta: { requiresAuth: true }
   }
 ]
 
