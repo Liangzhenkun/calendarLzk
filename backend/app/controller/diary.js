@@ -1,100 +1,107 @@
-const { Controller } = require('egg');
+'use strict';
+
+const Controller = require('egg').Controller;
 
 class DiaryController extends Controller {
-  async create() {
+  // 获取用户的所有日记
+  async index() {
     const { ctx, service } = this;
     const userId = ctx.state.user.id;
-    const data = { ...ctx.request.body, userId };
-
+    
     try {
-      ctx.logger.info('创建日记，接收到的数据:', data);
-      const result = await service.diary.create(data);
-      ctx.logger.info('日记创建成功:', result);
-      ctx.body = result;
-    } catch (error) {
-      ctx.logger.error('创建日记失败:', error);
-      ctx.status = 500;
-      ctx.body = { message: error.message };
-    }
-  }
-
-  async list() {
-    const { ctx, service } = this;
-    const userId = ctx.state.user.id;
-
-    try {
-      ctx.logger.info('获取用户日记列表, userId:', userId);
-      const diaries = await service.diary.list(userId);
-      ctx.logger.info('获取到日记数量:', diaries.length);
+      const diaries = await service.diary.getDiaries(userId);
       ctx.body = diaries;
     } catch (error) {
       ctx.logger.error('获取日记列表失败:', error);
       ctx.status = 500;
-      ctx.body = { message: error.message };
+      ctx.body = { message: '获取日记列表失败', error: error.message };
     }
   }
 
-  async getByDate() {
+  // 创建新日记
+  async create() {
     const { ctx, service } = this;
     const userId = ctx.state.user.id;
-    const date = ctx.params.date;
-
+    const diaryData = ctx.request.body;
+    
     try {
-      ctx.logger.info('按日期获取日记, userId:', userId, 'date:', date);
-      const diary = await service.diary.getByDate(userId, date);
-      if (!diary) {
-        ctx.status = 404;
-        ctx.body = { message: '该日期没有日记' };
-        return;
-      }
+      const diary = await service.diary.createDiary(userId, diaryData);
+      ctx.status = 201;
       ctx.body = diary;
     } catch (error) {
-      ctx.logger.error('获取日记失败:', error);
-      ctx.status = 500;
-      ctx.body = { message: error.message };
+      ctx.logger.error('创建日记失败:', error);
+      ctx.status = 400;
+      ctx.body = { message: '创建日记失败', error: error.message };
     }
   }
 
+  // 获取特定日记
+  async show() {
+    const { ctx, service } = this;
+    const userId = ctx.state.user.id;
+    const diaryId = ctx.params.id;
+    
+    try {
+      const diary = await service.diary.getDiary(diaryId, userId);
+      
+      if (!diary) {
+        ctx.status = 404;
+        ctx.body = { message: '日记不存在' };
+        return;
+      }
+      
+      ctx.body = diary;
+    } catch (error) {
+      ctx.logger.error('获取日记详情失败:', error);
+      ctx.status = 500;
+      ctx.body = { message: '获取日记详情失败', error: error.message };
+    }
+  }
+
+  // 更新日记
   async update() {
     const { ctx, service } = this;
     const userId = ctx.state.user.id;
-    const date = ctx.params.date;
-    const data = ctx.request.body;
-
+    const diaryId = ctx.params.id;
+    const updateData = ctx.request.body;
+    
     try {
-      ctx.logger.info('更新日记, userId:', userId, 'date:', date, 'data:', data);
-      const result = await service.diary.updateByDate(userId, date, data);
-      if (!result) {
+      const diary = await service.diary.updateDiary(diaryId, userId, updateData);
+      
+      if (!diary) {
         ctx.status = 404;
         ctx.body = { message: '日记不存在' };
         return;
       }
-      ctx.body = result;
+      
+      ctx.body = diary;
     } catch (error) {
       ctx.logger.error('更新日记失败:', error);
-      ctx.status = 500;
-      ctx.body = { message: error.message };
+      ctx.status = 400;
+      ctx.body = { message: '更新日记失败', error: error.message };
     }
   }
 
-  async delete() {
+  // 删除日记
+  async destroy() {
     const { ctx, service } = this;
     const userId = ctx.state.user.id;
-    const date = ctx.params.date;
-
+    const diaryId = ctx.params.id;
+    
     try {
-      ctx.logger.info('删除日记, userId:', userId, 'date:', date);
-      const result = await service.diary.deleteByDate(userId, date);
+      const result = await service.diary.deleteDiary(diaryId, userId);
+      
       if (!result) {
         ctx.status = 404;
         ctx.body = { message: '日记不存在' };
         return;
       }
-      ctx.body = { success: true };
+      
+      ctx.body = { message: '日记删除成功' };
     } catch (error) {
       ctx.logger.error('删除日记失败:', error);
       ctx.status = 500;
-      ctx.body = { message: error.message };
+      ctx.body = { message: '删除日记失败', error: error.message };
     }
   }
 }

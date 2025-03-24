@@ -31,6 +31,27 @@
         >
           日历
         </div>
+        <div 
+          class="tab"
+          :class="{ active: currentRoute === '/achievements' }"
+          @click="router.push('/achievements')"
+        >
+          成就
+        </div>
+        <div 
+          class="tab"
+          :class="{ active: currentRoute === '/tasks' }"
+          @click="router.push('/tasks')"
+        >
+          任务
+        </div>
+        <div 
+          class="tab"
+          :class="{ active: currentRoute === '/shop' }"
+          @click="router.push('/shop')"
+        >
+          商店
+        </div>
         <div class="tab logout" @click="handleLogout">退出</div>
       </div>
 

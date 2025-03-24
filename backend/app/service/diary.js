@@ -1,3 +1,5 @@
+'use strict';
+
 const Service = require('egg').Service;
 
 const TABLE_NAME = 'diary';
@@ -358,6 +360,94 @@ class DiaryService extends Service {
     } else {
       await app.mysql.insert('personal_metrics', metricsData);
     }
+  }
+
+  /**
+   * 获取用户的所有日记
+   * @param {string} userId - 用户ID
+   * @return {Promise<Array>} - 日记列表
+   */
+  async getDiaries(userId) {
+    const { ctx } = this;
+    return ctx.model.Diary.find({ userId }).sort({ date: -1 });
+  }
+
+  /**
+   * 创建新日记
+   * @param {string} userId - 用户ID
+   * @param {Object} diaryData - 日记数据
+   * @return {Promise<Object>} - 创建的日记
+   */
+  async createDiary(userId, diaryData) {
+    const { ctx } = this;
+    const { title, content, mood } = diaryData;
+    
+    const diary = new ctx.model.Diary({
+      userId,
+      title,
+      content,
+      mood,
+      date: new Date(),
+      exp: 10
+    });
+    
+    await diary.save();
+
+    // 更新用户经验值
+    await ctx.model.User.findByIdAndUpdate(
+      userId,
+      { $inc: { exp: diary.exp } }
+    );
+
+    return diary;
+  }
+
+  /**
+   * 获取特定日记
+   * @param {string} diaryId - 日记ID
+   * @param {string} userId - 用户ID
+   * @return {Promise<Object>} - 日记数据
+   */
+  async getDiary(diaryId, userId) {
+    const { ctx } = this;
+    return ctx.model.Diary.findOne({
+      _id: diaryId,
+      userId
+    });
+  }
+
+  /**
+   * 更新日记
+   * @param {string} diaryId - 日记ID
+   * @param {string} userId - 用户ID
+   * @param {Object} updateData - 更新数据
+   * @return {Promise<Object>} - 更新后的日记
+   */
+  async updateDiary(diaryId, userId, updateData) {
+    const { ctx } = this;
+    const { title, content, mood } = updateData;
+    
+    return ctx.model.Diary.findOneAndUpdate(
+      { _id: diaryId, userId },
+      { title, content, mood },
+      { new: true }
+    );
+  }
+
+  /**
+   * 删除日记
+   * @param {string} diaryId - 日记ID
+   * @param {string} userId - 用户ID
+   * @return {Promise<boolean>} - 删除结果
+   */
+  async deleteDiary(diaryId, userId) {
+    const { ctx } = this;
+    const result = await ctx.model.Diary.findOneAndDelete({
+      _id: diaryId,
+      userId
+    });
+    
+    return !!result;
   }
 }
 

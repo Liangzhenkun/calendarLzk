@@ -31,4 +31,20 @@ module.exports = app => {
   // 日历相关路由
   router.get('/calendar/records', jwt, controller.calendar.getRecords);
   router.post('/calendar/record', jwt, controller.calendar.createOrUpdate);
+  
+  // 成就相关路由
+  router.get('/achievements/all', jwt, controller.achievement.getAll);
+  router.get('/achievements/user', jwt, controller.achievement.getUserAchievements);
+  router.post('/achievements/check', jwt, controller.achievement.checkProgress);
+  
+  // 任务相关路由
+  router.get('/tasks/daily', jwt, controller.dailyTask.getDailyTasks);
+  router.post('/tasks/complete', jwt, controller.dailyTask.completeTask);
+  router.get('/tasks/history', jwt, controller.dailyTask.getTaskHistory);
+  
+  // 商店相关路由
+  router.get('/shop/items', jwt, controller.shop.getItems);
+  router.post('/shop/purchase', jwt, controller.shop.purchaseItem);
+  router.get('/shop/user-items', jwt, controller.shop.getUserItems);
+  router.post('/shop/use-item', jwt, controller.shop.useItem);
 }; 

@@ -1,74 +1,97 @@
-const express = require('express');
-const router = express.Router();
-const { DiaryService } = require('../services/diary.service');
-const auth = require('../middleware/auth');
+'use strict';
 
-const diaryService = new DiaryService();
-
-// 获取指定月份的日记
-router.get('/:year/:month', auth, async (req, res) => {
-  try {
-    const { year, month } = req.params;
-    const userId = req.user.id;
-    const diaries = await diaryService.getMonthDiaries(userId, parseInt(year), parseInt(month));
-    res.json(diaries);
-  } catch (error) {
-    console.error('Error fetching month diaries:', error);
-    res.status(500).json({ error: '获取日记失败' });
+/**
+ * 日记相关服务
+ */
+class DiaryService {
+  constructor(ctx) {
+    this.ctx = ctx;
+    this.DiaryModel = ctx.model.Diary;
+    this.UserModel = ctx.model.User;
   }
-});
 
-// 获取指定日期的日记
-router.get('/date/:date', auth, async (req, res) => {
-  try {
-    const { date } = req.params;
-    const userId = req.user.id;
-    const diary = await diaryService.getDiaryByDate(userId, date);
-    
-    if (!diary) {
-      return res.status(404).json({ error: '日记不存在' });
-    }
-    
-    res.json(diary);
-  } catch (error) {
-    console.error('Error fetching diary:', error);
-    res.status(500).json({ error: '获取日记失败' });
+  /**
+   * 获取用户的所有日记
+   * @param {string} userId - 用户ID
+   * @return {Promise<Array>} - 日记列表
+   */
+  async getDiaries(userId) {
+    return this.DiaryModel.find({ userId }).sort({ date: -1 });
   }
-});
 
-// 创建或更新日记
-router.post('/', auth, async (req, res) => {
-  try {
-    const userId = req.user.id;
-    const diaryData = req.body;
+  /**
+   * 创建新日记
+   * @param {string} userId - 用户ID
+   * @param {Object} diaryData - 日记数据
+   * @return {Promise<Object>} - 创建的日记
+   */
+  async createDiary(userId, diaryData) {
+    const { title, content, mood } = diaryData;
     
-    const result = await diaryService.saveDiary(userId, diaryData);
-    res.json({
-      success: true,
-      id: result.id,
-      message: '日记保存成功'
+    const diary = new this.DiaryModel({
+      userId,
+      title,
+      content,
+      mood,
+      date: new Date(),
+      exp: 10
     });
-  } catch (error) {
-    console.error('Error saving diary:', error);
-    res.status(500).json({ error: '保存日记失败' });
-  }
-});
-
-// 删除日记
-router.delete('/date/:date', auth, async (req, res) => {
-  try {
-    const { date } = req.params;
-    const userId = req.user.id;
     
-    await diaryService.deleteDiary(userId, date);
-    res.json({
-      success: true,
-      message: '日记删除成功'
-    });
-  } catch (error) {
-    console.error('Error deleting diary:', error);
-    res.status(500).json({ error: '删除日记失败' });
-  }
-});
+    await diary.save();
 
-module.exports = router; 
+    // 更新用户经验值
+    await this.UserModel.findByIdAndUpdate(
+      userId,
+      { $inc: { exp: diary.exp } }
+    );
+
+    return diary;
+  }
+
+  /**
+   * 获取特定日记
+   * @param {string} diaryId - 日记ID
+   * @param {string} userId - 用户ID
+   * @return {Promise<Object>} - 日记数据
+   */
+  async getDiary(diaryId, userId) {
+    return this.DiaryModel.findOne({
+      _id: diaryId,
+      userId
+    });
+  }
+
+  /**
+   * 更新日记
+   * @param {string} diaryId - 日记ID
+   * @param {string} userId - 用户ID
+   * @param {Object} updateData - 更新数据
+   * @return {Promise<Object>} - 更新后的日记
+   */
+  async updateDiary(diaryId, userId, updateData) {
+    const { title, content, mood } = updateData;
+    
+    return this.DiaryModel.findOneAndUpdate(
+      { _id: diaryId, userId },
+      { title, content, mood },
+      { new: true }
+    );
+  }
+
+  /**
+   * 删除日记
+   * @param {string} diaryId - 日记ID
+   * @param {string} userId - 用户ID
+   * @return {Promise<boolean>} - 删除结果
+   */
+  async deleteDiary(diaryId, userId) {
+    const result = await this.DiaryModel.findOneAndDelete({
+      _id: diaryId,
+      userId
+    });
+    
+    return !!result;
+  }
+}
+
+module.exports = { DiaryService }; 
