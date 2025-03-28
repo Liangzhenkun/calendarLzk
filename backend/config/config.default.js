@@ -46,20 +46,25 @@ module.exports = appInfo => {
   config.prefix = '/api';
 
   // 从环境变量获取允许的域名列表
-  const corsOrigins = (process.env.CORS_ORIGIN || '').split(' ').filter(Boolean);
+  const corsOrigins = (process.env.CORS_ALLOWED_ORIGINS || '').split(',').filter(Boolean);
 
   // 关闭 CSRF
   config.security = {
     csrf: {
       enable: false,
     },
-    // 使用环境变量中的域名列表
-    domainWhiteList: ['*']  // 开发环境下允许所有域名
+    domainWhiteList: corsOrigins.length ? corsOrigins : ['https://seefu.cn', 'https://www.seefu.cn']
   };
 
   // 配置 CORS
   config.cors = {
-    origin: '*',  // 开发环境下允许所有域名
+    origin: ctx => {
+      const requestOrigin = ctx.get('Origin');
+      if (corsOrigins.length) {
+        return corsOrigins.includes(requestOrigin) ? requestOrigin : false;
+      }
+      return ['https://seefu.cn', 'https://www.seefu.cn'].includes(requestOrigin) ? requestOrigin : false;
+    },
     credentials: true,
     allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH,OPTIONS',
     allowHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],

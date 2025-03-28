@@ -9,7 +9,10 @@
     },
     "security": {
       "domainWhiteList": [
-        "*"
+        "https://www.seefu.cn",
+        "https://seefu.cn",
+        "http://localhost:3000",
+        "http://localhost:7001"
       ],
       "protocolWhiteList": [],
       "defaultMiddleware": "csrf,hsts,methodnoallow,noopen,nosniff,csp,xssProtection,xframe,dta",
@@ -189,7 +192,7 @@
       }
     },
     "cors": {
-      "origin": "*",
+      "origin": "<Function origin>",
       "credentials": true,
       "allowMethods": "GET,HEAD,PUT,POST,DELETE,PATCH,OPTIONS",
       "allowHeaders": [
