@@ -22,10 +22,13 @@ class DiaryController extends Controller {
   async create() {
     const { ctx, service } = this;
     const userId = ctx.state.user.id;
-    const diaryData = ctx.request.body;
+    const diaryData = {
+      ...ctx.request.body,
+      userId
+    };
     
     try {
-      const diary = await service.diary.createDiary(userId, diaryData);
+      const diary = await service.diary.create(diaryData);
       ctx.status = 201;
       ctx.body = diary;
     } catch (error) {
@@ -39,10 +42,10 @@ class DiaryController extends Controller {
   async show() {
     const { ctx, service } = this;
     const userId = ctx.state.user.id;
-    const diaryId = ctx.params.id;
+    const date = ctx.params.date;
     
     try {
-      const diary = await service.diary.getDiary(diaryId, userId);
+      const diary = await service.diary.getByDate(userId, date);
       
       if (!diary) {
         ctx.status = 404;
@@ -62,19 +65,19 @@ class DiaryController extends Controller {
   async update() {
     const { ctx, service } = this;
     const userId = ctx.state.user.id;
-    const diaryId = ctx.params.id;
+    const date = ctx.params.date;
     const updateData = ctx.request.body;
     
     try {
-      const diary = await service.diary.updateDiary(diaryId, userId, updateData);
+      const result = await service.diary.updateByDate(userId, date, updateData);
       
-      if (!diary) {
+      if (!result) {
         ctx.status = 404;
         ctx.body = { message: '日记不存在' };
         return;
       }
       
-      ctx.body = diary;
+      ctx.body = { message: '日记更新成功' };
     } catch (error) {
       ctx.logger.error('更新日记失败:', error);
       ctx.status = 400;
@@ -86,10 +89,10 @@ class DiaryController extends Controller {
   async destroy() {
     const { ctx, service } = this;
     const userId = ctx.state.user.id;
-    const diaryId = ctx.params.id;
+    const date = ctx.params.date;
     
     try {
-      const result = await service.diary.deleteDiary(diaryId, userId);
+      const result = await service.diary.deleteByDate(userId, date);
       
       if (!result) {
         ctx.status = 404;

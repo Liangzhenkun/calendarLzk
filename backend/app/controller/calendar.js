@@ -1,4 +1,6 @@
-const { Controller } = require('egg');
+'use strict';
+
+const Controller = require('egg').Controller;
 
 class CalendarController extends Controller {
   async getRecords() {

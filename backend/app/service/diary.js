@@ -368,38 +368,16 @@ class DiaryService extends Service {
    * @return {Promise<Array>} - 日记列表
    */
   async getDiaries(userId) {
-    const { ctx } = this;
-    return ctx.model.Diary.find({ userId }).sort({ date: -1 });
-  }
-
-  /**
-   * 创建新日记
-   * @param {string} userId - 用户ID
-   * @param {Object} diaryData - 日记数据
-   * @return {Promise<Object>} - 创建的日记
-   */
-  async createDiary(userId, diaryData) {
-    const { ctx } = this;
-    const { title, content, mood } = diaryData;
-    
-    const diary = new ctx.model.Diary({
-      userId,
-      title,
-      content,
-      mood,
-      date: new Date(),
-      exp: 10
-    });
-    
-    await diary.save();
-
-    // 更新用户经验值
-    await ctx.model.User.findByIdAndUpdate(
-      userId,
-      { $inc: { exp: diary.exp } }
-    );
-
-    return diary;
+    const { app } = this;
+    try {
+      return await app.mysql.select(TABLE_NAME, {
+        where: { user_id: userId },
+        orders: [['date', 'desc']]
+      });
+    } catch (error) {
+      this.ctx.logger.error('获取日记列表失败:', error);
+      throw error;
+    }
   }
 
   /**
@@ -409,11 +387,16 @@ class DiaryService extends Service {
    * @return {Promise<Object>} - 日记数据
    */
   async getDiary(diaryId, userId) {
-    const { ctx } = this;
-    return ctx.model.Diary.findOne({
-      _id: diaryId,
-      userId
-    });
+    const { app } = this;
+    try {
+      return await app.mysql.get(TABLE_NAME, {
+        id: diaryId,
+        user_id: userId
+      });
+    } catch (error) {
+      this.ctx.logger.error('获取日记详情失败:', error);
+      throw error;
+    }
   }
 
   /**
@@ -424,14 +407,27 @@ class DiaryService extends Service {
    * @return {Promise<Object>} - 更新后的日记
    */
   async updateDiary(diaryId, userId, updateData) {
-    const { ctx } = this;
-    const { title, content, mood } = updateData;
-    
-    return ctx.model.Diary.findOneAndUpdate(
-      { _id: diaryId, userId },
-      { title, content, mood },
-      { new: true }
-    );
+    const { app } = this;
+    try {
+      const { title, content, mood } = updateData;
+      
+      const result = await app.mysql.update(TABLE_NAME, {
+        title,
+        content,
+        mood,
+        updated_at: app.mysql.literals.now
+      }, {
+        where: {
+          id: diaryId,
+          user_id: userId
+        }
+      });
+      
+      return result.affectedRows > 0;
+    } catch (error) {
+      this.ctx.logger.error('更新日记失败:', error);
+      throw error;
+    }
   }
 
   /**
@@ -441,13 +437,18 @@ class DiaryService extends Service {
    * @return {Promise<boolean>} - 删除结果
    */
   async deleteDiary(diaryId, userId) {
-    const { ctx } = this;
-    const result = await ctx.model.Diary.findOneAndDelete({
-      _id: diaryId,
-      userId
-    });
-    
-    return !!result;
+    const { app } = this;
+    try {
+      const result = await app.mysql.delete(TABLE_NAME, {
+        id: diaryId,
+        user_id: userId
+      });
+      
+      return result.affectedRows > 0;
+    } catch (error) {
+      this.ctx.logger.error('删除日记失败:', error);
+      throw error;
+    }
   }
 }
 
