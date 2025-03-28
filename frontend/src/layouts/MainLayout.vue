@@ -64,7 +64,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, nextTick, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { ElMessage } from 'element-plus'
@@ -76,11 +76,22 @@ const isOpen = ref(false)
 
 const currentRoute = computed(() => route.path)
 
+// 监听路由变化
+watch(route, () => {
+  // 确保在路由变化时保持打开状态
+  nextTick(() => {
+    isOpen.value = true;
+  });
+});
+
 // 在组件挂载时添加打开动画
 onMounted(() => {
-  setTimeout(() => {
-    isOpen.value = true
-  }, 300)
+  // 使用 nextTick 确保 DOM 已经更新
+  nextTick(() => {
+    setTimeout(() => {
+      isOpen.value = true;
+    }, 300);
+  });
 })
 
 const handleLogout = async () => {
@@ -229,26 +240,36 @@ const handleLogout = async () => {
 /* 日记本内页样式 */
 .notebook-pages {
   position: absolute;
-  width: 100%;
-  height: 100%;
+  width: 90%;
+  max-width: 1200px;
+  height: 85vh;
   background: #fff;
   border-radius: 10px;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  visibility: hidden;
+  transition: all 0.5s ease;
   overflow: hidden;
   box-shadow: 0 0 20px rgba(0,0,0,0.1);
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  will-change: opacity, visibility;
 }
 
 .pages-visible {
   opacity: 1;
+  visibility: visible;
 }
 
 /* 导航标签样式 */
 .notebook-tabs {
+  position: sticky;
+  top: 0;
+  z-index: 10;
   display: flex;
   padding: 20px;
   background: #f5f5f5;
   border-bottom: 1px solid #ddd;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .tab {
@@ -278,6 +299,26 @@ const handleLogout = async () => {
   padding: 20px;
   height: calc(100% - 80px);
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+.notebook-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.notebook-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.notebook-content::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.notebook-content::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
 
 /* 添加纸张纹理 */
