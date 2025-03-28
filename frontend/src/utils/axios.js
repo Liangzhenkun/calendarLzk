@@ -19,6 +19,14 @@ const instance = axios.create({
 // 请求拦截器
 instance.interceptors.request.use(
     config => {
+        console.log('Axios 请求配置:', {
+            url: config.url,
+            method: config.method,
+            baseURL: config.baseURL,
+            withCredentials: config.withCredentials,
+            headers: config.headers
+        });
+
         const token = sessionStorage.getItem('access_token');
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
@@ -34,35 +42,36 @@ instance.interceptors.request.use(
 // 响应拦截器
 instance.interceptors.response.use(
     response => {
-        console.log('Axios 响应拦截器:', {
+        console.log('Axios 响应:', {
             status: response.status,
-            data: response.data,
-            hasData: !!response.data,
-            hasCode: typeof response.data === 'object' && response.data !== null ? 'code' in response.data : false
+            statusText: response.statusText,
+            headers: response.headers,
+            data: response.data
         });
-
-        // 返回完整的响应对象
         return response;
     },
     async error => {
-        console.error('Axios 错误拦截器:', {
-            error: error.message,
-            response: error.response?.data,
-            status: error.response?.status,
+        console.error('Axios 错误:', {
+            message: error.message,
             config: {
                 url: error.config?.url,
                 method: error.config?.method,
-                baseURL: error.config?.baseURL
-            }
+                baseURL: error.config?.baseURL,
+                withCredentials: error.config?.withCredentials
+            },
+            response: error.response ? {
+                status: error.response.status,
+                statusText: error.response.statusText,
+                headers: error.response.headers,
+                data: error.response.data
+            } : undefined
         });
 
         if (error.response) {
             const authStore = useAuthStore();
 
             // 如果响应中包含具体错误信息，优先使用它
-            const errorMessage = typeof error.response.data === 'object' && error.response.data !== null
-                ? error.response.data.message || error.response.data.error || '请求失败'
-                : '请求失败';
+            const errorMessage = error.response.data?.message || error.response.data?.error || '请求失败';
 
             switch (error.response.status) {
                 case 401:
@@ -74,7 +83,6 @@ instance.interceptors.response.use(
                             error.config.headers.Authorization = `Bearer ${authStore.accessToken}`;
                             return instance(error.config);
                         } catch (refreshError) {
-                            // 如果刷新 token 失败，清除认证信息并跳转到登录页
                             authStore.logout();
                             router.push('/login');
                             ElMessage.error('登录已过期，请重新登录');

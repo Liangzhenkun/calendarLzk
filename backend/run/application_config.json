@@ -232,6 +232,12 @@
         "Authorization",
         "X-Requested-With"
       ],
+      "exposeHeaders": [
+        "Content-Length",
+        "Date",
+        "X-Response-Time"
+      ],
+      "keepHeadersOnError": true,
       "maxAge": 86400,
       "hasCustomOriginHandler": true
     },

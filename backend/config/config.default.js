@@ -60,14 +60,14 @@ module.exports = appInfo => {
   config.cors = {
     origin: ctx => {
       const requestOrigin = ctx.get('Origin');
-      if (corsOrigins.length) {
-        return corsOrigins.includes(requestOrigin) ? requestOrigin : false;
-      }
-      return ['https://seefu.cn', 'https://www.seefu.cn'].includes(requestOrigin) ? requestOrigin : false;
+      const allowedOrigins = corsOrigins.length ? corsOrigins : ['https://seefu.cn', 'https://www.seefu.cn'];
+      return allowedOrigins.includes(requestOrigin) ? requestOrigin : false;
     },
     credentials: true,
     allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH,OPTIONS',
     allowHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+    exposeHeaders: ['Content-Length', 'Date', 'X-Response-Time'],
+    keepHeadersOnError: true,
     maxAge: 86400
   };
 
