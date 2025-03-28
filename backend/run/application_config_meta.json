@@ -74,7 +74,6 @@
     "allowMethods": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\config\\config.default.js",
     "allowHeaders": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\config\\config.default.js",
     "exposeHeaders": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\config\\config.default.js",
-    "keepHeadersOnError": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\config\\config.default.js",
     "maxAge": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\config\\config.default.js"
   },
   "mysql": {

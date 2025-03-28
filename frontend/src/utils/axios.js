@@ -4,14 +4,15 @@ import router from '@/router';
 import { useAuthStore } from '@/stores/auth';
 
 // 使用环境变量配置API基础路径
-const baseURL = import.meta.env.VITE_API_URL || window.location.origin;
+const baseURL = import.meta.env.VITE_API_URL || `${window.location.protocol}//${window.location.host}`;
 
 // 创建 axios 实例
 const instance = axios.create({
     baseURL,
     timeout: 5000,
     headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest'
     },
     withCredentials: true  // 允许跨域请求携带凭证
 });
@@ -19,6 +20,11 @@ const instance = axios.create({
 // 请求拦截器
 instance.interceptors.request.use(
     config => {
+        // 移除重复的 /api 前缀
+        if (config.url.startsWith('/api/api/')) {
+            config.url = config.url.replace('/api/api/', '/api/');
+        }
+        
         console.log('Axios 请求配置:', {
             url: config.url,
             method: config.method,

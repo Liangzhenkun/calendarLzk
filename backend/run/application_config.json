@@ -237,7 +237,6 @@
         "Date",
         "X-Response-Time"
       ],
-      "keepHeadersOnError": true,
       "maxAge": 86400,
       "hasCustomOriginHandler": true
     },
