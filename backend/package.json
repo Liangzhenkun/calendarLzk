@@ -7,9 +7,9 @@
     "declarations": true
   },
   "scripts": {
-    "start": "cross-env NODE_ENV=production egg-scripts start --title=calendar-server --daemon",
-    "stop": "egg-scripts stop --title=calendar-server",
     "dev": "cross-env NODE_ENV=development egg-bin dev",
+    "start": "egg-scripts start --title=calendar-server",
+    "stop": "egg-scripts stop --title=calendar-server",
     "debug": "cross-env NODE_ENV=development egg-bin debug",
     "test": "cross-env NODE_ENV=test egg-bin test",
     "cov": "cross-env NODE_ENV=test egg-bin cov",

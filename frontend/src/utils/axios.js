@@ -14,13 +14,13 @@ const instance = axios.create({
         'Content-Type': 'application/json',
         'X-Requested-With': 'XMLHttpRequest'
     },
-    withCredentials: true  // 允许跨域请求携带凭证
+    withCredentials: import.meta.env.VITE_CORS_CREDENTIALS === 'true'  // 允许跨域请求携带凭证
 });
 
 // 请求拦截器
 instance.interceptors.request.use(
     config => {
-        // 移除重复的 /api 前缀
+        // 移除重复的 /api 前缀（如果有）
         if (config.url.startsWith('/api/api/')) {
             config.url = config.url.replace('/api/api/', '/api/');
         }
@@ -59,12 +59,12 @@ instance.interceptors.response.use(
     async error => {
         console.error('Axios 错误:', {
             message: error.message,
-            config: {
-                url: error.config?.url,
-                method: error.config?.method,
-                baseURL: error.config?.baseURL,
-                withCredentials: error.config?.withCredentials
-            },
+            config: error.config ? {
+                url: error.config.url,
+                method: error.config.method,
+                baseURL: error.config.baseURL,
+                withCredentials: error.config.withCredentials
+            } : undefined,
             response: error.response ? {
                 status: error.response.status,
                 statusText: error.response.statusText,

@@ -231,9 +231,9 @@
       "declarations": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js"
     },
     "scripts": {
+      "dev": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
       "start": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
       "stop": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
-      "dev": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
       "debug": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
       "test": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",
       "cov": "C:\\Users\\Lzk\\Desktop\\pyAI learning\\cursor test\\app-develop-test\\backend\\node_modules\\egg\\config\\config.default.js",

@@ -18,8 +18,8 @@
       'is-mobile': isMobile 
     }">
       <!-- 日历头部 -->
-      <div class="calendar-header">
-        <div class="month-navigation">
+    <div class="calendar-header">
+      <div class="month-navigation">
           <el-button 
             class="nav-button ios-button" 
             text 
@@ -45,18 +45,18 @@
         <div class="debug-tools" v-if="showDebugTools">
           <el-button size="small" @click="checkAuthStatus">检查认证状态</el-button>
           <el-button size="small" @click="testBackendConnection">测试后端连接</el-button>
-        </div>
       </div>
+    </div>
 
       <!-- 日历主体 -->
-      <div class="calendar-body">
+    <div class="calendar-body">
         <!-- 星期栏 -->
-        <div class="weekdays">
+      <div class="weekdays">
           <div v-for="day in weekDays" :key="day" class="weekday">
             {{ isMobile ? day.charAt(0) : day }}
           </div>
-        </div>
-        
+      </div>
+      
         <!-- 日期网格 -->
         <transition-group 
           name="calendar-days" 
@@ -68,17 +68,17 @@
         >
           <div
             v-for="({ date, isCurrentMonth, hasDiary }, index) in calendarDays"
-            :key="date.toISOString()"
-            class="day"
-            :class="{
-              'other-month': !isCurrentMonth,
-              'has-diary': hasDiary,
+          :key="date.toISOString()"
+          class="day"
+          :class="{
+            'other-month': !isCurrentMonth,
+            'has-diary': hasDiary,
               'is-today': isToday(date)
-            }"
+          }"
             :data-index="index"
-            @click="openDiaryDialog({ date, hasDiary })"
-          >
-            <span class="day-number">{{ date.getDate() }}</span>
+          @click="openDiaryDialog({ date, hasDiary })"
+        >
+          <span class="day-number">{{ date.getDate() }}</span>
             <transition name="diary-dot">
               <div v-if="hasDiary" class="diary-indicator"></div>
             </transition>
@@ -996,9 +996,9 @@ const testBackendConnection = async () => {
   }
   
   &.other-month {
-    opacity: 0.5;
-  }
-  
+  opacity: 0.5;
+}
+
   &.has-diary {
     background: rgba(var(--ios-primary-rgb), 0.1);
     border-color: var(--ios-primary);
@@ -1083,9 +1083,9 @@ const testBackendConnection = async () => {
 
   .day {
     padding: 2px;
-  }
+}
 
-  .day-number {
+.day-number {
     font-size: 0.9em;
   }
 
@@ -1195,7 +1195,7 @@ const testBackendConnection = async () => {
 
 /* 日记对话框样式 */
 .diary-dialog {
-  .diary-form {
+.diary-form {
     padding: var(--ios-spacing-md);
   }
   

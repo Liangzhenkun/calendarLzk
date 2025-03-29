@@ -60,8 +60,18 @@ module.exports = appInfo => {
   config.cors = {
     origin: ctx => {
       const requestOrigin = ctx.get('Origin');
-      const allowedOrigins = ['https://seefu.cn', 'https://www.seefu.cn'];
-      return allowedOrigins.includes(requestOrigin) ? requestOrigin : false;
+      
+      // 开发环境下允许所有 localhost 请求
+      if (process.env.NODE_ENV === 'development' && requestOrigin.startsWith('http://localhost:')) {
+        return requestOrigin;
+      }
+      
+      // 使用从环境变量读取的域名列表
+      if (corsOrigins.includes(requestOrigin)) {
+        return requestOrigin;
+      }
+      
+      return false;
     },
     credentials: true,
     allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH,OPTIONS',

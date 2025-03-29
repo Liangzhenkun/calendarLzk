@@ -18,6 +18,11 @@
         "https://www.seefu.cn",
         "https://seefu.cn",
         "http://localhost:3000",
+        "http://localhost:3001",
+        "http://localhost:3002",
+        "http://localhost:3003",
+        "http://localhost:3004",
+        "http://localhost:3005",
         "http://localhost:7001"
       ],
       "protocolWhiteList": [],
@@ -264,9 +269,9 @@
         "declarations": true
       },
       "scripts": {
-        "start": "cross-env NODE_ENV=production egg-scripts start --title=calendar-server --daemon",
-        "stop": "egg-scripts stop --title=calendar-server",
         "dev": "cross-env NODE_ENV=development egg-bin dev",
+        "start": "egg-scripts start --title=calendar-server",
+        "stop": "egg-scripts stop --title=calendar-server",
         "debug": "cross-env NODE_ENV=development egg-bin debug",
         "test": "cross-env NODE_ENV=test egg-bin test",
         "cov": "cross-env NODE_ENV=test egg-bin cov",
@@ -611,9 +616,9 @@
         "declarations": true
       },
       "scripts": {
-        "start": "cross-env NODE_ENV=production egg-scripts start --title=calendar-server --daemon",
-        "stop": "egg-scripts stop --title=calendar-server",
         "dev": "cross-env NODE_ENV=development egg-bin dev",
+        "start": "egg-scripts start --title=calendar-server",
+        "stop": "egg-scripts stop --title=calendar-server",
         "debug": "cross-env NODE_ENV=development egg-bin debug",
         "test": "cross-env NODE_ENV=test egg-bin test",
         "cov": "cross-env NODE_ENV=test egg-bin cov",
