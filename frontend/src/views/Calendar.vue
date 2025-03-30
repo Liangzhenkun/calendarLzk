@@ -868,7 +868,9 @@ const checkAuthStatus = () => {
 
 const testBackendConnection = async () => {
   try {
-    const response = await axios.get('http://localhost:7001/api/health', {
+    // 使用环境变量中的API URL
+    const apiUrl = import.meta.env.VITE_API_URL;
+    const response = await axios.get(`${apiUrl}/api/health`, {
       headers: {
         Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
       }
