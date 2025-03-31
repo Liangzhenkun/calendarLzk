@@ -51,7 +51,13 @@ module.exports = appInfo => {
   // CORS 配置
   config.cors = {
     enable: true,
-    origin: '*',
+    origin: (ctx) => {
+      const requestOrigin = ctx.get('Origin');
+      if (corsOrigins.includes(requestOrigin)) {
+        return requestOrigin;
+      }
+      return corsOrigins[0];
+    },
     allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH,OPTIONS',
     credentials: true,
     maxAge: 86400,
