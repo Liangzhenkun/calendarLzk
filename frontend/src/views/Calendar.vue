@@ -58,14 +58,7 @@
       </div>
       
         <!-- 日期网格 -->
-        <transition-group 
-          name="calendar-days" 
-          tag="div" 
-          class="days"
-          @before-enter="onBeforeEnter"
-          @enter="onEnter"
-          @leave="onLeave"
-        >
+        <div class="days">
           <div
             v-for="({ date, isCurrentMonth, hasDiary }, index) in calendarDays"
           :key="date.toISOString()"
@@ -83,7 +76,7 @@
               <div v-if="hasDiary" class="diary-indicator"></div>
             </transition>
           </div>
-        </transition-group>
+        </div>
       </div>
     </div>
 
@@ -733,34 +726,6 @@ const getMetricLabel = (key) => {
 // 动画相关
 const monthTransition = ref('next');
 
-// 月份切换动画处理方法
-const onBeforeEnter = (el) => {
-  el.style.opacity = 0;
-  el.style.transform = monthTransition.value === 'next' 
-    ? 'translateX(30px)' 
-    : 'translateX(-30px)';
-};
-
-const onEnter = (el, done) => {
-  const delay = el.dataset.index * 50;
-  setTimeout(() => {
-    el.style.transition = 'all 0.3s ease-out';
-    el.style.opacity = 1;
-    el.style.transform = 'translateX(0)';
-  }, delay);
-};
-
-const onLeave = (el, done) => {
-  const delay = el.dataset.index * 50;
-  setTimeout(() => {
-    el.style.transition = 'all 0.3s ease-out';
-    el.style.opacity = 0;
-    el.style.transform = monthTransition.value === 'next' 
-      ? 'translateX(-30px)' 
-      : 'translateX(30px)';
-  }, delay);
-};
-
 // 手势处理
 const handlePinch = (e) => {
   ElMessage({
@@ -868,9 +833,9 @@ const checkAuthStatus = () => {
 
 const testBackendConnection = async () => {
   try {
-    // 使用环境变量中的API URL，移除重复的/api前缀
+    // 使用环境变量中的API URL
     const apiUrl = import.meta.env.VITE_API_URL;
-    const response = await axios.get(`${apiUrl}/health`, {
+    const response = await axios.get(`${apiUrl}/api/health`, {
       headers: {
         Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
       }
