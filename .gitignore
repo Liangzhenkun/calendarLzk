@@ -1,33 +1,43 @@
 # Dependencies
-node_modules
+node_modules/
 npm-debug.log
 yarn-debug.log
 yarn-error.log
 
-# Environment
-.env*
-!.env.example
-*.env.secret
+# Environment variables
+.env
+.env.local
+.env.*.local
 
-# Build
+# Build output
 dist/
 build/
-.DS_Store
+out/
 
-# IDE
+# IDE and editor files
 .idea/
 .vscode/
 *.swp
 *.swo
+.DS_Store
 
 # Logs
 logs/
 *.log
 
-# Local config
-config/local.js
-config/*.local.js
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
 
-# Runtime
-run/
-.tmp/backend/run/
+# Testing
+coverage/
+
+# Temporary files
+tmp/
+temp/
+
+# System Files
+.DS_Store
+Thumbs.db 
