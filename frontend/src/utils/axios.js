@@ -34,15 +34,15 @@ const instance = axios.create({
         'Content-Type': 'application/json',
         'X-Requested-With': 'XMLHttpRequest'
     },
-    withCredentials: import.meta.env.VITE_CORS_CREDENTIALS === 'true'  // 允许跨域请求携带凭证
+    withCredentials: true  // 始终允许跨域请求携带凭证
 });
 
 // 请求拦截器
 instance.interceptors.request.use(
     config => {
-        // 移除重复的 /api 前缀（如果有）
-        if (config.url.startsWith('/api/api/')) {
-            config.url = config.url.replace('/api/api/', '/api/');
+        // 确保 URL 以 /api 开头
+        if (!config.url.startsWith('/api/')) {
+            config.url = `/api${config.url}`;
         }
         
         console.log('Axios 请求配置:', {
