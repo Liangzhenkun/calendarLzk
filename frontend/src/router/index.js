@@ -27,13 +27,13 @@ const routes = [
       {
         path: '/achievements',
         name: 'Achievements',
-        component: () => import('@/components/Achievement.vue'),
+        component: () => import('@/views/Achievement.vue'),
         meta: { requiresAuth: true }
       },
       {
         path: '/tasks',
         name: 'Tasks',
-        component: () => import('@/components/DailyTasks.vue'),
+        component: () => import('@/views/Tasks.vue'),
         meta: { requiresAuth: true }
       },
       {
