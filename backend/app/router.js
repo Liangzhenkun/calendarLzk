@@ -47,4 +47,6 @@ module.exports = app => {
   router.post('/shop/purchase', jwt, controller.shop.purchaseItem);
   router.get('/shop/user-items', jwt, controller.shop.getUserItems);
   router.post('/shop/use-item', jwt, controller.shop.useItem);
+// 调试路由
+router.get('/debug/delete-diary/:date', jwt, controller.debug.testDeleteDiary);
 }; 
