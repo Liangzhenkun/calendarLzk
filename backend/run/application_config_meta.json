@@ -8,12 +8,7 @@
   },
   "prefix": "E:\\cursor\\clanderLzk\\backend\\config\\config.default.js",
   "cors": {
-    "origin": "E:\\cursor\\clanderLzk\\backend\\config\\config.default.js",
-    "credentials": "E:\\cursor\\clanderLzk\\backend\\config\\config.default.js",
-    "allowMethods": "E:\\cursor\\clanderLzk\\backend\\config\\config.default.js",
-    "allowHeaders": "E:\\cursor\\clanderLzk\\backend\\config\\config.default.js",
-    "exposeHeaders": "E:\\cursor\\clanderLzk\\backend\\config\\config.default.js",
-    "maxAge": "E:\\cursor\\clanderLzk\\backend\\config\\config.default.js"
+    "enable": "E:\\cursor\\clanderLzk\\backend\\config\\config.default.js"
   },
   "security": {
     "csrf": {

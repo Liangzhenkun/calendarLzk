@@ -48,28 +48,9 @@ module.exports = appInfo => {
   // 从环境变量获取允许的域名列表
   const corsOrigins = (process.env.CORS_ALLOWED_ORIGINS || 'https://seefu.cn,https://www.seefu.cn').split(',').filter(Boolean);
 
-  // 配置 CORS
+  // CORS 配置 - 禁用 Egg.js 的 CORS，由 Nginx 处理
   config.cors = {
-    origin: ctx => {
-      const requestOrigin = ctx.get('Origin');
-      
-      // 开发环境下允许所有 localhost 请求
-      if (process.env.NODE_ENV === 'development' && requestOrigin.startsWith('http://localhost:')) {
-        return requestOrigin;
-      }
-      
-      // 使用环境变量中配置的域名列表
-      if (corsOrigins.includes(requestOrigin)) {
-        return requestOrigin;
-      }
-      
-      return false;
-    },
-    credentials: true,
-    allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH,OPTIONS',
-    allowHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-    exposeHeaders: ['Content-Length', 'Date', 'X-Response-Time'],
-    maxAge: 86400
+    enable: false
   };
 
   // 安全配置
@@ -77,6 +58,7 @@ module.exports = appInfo => {
     csrf: {
       enable: false,
     },
+    // 仍然保留域名白名单，用于其他安全检查
     domainWhiteList: corsOrigins
   };
 

@@ -229,21 +229,9 @@
       }
     },
     "cors": {
-      "origin": "<Function origin>",
-      "credentials": true,
-      "allowMethods": "GET,HEAD,PUT,POST,DELETE,PATCH,OPTIONS",
-      "allowHeaders": [
-        "Content-Type",
-        "Authorization",
-        "X-Requested-With"
-      ],
-      "exposeHeaders": [
-        "Content-Length",
-        "Date",
-        "X-Response-Time"
-      ],
-      "maxAge": 86400,
-      "hasCustomOriginHandler": true
+      "enable": false,
+      "hasCustomOriginHandler": false,
+      "origin": "<Function corsOrigin>"
     },
     "jwt": {
       "secret": "<String len: 28>",
