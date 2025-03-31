@@ -662,34 +662,30 @@ const saveDiary = async () => {
 const previousMonth = async () => {
   if (isMonthChanging.value) return
   isMonthChanging.value = true
-  
-  const newDate = new Date(currentDate.value)
-  newDate.setMonth(newDate.getMonth() - 1)
-  currentDate.value = newDate
+  monthTransition.value = 'prev'
+  currentDate.value = new Date(currentYear.value, currentMonth.value - 1)
   
   try {
     await fetchMonthDiaries()
   } finally {
     setTimeout(() => {
       isMonthChanging.value = false
-    }, 300)
+    }, 500)
   }
 }
 
 const nextMonth = async () => {
   if (isMonthChanging.value) return
   isMonthChanging.value = true
-  
-  const newDate = new Date(currentDate.value)
-  newDate.setMonth(newDate.getMonth() + 1)
-  currentDate.value = newDate
+  monthTransition.value = 'next'
+  currentDate.value = new Date(currentYear.value, currentMonth.value + 1)
   
   try {
     await fetchMonthDiaries()
   } finally {
     setTimeout(() => {
       isMonthChanging.value = false
-    }, 300)
+    }, 500)
   }
 }
 
@@ -735,26 +731,33 @@ const getMetricLabel = (key) => {
 };
 
 // 动画相关
+const monthTransition = ref('next');
+
+// 月份切换动画处理方法
 const onBeforeEnter = (el) => {
   el.style.opacity = 0;
-  el.style.transform = 'translateY(30px)';
+  el.style.transform = monthTransition.value === 'next' 
+    ? 'translateX(30px)' 
+    : 'translateX(-30px)';
 };
 
 const onEnter = (el, done) => {
   const delay = el.dataset.index * 50;
   setTimeout(() => {
-    el.style.transition = 'all var(--ios-transition-normal)';
+    el.style.transition = 'all 0.3s ease-out';
     el.style.opacity = 1;
-    el.style.transform = 'translateY(0)';
+    el.style.transform = 'translateX(0)';
   }, delay);
 };
 
 const onLeave = (el, done) => {
   const delay = el.dataset.index * 50;
   setTimeout(() => {
-    el.style.transition = 'all var(--ios-transition-normal)';
+    el.style.transition = 'all 0.3s ease-out';
     el.style.opacity = 0;
-    el.style.transform = 'translateY(-30px)';
+    el.style.transform = monthTransition.value === 'next' 
+      ? 'translateX(-30px)' 
+      : 'translateX(30px)';
   }, delay);
 };
 
@@ -821,9 +824,6 @@ onMounted(() => {
 // 优化性能的保存状态
 const saving = ref(false);
 
-// 月份切换动画
-const monthTransition = ref('next');
-
 // 异步加载月份数据
 const loading = ref(false);
 
@@ -868,9 +868,9 @@ const checkAuthStatus = () => {
 
 const testBackendConnection = async () => {
   try {
-    // 使用环境变量中的API URL
+    // 使用环境变量中的API URL，移除重复的/api前缀
     const apiUrl = import.meta.env.VITE_API_URL;
-    const response = await axios.get(`${apiUrl}/api/health`, {
+    const response = await axios.get(`${apiUrl}/health`, {
       headers: {
         Authorization: `Bearer ${sessionStorage.getItem('access_token')}`
       }
@@ -1165,13 +1165,10 @@ const testBackendConnection = async () => {
   transform: translateY(20px);
 }
 
-.calendar-days-enter-active {
-  transition: all var(--ios-transition-normal);
-}
-
+/* 日历网格切换动画 */
+.calendar-days-enter-active,
 .calendar-days-leave-active {
-  transition: all var(--ios-transition-normal);
-  position: absolute;
+  transition: all 0.3s ease-out;
 }
 
 .calendar-days-enter-from {
@@ -1182,6 +1179,24 @@ const testBackendConnection = async () => {
 .calendar-days-leave-to {
   opacity: 0;
   transform: translateX(-30px);
+}
+
+.calendar-days-move {
+  transition: transform 0.3s ease-out;
+}
+
+/* 单个日期格子的动画 */
+.day {
+  transition: all 0.3s ease-out;
+  transform-origin: center;
+  
+  &.calendar-days-leave-active {
+    position: absolute;
+  }
+  
+  &.calendar-days-move {
+    transition: all 0.3s ease-out;
+  }
 }
 
 .diary-dot-enter-active,

@@ -1,42 +1,58 @@
 <template>
   <div class="login-container">
-    <div class="login-box ios-glass">
-      <h2>{{ t('login.title') }}</h2>
-      <el-form
-        ref="formRef"
-        :model="form"
-        :rules="rules"
-        label-position="top"
-        class="ios-form"
-        @keyup.enter="handleLogin"
-      >
-        <el-form-item :label="t('login.username')" prop="username">
-          <el-input
-            v-model="form.username"
-            :placeholder="t('login.usernameRequired')"
-            prefix-icon="User"
-            class="ios-input"
-          />
-        </el-form-item>
-        
-        <el-form-item :label="t('login.password')" prop="password">
-          <el-input
-            v-model="form.password"
-            type="password"
-            :placeholder="t('login.passwordRequired')"
-            prefix-icon="Lock"
-            show-password
-            class="ios-input"
-          />
-        </el-form-item>
+    <div class="login-content">
+      <!-- 左侧品牌区域 -->
+      <div class="brand-section">
+        <div class="pixel-art">
+          <div class="pixel-diary"></div>
+          <div class="pixel-calendar"></div>
+        </div>
+        <h1 class="brand-title">惜福记事</h1>
+        <p class="brand-subtitle">文以载道，以记为福</p>
+      </div>
 
-        <el-form-item>
-          <el-checkbox v-model="form.remember" class="ios-checkbox">
-            {{ t('login.rememberMe') }}
-          </el-checkbox>
-        </el-form-item>
+      <!-- 右侧登录表单 -->
+      <div class="login-box ios-glass">
+        <div class="form-header">
+          <h2>欢迎回来</h2>
+          <p class="subtitle">登录您的惜福记事账号</p>
+        </div>
 
-        <el-form-item>
+        <el-form
+          ref="formRef"
+          :model="form"
+          :rules="rules"
+          label-position="top"
+          class="ios-form"
+          @keyup.enter="handleLogin"
+        >
+          <el-form-item :label="t('login.username')" prop="username">
+            <el-input
+              v-model="form.username"
+              :placeholder="t('login.usernameRequired')"
+              prefix-icon="User"
+              class="ios-input"
+            />
+          </el-form-item>
+          
+          <el-form-item :label="t('login.password')" prop="password">
+            <el-input
+              v-model="form.password"
+              type="password"
+              :placeholder="t('login.passwordRequired')"
+              prefix-icon="Lock"
+              show-password
+              class="ios-input"
+            />
+          </el-form-item>
+
+          <div class="form-options">
+            <el-checkbox v-model="form.remember" class="ios-checkbox">
+              {{ t('login.rememberMe') }}
+            </el-checkbox>
+            <a href="#" class="forgot-password">忘记密码？</a>
+          </div>
+
           <el-button
             type="primary"
             :loading="loading"
@@ -45,12 +61,13 @@
           >
             {{ t('login.submit') }}
           </el-button>
-        </el-form-item>
 
-        <div class="register-link">
-          <router-link to="/register" class="ios-link">{{ t('login.register') }}</router-link>
-        </div>
-      </el-form>
+          <div class="register-link">
+            <span>还没有账号？</span>
+            <router-link to="/register" class="ios-link">立即注册</router-link>
+          </div>
+        </el-form>
+      </div>
     </div>
   </div>
 </template>
@@ -173,146 +190,266 @@ const handleLogin = async () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%);
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e7eb 100%);
   padding: 20px;
+  overflow: hidden;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--ios-primary) 0%, var(--ios-secondary) 100%);
+  }
+}
+
+.login-content {
+  display: flex;
+  width: 100%;
+  max-width: 1000px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: var(--ios-radius-xl);
+  overflow: hidden;
+  @include ios-shadow('xl');
+}
+
+.brand-section {
+  flex: 1;
+  padding: 60px;
+  background: linear-gradient(135deg, var(--ios-primary) 0%, var(--ios-secondary) 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+}
+
+.pixel-art {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin-bottom: 30px;
+}
+
+.pixel-diary {
+  width: 64px;
+  height: 64px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #ffffff;
+  box-shadow: 
+    /* 日记本外框 */
+    2px 2px 0 rgba(0,0,0,0.2),
+    /* 页面效果 */
+    4px 0 0 #f0f0f0,
+    8px 0 0 #e0e0e0;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 40px;
+    height: 4px;
+    background: var(--ios-primary);
+    box-shadow: 0 10px 0 var(--ios-primary), 0 20px 0 var(--ios-primary);
+  }
+}
+
+.pixel-calendar {
+  width: 64px;
+  height: 64px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(15deg);
+  background: var(--ios-secondary);
+  border: 4px solid #ffffff;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    width: 40px;
+    height: 40px;
+    background: #ffffff;
+    
+    /* 日期数字 */
+    box-shadow: 
+      8px 8px 0 var(--ios-primary),
+      16px 8px 0 var(--ios-primary),
+      24px 8px 0 var(--ios-primary),
+      8px 16px 0 var(--ios-primary),
+      16px 16px 0 var(--ios-primary),
+      24px 16px 0 var(--ios-primary),
+      8px 24px 0 var(--ios-primary),
+      16px 24px 0 var(--ios-primary),
+      24px 24px 0 var(--ios-primary);
+  }
+}
+
+.brand-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+}
+
+.brand-subtitle {
+  font-size: 1.2rem;
+  opacity: 0.9;
+  margin-top: 10px;
 }
 
 .login-box {
-  width: 100%;
-  max-width: 400px;
-  padding: 40px;
-  background: rgba(255, 255, 255, 0.8);
-  border-radius: var(--ios-radius-lg);
-  @include ios-shadow('lg');
-  backdrop-filter: var(--ios-blur-md);
-  -webkit-backdrop-filter: var(--ios-blur-md);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  animation: ios-scale-in var(--ios-transition-normal);
+  flex: 1;
+  padding: 60px;
+  background: rgba(255, 255, 255, 0.95);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-h2 {
+.form-header {
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 40px;
+
+  h2 {
+    font-size: 2rem;
+    color: var(--ios-text-primary);
+    margin: 0;
+    font-weight: 600;
+  }
+
+  .subtitle {
+    color: var(--ios-text-secondary);
+    margin-top: 8px;
+    font-size: 1rem;
+  }
+}
+
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.forgot-password {
   color: var(--ios-primary);
-  font-size: 24px;
-  font-weight: 600;
-  font-family: var(--ios-font-family);
+  text-decoration: none;
+  font-size: 0.9rem;
+  
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .submit-btn {
   width: 100%;
-  padding: 12px;
-  font-size: 16px;
-  background: var(--ios-primary);
-  border-color: var(--ios-primary);
-  transition: all var(--ios-transition-fast);
+  height: 44px;
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+  background: linear-gradient(90deg, var(--ios-primary) 0%, var(--ios-secondary) 100%);
+  border: none;
   
   &:hover {
     transform: translateY(-1px);
-    opacity: 0.9;
-  }
-  
-  &:active {
-    transform: translateY(0);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   }
 }
 
 .register-link {
   text-align: center;
   margin-top: 20px;
+  color: var(--ios-text-secondary);
   
-  a {
-    color: var(--ios-secondary);
+  .ios-link {
+    color: var(--ios-primary);
+    margin-left: 4px;
     text-decoration: none;
     font-weight: 500;
-    transition: all var(--ios-transition-fast);
     
     &:hover {
-      color: var(--ios-primary);
+      text-decoration: underline;
     }
   }
 }
 
 /* 响应式设计 */
-@media screen and (max-width: 480px) {
-  .login-box {
-    margin: 10px;
-    padding: 20px;
+@media screen and (max-width: 768px) {
+  .login-content {
+    flex-direction: column;
+    max-width: 400px;
   }
 
-  h2 {
-    font-size: 20px;
+  .brand-section {
+    padding: 40px 20px;
+  }
+
+  .login-box {
+    padding: 40px 20px;
+  }
+
+  .pixel-art {
+    width: 150px;
+    height: 150px;
     margin-bottom: 20px;
   }
 
-  .submit-btn {
-    padding: 10px;
-    font-size: 14px;
-  }
-
-  :deep(.el-form-item) {
-    margin-bottom: 15px;
-  }
-
-  :deep(.el-input) {
-    font-size: 14px;
-  }
-}
-
-/* 平板屏幕 */
-@media screen and (min-width: 481px) and (max-width: 768px) {
-  .login-box {
-    max-width: 360px;
-    padding: 30px;
+  .brand-title {
+    font-size: 2rem;
   }
 }
 
 /* 深色模式支持 */
 @media (prefers-color-scheme: dark) {
   .login-container {
-    background: linear-gradient(135deg, #1a1a1a 0%, #2c3e50 100%);
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  }
+
+  .login-content {
+    background: rgba(0, 0, 0, 0.8);
   }
 
   .login-box {
-    background: rgba(44, 62, 80, 0.8);
+    background: rgba(30, 30, 30, 0.95);
   }
 
-  h2 {
-    color: var(--ios-secondary);
-  }
+  .form-header {
+    h2 {
+      color: #ffffff;
+    }
 
-  :deep(.el-input__inner) {
-    background-color: rgba(255, 255, 255, 0.1);
-    color: #ffffff;
-    border-color: rgba(255, 255, 255, 0.2);
-    
-    &::placeholder {
-      color: rgba(255, 255, 255, 0.5);
+    .subtitle {
+      color: rgba(255, 255, 255, 0.7);
     }
   }
 
-  :deep(.el-checkbox__label) {
-    color: #ffffff;
-  }
-
-  .register-link a {
+  .forgot-password {
     color: var(--ios-secondary);
-    
-    &:hover {
-      color: var(--ios-primary);
-    }
   }
-}
 
-/* 动画效果 */
-@keyframes ios-scale-in {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
+  .register-link {
+    color: rgba(255, 255, 255, 0.7);
   }
 }
 </style> 

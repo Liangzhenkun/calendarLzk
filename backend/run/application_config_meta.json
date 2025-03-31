@@ -7,6 +7,14 @@
     "enable": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-jwt\\config\\config.default.js"
   },
   "prefix": "E:\\cursor\\clanderLzk\\backend\\config\\config.default.js",
+  "cors": {
+    "origin": "E:\\cursor\\clanderLzk\\backend\\config\\config.default.js",
+    "credentials": "E:\\cursor\\clanderLzk\\backend\\config\\config.default.js",
+    "allowMethods": "E:\\cursor\\clanderLzk\\backend\\config\\config.default.js",
+    "allowHeaders": "E:\\cursor\\clanderLzk\\backend\\config\\config.default.js",
+    "exposeHeaders": "E:\\cursor\\clanderLzk\\backend\\config\\config.default.js",
+    "maxAge": "E:\\cursor\\clanderLzk\\backend\\config\\config.default.js"
+  },
   "security": {
     "csrf": {
       "enable": "E:\\cursor\\clanderLzk\\backend\\config\\config.default.js",
@@ -67,14 +75,6 @@
       "hostnameExceptionList": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js",
       "checkAddress": "E:\\cursor\\clanderLzk\\backend\\node_modules\\egg-security\\config\\config.default.js"
     }
-  },
-  "cors": {
-    "origin": "E:\\cursor\\clanderLzk\\backend\\config\\config.default.js",
-    "credentials": "E:\\cursor\\clanderLzk\\backend\\config\\config.default.js",
-    "allowMethods": "E:\\cursor\\clanderLzk\\backend\\config\\config.default.js",
-    "allowHeaders": "E:\\cursor\\clanderLzk\\backend\\config\\config.default.js",
-    "exposeHeaders": "E:\\cursor\\clanderLzk\\backend\\config\\config.default.js",
-    "maxAge": "E:\\cursor\\clanderLzk\\backend\\config\\config.default.js"
   },
   "mysql": {
     "client": {
