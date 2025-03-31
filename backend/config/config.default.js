@@ -48,9 +48,13 @@ module.exports = appInfo => {
   // 从环境变量获取允许的域名列表
   const corsOrigins = (process.env.CORS_ALLOWED_ORIGINS || 'https://seefu.cn,https://www.seefu.cn').split(',').filter(Boolean);
 
-  // CORS 配置 - 禁用 Egg.js 的 CORS，由 Nginx 处理
+  // CORS 配置
   config.cors = {
-    enable: false
+    enable: true,
+    origin: '*',
+    allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH,OPTIONS',
+    credentials: true,
+    maxAge: 86400,
   };
 
   // 安全配置
