@@ -3,8 +3,28 @@ import { ElMessage } from 'element-plus';
 import router from '@/router';
 import { useAuthStore } from '@/stores/auth';
 
+// 解析环境变量中的多域名配置
+const parseApiUrls = (urlString) => {
+  return urlString.split(',').map(url => url.trim());
+};
+
+// 获取当前域名
+const getCurrentDomain = () => {
+  return window.location.hostname;
+};
+
+// 选择匹配的 API URL
+const selectApiUrl = (urls) => {
+  const currentDomain = getCurrentDomain();
+  return urls.find(url => {
+    const urlDomain = new URL(url).hostname;
+    return urlDomain === currentDomain || urlDomain === `www.${currentDomain}`;
+  }) || urls[0]; // 如果没找到匹配的，使用第一个 URL
+};
+
 // 使用环境变量配置API基础路径
-const baseURL = import.meta.env.VITE_API_URL || `${window.location.protocol}//${window.location.host}`;
+const apiUrls = parseApiUrls(import.meta.env.VITE_API_URL || `${window.location.protocol}//${window.location.host}`);
+const baseURL = selectApiUrl(apiUrls);
 
 // 创建 axios 实例
 const instance = axios.create({
