@@ -1,12 +1,13 @@
 const dotenv = require('dotenv');
 const path = require('path');
 
-// 加载 .env 文件
-const envPath = path.join(__dirname, '../.env');
+// 根据环境加载对应的 .env 文件
+const env = process.env.NODE_ENV || 'development';
+const envPath = path.join(__dirname, `../.env.${env}`);
 const result = dotenv.config({ path: envPath });
 
 if (result.error) {
-  console.error('Error loading .env file:', result.error);
+  console.error(`Error loading .env.${env} file:`, result.error);
   process.exit(1);
 }
 
@@ -29,6 +30,16 @@ module.exports = appInfo => {
 
   // add your middleware config here
   config.middleware = [];
+
+  // 应用启动初始化
+  config.beforeStart = async (app) => {
+    try {
+      await require('../app/init')(app);
+    } catch (error) {
+      app.logger.error('应用初始化失败:', error);
+      throw error;
+    }
+  };
 
   // JWT 配置
   const jwtSecret = process.env.JWT_SECRET;

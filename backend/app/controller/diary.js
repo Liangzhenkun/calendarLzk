@@ -22,19 +22,33 @@ class DiaryController extends Controller {
   async create() {
     const { ctx, service } = this;
     const userId = ctx.state.user.id;
-    const diaryData = {
-      ...ctx.request.body,
-      userId
-    };
     
     try {
+      this.ctx.logger.info('创建日记，接收到的数据:', ctx.request.body);
+      
+      const diaryData = {
+        ...ctx.request.body,
+        userId
+      };
+      
+      this.ctx.logger.info('处理后的日记数据:', diaryData);
+      
       const diary = await service.diary.create(diaryData);
       ctx.status = 201;
       ctx.body = diary;
     } catch (error) {
-      ctx.logger.error('创建日记失败:', error);
+      this.ctx.logger.error('创建日记失败:', error);
+      this.ctx.logger.error('错误详情:', {
+        message: error.message,
+        stack: error.stack,
+        data: ctx.request.body
+      });
       ctx.status = 400;
-      ctx.body = { message: '创建日记失败', error: error.message };
+      ctx.body = { 
+        message: '创建日记失败', 
+        error: error.message,
+        details: error.stack
+      };
     }
   }
 
@@ -77,7 +91,9 @@ class DiaryController extends Controller {
         return;
       }
       
-      ctx.body = { message: '日记更新成功' };
+      // 获取更新后的日记数据
+      const updatedDiary = await service.diary.getByDate(userId, date);
+      ctx.body = updatedDiary;
     } catch (error) {
       ctx.logger.error('更新日记失败:', error);
       ctx.status = 400;

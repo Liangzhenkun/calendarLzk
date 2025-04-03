@@ -7,14 +7,14 @@
     "declarations": true
   },
   "scripts": {
-    "dev": "cross-env NODE_ENV=development egg-bin dev",
+    "dev": "cross-env NODE_ENV=development egg-bin dev --port=7001",
     "start": "egg-scripts start --title=calendar-server",
     "stop": "egg-scripts stop --title=calendar-server",
-    "debug": "cross-env NODE_ENV=development egg-bin debug",
+    "debug": "cross-env NODE_ENV=test egg-bin debug",
     "test": "cross-env NODE_ENV=test egg-bin test",
     "cov": "cross-env NODE_ENV=test egg-bin cov",
     "start:prod": "cross-env NODE_ENV=production egg-scripts start --title=calendar-server --daemon",
-    "start:dev": "cross-env NODE_ENV=development egg-bin dev"
+    "start:dev": "cross-env NODE_ENV=development egg-bin dev --port=7001"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

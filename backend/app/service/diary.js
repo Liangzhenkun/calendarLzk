@@ -27,22 +27,37 @@ class DiaryService extends Service {
     try {
       this.ctx.logger.info('创建日记，接收到的数据:', diary);
       
+      // 验证必要字段
+      const requiredFields = ['date', 'title', 'content'];
+      const missingFields = requiredFields.filter(field => !diary[field]);
+      
+      if (missingFields.length > 0) {
+        throw new Error(`缺少必要字段: ${missingFields.join(', ')}`);
+      }
+      
+      // 如果使用的是state.user.id，需要确保设置了userId
+      const userId = diary.userId || this.ctx.state.user.id;
+      if (!userId) {
+        throw new Error('用户ID不能为空');
+      }
+
       const formattedDate = this.formatDate(diary.date);
 
       // 检查是否存在同一天的日记
       const existingDiary = await app.mysql.get(TABLE_NAME, {
-        user_id: diary.userId,
+        user_id: userId,
         date: formattedDate
       });
       
       const data = {
-        user_id: diary.userId,
+        user_id: userId,
         title: diary.title,
         date: formattedDate,
         content: diary.content,
         mood: diary.mood || 3,
-        weather: diary.weather,
-        type: diary.type || 'normal'
+        weather: diary.weather || 'sunny',
+        created_at: app.mysql.literals.now,
+        updated_at: app.mysql.literals.now
       };
       
       this.ctx.logger.info('准备处理数据:', {
@@ -51,34 +66,63 @@ class DiaryService extends Service {
       });
       
       let result;
+      let savedDiary;
+      
       if (existingDiary) {
-        // 更新已存在的日记
-        result = await app.mysql.update(TABLE_NAME, {
-          ...data,
-          updated_at: app.mysql.literals.now
-        }, {
+        // 更新现有日记
+        result = await app.mysql.update(TABLE_NAME, data, {
           where: { id: existingDiary.id }
         });
-
-        // 更新或创建个性化指标
-        if (diary.metrics) {
-          await this.updateMetrics(diary.userId, existingDiary.id, formattedDate, diary.metrics);
-        }
-
-        return { ...diary, id: existingDiary.id };
+        savedDiary = { ...existingDiary, ...data };
       } else {
         // 创建新日记
         result = await app.mysql.insert(TABLE_NAME, data);
-        
-        // 创建个性化指标
-        if (diary.metrics) {
-          await this.updateMetrics(diary.userId, result.insertId, formattedDate, diary.metrics);
-        }
-
-        return { ...diary, id: result.insertId };
+        savedDiary = { id: result.insertId, ...data };
       }
+
+      // 处理个性化指标
+      if (diary.metrics) {
+        try {
+          const metricsData = {
+            diary_id: savedDiary.id,
+            sleep_quality: diary.metrics.sleepQuality || 5,
+            stress_level: diary.metrics.stressLevel || 5,
+            productivity: diary.metrics.productivity || 5,
+            created_at: app.mysql.literals.now,
+            updated_at: app.mysql.literals.now
+          };
+
+          // 检查是否存在现有指标
+          const existingMetrics = await app.mysql.get('personal_metrics', {
+            diary_id: savedDiary.id
+          });
+
+          if (existingMetrics) {
+            await app.mysql.update('personal_metrics', metricsData, {
+              where: { diary_id: savedDiary.id }
+            });
+          } else {
+            await app.mysql.insert('personal_metrics', metricsData);
+          }
+
+          savedDiary.metrics = {
+            sleepQuality: metricsData.sleep_quality,
+            stressLevel: metricsData.stress_level,
+            productivity: metricsData.productivity
+          };
+        } catch (error) {
+          this.ctx.logger.error('保存个性化指标失败:', error);
+          // 不抛出异常，避免影响主流程
+        }
+      }
+
+      return savedDiary;
     } catch (error) {
-      this.ctx.logger.error('创建/更新日记失败:', error);
+      this.ctx.logger.error('创建日记失败:', {
+        error: error.message,
+        stack: error.stack,
+        data: diary
+      });
       throw error;
     }
   }
@@ -187,6 +231,9 @@ class DiaryService extends Service {
           // 不抛出异常，避免影响主流程
         }
       }
+
+      // 检查成就进度
+      await this.service.achievement.checkAchievements(userId);
       
       this.ctx.logger.info('日记更新结果:', {
         affectedRows: result.affectedRows,
@@ -217,7 +264,10 @@ class DiaryService extends Service {
   async getByDate(userId, date) {
     const { app } = this;
     try {
+      this.ctx.logger.info('按日期获取日记，传入参数:', { userId, date });
+      
       const formattedDate = this.formatDate(date);
+      this.ctx.logger.info('格式化后的日期:', formattedDate);
 
       // 获取日记
       const diary = await app.mysql.get(TABLE_NAME, {
@@ -225,16 +275,24 @@ class DiaryService extends Service {
         date: formattedDate
       });
 
+      this.ctx.logger.info('查询结果:', diary);
+
       if (!diary) {
         return null;
       }
 
       // 获取个性化指标
-      const metrics = await app.mysql.get('personal_metrics', {
-        diary_id: diary.id
-      });
+      let metrics = null;
+      try {
+        metrics = await app.mysql.get('personal_metrics', {
+          diary_id: diary.id
+        });
+      } catch (e) {
+        this.ctx.logger.error('获取个性化指标失败:', e);
+        // 忽略错误，继续返回日记
+      }
 
-      return {
+      const result = {
         ...diary,
         metrics: metrics ? {
           sleepQuality: metrics.sleep_quality,
@@ -242,8 +300,12 @@ class DiaryService extends Service {
           productivity: metrics.productivity
         } : null
       };
+      
+      this.ctx.logger.info('返回的日记数据:', result);
+      return result;
     } catch (error) {
       this.ctx.logger.error('按日期获取日记失败:', error);
+      this.ctx.logger.error('错误详情:', error.stack);
       throw error;
     }
   }
@@ -251,7 +313,10 @@ class DiaryService extends Service {
   async updateByDate(userId, date, data) {
     const { app } = this;
     try {
+      this.ctx.logger.info('按日期更新日记，传入参数:', { userId, date, data });
+      
       const formattedDate = this.formatDate(date);
+      this.ctx.logger.info('格式化后的日期:', formattedDate);
 
       // 获取现有日记
       const existingDiary = await app.mysql.get(TABLE_NAME, {
@@ -259,32 +324,45 @@ class DiaryService extends Service {
         date: formattedDate
       });
 
+      this.ctx.logger.info('查询到的现有日记:', existingDiary);
+
       if (!existingDiary) {
+        this.ctx.logger.info('日记不存在，无法更新');
         return null;
       }
 
-      // 更新日记
+      // 构建更新数据
       const updateData = {
-        title: data.title,
-        content: data.content,
-        mood: data.mood || existingDiary.mood,
+        title: data.title || existingDiary.title,
+        content: data.content || existingDiary.content,
+        mood: data.mood !== undefined ? data.mood : existingDiary.mood,
         weather: data.weather || existingDiary.weather,
-        type: data.type || existingDiary.type,
         updated_at: app.mysql.literals.now
       };
 
+      this.ctx.logger.info('准备更新数据:', updateData);
+
+      // 更新日记
       const result = await app.mysql.update(TABLE_NAME, updateData, {
         where: { id: existingDiary.id }
       });
 
+      this.ctx.logger.info('更新结果:', result);
+
       // 更新个性化指标
-      if (data.metrics) {
-        await this.updateMetrics(userId, existingDiary.id, formattedDate, data.metrics);
+      try {
+        if (data.metrics) {
+          await this.updateMetrics(userId, existingDiary.id, formattedDate, data.metrics);
+        }
+      } catch (e) {
+        this.ctx.logger.error('更新个性化指标失败:', e);
+        // 忽略错误，不影响主流程
       }
 
       return result.affectedRows > 0;
     } catch (error) {
       this.ctx.logger.error('更新日记失败:', error);
+      this.ctx.logger.error('错误详情:', error.stack);
       throw error;
     }
   }
@@ -292,7 +370,10 @@ class DiaryService extends Service {
   async deleteByDate(userId, date) {
     const { app } = this;
     try {
+      this.ctx.logger.info('按日期删除日记，传入参数:', { userId, date });
+      
       const formattedDate = this.formatDate(date);
+      this.ctx.logger.info('格式化后的日期:', formattedDate);
 
       // 获取日记
       const diary = await app.mysql.get(TABLE_NAME, {
@@ -300,23 +381,33 @@ class DiaryService extends Service {
         date: formattedDate
       });
 
+      this.ctx.logger.info('查询到的日记:', diary);
+
       if (!diary) {
+        this.ctx.logger.info('日记不存在，无法删除');
         return false;
       }
 
-      // 删除相关的个性化指标
-      await app.mysql.delete('personal_metrics', {
-        diary_id: diary.id
-      });
+      // 尝试删除相关的个性化指标
+      try {
+        await app.mysql.delete('personal_metrics', {
+          diary_id: diary.id
+        });
+      } catch (e) {
+        this.ctx.logger.error('删除个性化指标失败:', e);
+        // 忽略错误，继续删除日记
+      }
 
       // 删除日记
       const result = await app.mysql.delete(TABLE_NAME, {
         id: diary.id
       });
 
+      this.ctx.logger.info('删除结果:', result);
       return result.affectedRows > 0;
     } catch (error) {
       this.ctx.logger.error('删除日记失败:', error);
+      this.ctx.logger.error('错误详情:', error.stack);
       throw error;
     }
   }
@@ -324,41 +415,42 @@ class DiaryService extends Service {
   // 抽取指标更新方法
   async updateMetrics(userId, diaryId, date, metrics) {
     const { app } = this;
-    const metricsData = {
-      user_id: userId,
-      diary_id: diaryId,
-      date: date,
-      sleep_quality: metrics.sleepQuality || 5,
-      energy_level: metrics.energyLevel || 5,
-      stress_level: metrics.stressLevel || 5,
-      productivity: metrics.productivity || 5,
-      mood_score: metrics.moodScore || 5,
-      social_satisfaction: metrics.socialSatisfaction || 5,
-      family_index: metrics.familyIndex || 5,
-      health_score: metrics.healthScore || 5
-    };
+    try {
+      this.ctx.logger.info('更新指标，接收到的数据:', metrics);
 
-    const existingMetrics = await app.mysql.get('personal_metrics', {
-      diary_id: diaryId
-    });
-
-    if (existingMetrics) {
-      // 更新所有指标值和更新时间
-      await app.mysql.update('personal_metrics', {
-        sleep_quality: metricsData.sleep_quality,
-        energy_level: metricsData.energy_level,
-        stress_level: metricsData.stress_level,
-        productivity: metricsData.productivity,
-        mood_score: metricsData.mood_score,
-        social_satisfaction: metricsData.social_satisfaction,
-        family_index: metricsData.family_index,
-        health_score: metricsData.health_score,
+      const metricsData = {
+        diary_id: diaryId,
+        user_id: userId,
+        date: date,
+        sleep_quality: metrics.sleepQuality || 0,
+        stress_level: metrics.stressLevel || 0,
+        productivity: metrics.productivity || 0,
+        created_at: app.mysql.literals.now,
         updated_at: app.mysql.literals.now
-      }, {
-        where: { id: existingMetrics.id }
+      };
+
+      this.ctx.logger.info('处理后的指标数据:', metricsData);
+
+      // 检查是否已存在指标记录
+      const existingMetrics = await app.mysql.get('personal_metrics', {
+        diary_id: diaryId
       });
-    } else {
-      await app.mysql.insert('personal_metrics', metricsData);
+
+      if (existingMetrics) {
+        // 更新现有记录
+        await app.mysql.update('personal_metrics', {
+          ...metricsData,
+          updated_at: app.mysql.literals.now
+        }, {
+          where: { diary_id: diaryId }
+        });
+      } else {
+        // 创建新记录
+        await app.mysql.insert('personal_metrics', metricsData);
+      }
+    } catch (error) {
+      this.ctx.logger.error('更新个性化指标失败:', error);
+      throw error;
     }
   }
 

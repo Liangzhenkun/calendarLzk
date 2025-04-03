@@ -1,533 +1,435 @@
 <template>
   <div class="achievement-container">
-    <!-- 成就总览卡片 -->
-    <el-card class="achievement-summary">
-      <div class="summary-stats">
-        <div class="stat-item">
-          <h3>已获得成就</h3>
-          <p>{{ completedCount }}/{{ totalCount }}</p>
+    <!-- 加载状态 -->
+    <div v-if="loading" class="loading-container">
+      <el-skeleton :rows="10" animated />
+    </div>
+    <div v-else>
+      <!-- 成就统计卡片 -->
+      <el-card class="achievement-summary" shadow="hover">
+        <div class="summary-content">
+          <div class="summary-item">
+            <div class="summary-number">{{ completedCount }}</div>
+            <div>已完成</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-number">{{ achievementStore.currentStreak }}天</div>
+            <div>当前连续</div>
         </div>
-        <div class="stat-item">
-          <h3>当前连续打卡</h3>
-          <p>{{ currentStreak }}天</p>
+          <div class="summary-item">
+            <div class="summary-number">{{ totalCount - completedCount }}</div>
+            <div>待解锁</div>
         </div>
-        <div class="stat-item">
-          <h3>本月容错剩余</h3>
-          <p>{{ 5 - monthlyMisses }}天</p>
+          <div class="summary-actions">
+            <el-tooltip content="刷新成就状态" placement="top">
+              <el-button 
+                type="primary" 
+                size="small" 
+                :loading="checkingAchievements" 
+                @click="checkAchievements"
+              >
+                刷新成就
+              </el-button>
+            </el-tooltip>
         </div>
       </div>
     </el-card>
 
-    <!-- 成就分类标签页 -->
-    <el-tabs v-model="activeCategory" class="achievement-tabs">
+      <!-- 成就分类导航 -->
+      <el-tabs v-model="activeTab" class="achievement-tabs">
       <el-tab-pane label="连续打卡" name="streak">
-        <div class="achievement-grid">
+          <div v-if="streakAchievements.length === 0" class="empty-achievement">
+            <el-empty description="暂无连续打卡成就" />
+          </div>
+          <div v-else class="achievement-grid">
           <achievement-card
             v-for="achievement in streakAchievements"
             :key="achievement.id"
             :achievement="achievement"
-            class="achievement-item"
           />
         </div>
       </el-tab-pane>
+
       <el-tab-pane label="特殊成就" name="special">
-        <div class="achievement-grid">
+          <div v-if="specialAchievements.length === 0" class="empty-achievement">
+            <el-empty description="暂无特殊成就" />
+          </div>
+          <div v-else class="achievement-grid">
           <achievement-card
             v-for="achievement in specialAchievements"
             :key="achievement.id"
             :achievement="achievement"
-            class="achievement-item"
           />
         </div>
       </el-tab-pane>
+
       <el-tab-pane label="互动成就" name="interaction">
-        <div class="achievement-grid">
+          <div v-if="interactionAchievements.length === 0" class="empty-achievement">
+            <el-empty description="暂无互动成就" />
+          </div>
+          <div v-else class="achievement-grid">
           <achievement-card
             v-for="achievement in interactionAchievements"
             :key="achievement.id"
             :achievement="achievement"
-            class="achievement-item"
           />
         </div>
       </el-tab-pane>
-      <el-tab-pane label="字数成就" name="content">
-        <div class="achievement-grid">
+
+        <el-tab-pane label="内容成就" name="content">
+          <div v-if="contentAchievements.length === 0" class="empty-achievement">
+            <el-empty description="暂无内容成就" />
+          </div>
+          <div v-else class="achievement-grid">
           <achievement-card
             v-for="achievement in contentAchievements"
             :key="achievement.id"
             :achievement="achievement"
-            class="achievement-item"
           />
         </div>
       </el-tab-pane>
     </el-tabs>
+      
+      <!-- 成就详情 -->
+      <div v-if="selectedAchievement" class="achievement-detail">
+        <el-dialog
+          v-model="showDetail"
+          :title="selectedAchievement.name"
+          width="30%"
+        >
+          <div class="achievement-detail-content">
+            <p>{{ selectedAchievement.description }}</p>
+            <div class="achievement-status">
+              <span v-if="selectedAchievement.completed">
+                已完成于 {{ formatDate(selectedAchievement.completed_at) }}
+              </span>
+              <span v-else>
+                进度: {{ selectedAchievement.progress || 0 }}/{{ selectedAchievement.required_value }}
+              </span>
+            </div>
+          </div>
+        </el-dialog>
+      </div>
+      
+      <!-- 成就调试信息 (开发环境下可见) -->
+      <div v-if="isDevEnvironment" class="achievement-debug">
+        <el-collapse>
+          <el-collapse-item title="成就调试信息" name="debug">
+            <div class="debug-info">
+              <h4>连续打卡天数: {{ currentStreak }}</h4>
+              <h4>连续成就状态:</h4>
+              <pre>{{ JSON.stringify(streakAchievements, null, 2) }}</pre>
+            </div>
+          </el-collapse-item>
+        </el-collapse>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
+import { useAchievementStore } from '@/stores/achievement'
 import AchievementCard from '@/components/AchievementCard.vue'
+import { ElMessage, ElEmpty, ElSkeleton, ElTabs, ElTabPane, ElCard, ElButton, ElDialog, ElCollapse, ElCollapseItem } from 'element-plus'
 
-const activeCategory = ref('streak')
+// 成就存储
+const achievementStore = useAchievementStore()
 
-// 计算成就统计
-const completedCount = computed(() => {
-  return [...streakAchievements.value, ...specialAchievements.value, ...interactionAchievements.value, ...contentAchievements.value]
-    .filter(achievement => achievement.completed).length
-})
+// 页面状态
+const loading = ref(true)
+const activeTab = ref('streak')
+const showDetail = ref(false)
+const selectedAchievement = ref(null)
+const checkingAchievements = ref(false)
+const isDevEnvironment = import.meta.env.MODE === 'development'
 
-const totalCount = computed(() => {
-  return streakAchievements.value.length + specialAchievements.value.length + 
-         interactionAchievements.value.length + contentAchievements.value.length
-})
+// 成就分类
+const streakAchievements = ref([])
+const specialAchievements = ref([])
+const interactionAchievements = ref([])
+const contentAchievements = ref([])
 
+// 统计信息
 const currentStreak = ref(0)
-const monthlyMisses = ref(0)
+const monthlyMisses = ref(3) // 假设每月有3次缺勤机会
 
-// 模拟数据，后续会从后端获取
-const streakAchievements = ref([
-  // 初心者系列
-  {
-    id: 1,
-    name: '启程之日',
-    description: '完成第一次日记记录',
-    icon: 'Calendar',
-    progress: 0,
-    required: 1,
-    completed: false
-  },
-  {
-    id: 2,
-    name: '初心萌动',
-    description: '连续记录3天',
-    icon: 'Star',
-    progress: 0,
-    required: 3,
-    completed: false
-  },
-  {
-    id: 3,
-    name: '坚持之芽',
-    description: '连续记录7天',
-    icon: 'Check',
-    progress: 0,
-    required: 7,
-    completed: false
-  },
-  {
-    id: 4,
-    name: '习惯养成',
-    description: '连续记录14天（激活容错机制）',
-    icon: 'Trophy',
-    progress: 0,
-    required: 14,
-    completed: false
-  },
-  // 月度成就系列
-  {
-    id: 5,
-    name: '月光守护者',
-    description: '连续记录1个月',
-    icon: 'Moon',
-    progress: 0,
-    required: 30,
-    completed: false
-  },
-  {
-    id: 6,
-    name: '双月物语',
-    description: '连续记录2个月',
-    icon: 'MoonNight',
-    progress: 0,
-    required: 60,
-    completed: false
-  },
-  {
-    id: 7,
-    name: '春分之约',
-    description: '连续记录3个月',
-    icon: 'Sunrise',
-    progress: 0,
-    required: 90,
-    completed: false
-  },
-  {
-    id: 8,
-    name: '四月物语',
-    description: '连续记录4个月',
-    icon: 'Sunny',
-    progress: 0,
-    required: 120,
-    completed: false
-  },
-  {
-    id: 9,
-    name: '五月之誓',
-    description: '连续记录5个月',
-    icon: 'Sunny',
-    progress: 0,
-    required: 150,
-    completed: false
-  },
-  {
-    id: 10,
-    name: '半年之约',
-    description: '连续记录6个月',
-    icon: 'Sunny',
-    progress: 0,
-    required: 180,
-    completed: false
-  },
-  {
-    id: 11,
-    name: '七月之契',
-    description: '连续记录7个月',
-    icon: 'Sunny',
-    progress: 0,
-    required: 210,
-    completed: false
-  },
-  {
-    id: 12,
-    name: '八月之心',
-    description: '连续记录8个月',
-    icon: 'Sunny',
-    progress: 0,
-    required: 240,
-    completed: false
-  },
-  {
-    id: 13,
-    name: '九月之旅',
-    description: '连续记录9个月',
-    icon: 'Sunny',
-    progress: 0,
-    required: 270,
-    completed: false
-  },
-  {
-    id: 14,
-    name: '十月之志',
-    description: '连续记录10个月',
-    icon: 'Sunny',
-    progress: 0,
-    required: 300,
-    completed: false
-  },
-  {
-    id: 15,
-    name: '十一月之约',
-    description: '连续记录11个月',
-    icon: 'Sunny',
-    progress: 0,
-    required: 330,
-    completed: false
-  },
-  {
-    id: 16,
-    name: '岁末之誓',
-    description: '连续记录12个月',
-    icon: 'Sunny',
-    progress: 0,
-    required: 365,
-    completed: false
-  }
-])
+// 计算属性
+const completedCount = computed(() => achievementStore.completedCount)
+const totalCount = computed(() => achievementStore.totalCount)
 
-const specialAchievements = ref([
-  // 季度特殊成就
-  {
-    id: 17,
-    name: '春之物语',
-    description: '完成春季（3个月）连续记录',
-    icon: 'Cherry',
-    progress: 0,
-    required: 90,
-    completed: false
-  },
-  {
-    id: 18,
-    name: '夏之轻语',
-    description: '完成夏季（6个月）连续记录',
-    icon: 'Sunny',
-    progress: 0,
-    required: 180,
-    completed: false
-  },
-  {
-    id: 19,
-    name: '秋之私语',
-    description: '完成秋季（9个月）连续记录',
-    icon: 'Leaf',
-    progress: 0,
-    required: 270,
-    completed: false
-  },
-  {
-    id: 20,
-    name: '冬之絮语',
-    description: '完成冬季（12个月）连续记录',
-    icon: 'Snowflake',
-    progress: 0,
-    required: 365,
-    completed: false
-  },
-  // 里程碑特殊成就
-  {
-    id: 21,
-    name: '时光守护者',
-    description: '完成半年连续记录',
-    icon: 'Timer',
-    progress: 0,
-    required: 180,
-    completed: false
-  },
-  {
-    id: 22,
-    name: '岁月见证者',
-    description: '完成一年连续记录',
-    icon: 'Calendar',
-    progress: 0,
-    required: 365,
-    completed: false
-  },
-  // 特殊时段成就
-  {
-    id: 23,
-    name: '夜之诗人',
-    description: '在深夜（23:00-次日5:00）完成记录',
-    icon: 'Moon',
-    progress: 0,
-    required: 1,
-    completed: false
-  },
-  {
-    id: 24,
-    name: '晨光笔记',
-    description: '在清晨（5:00-7:00）完成记录',
-    icon: 'Sunrise',
-    progress: 0,
-    required: 1,
-    completed: false
-  },
-  {
-    id: 25,
-    name: '节日记事官',
-    description: '在节日当天完成记录',
-    icon: 'Present',
-    progress: 0,
-    required: 1,
-    completed: false
-  }
-])
+// 格式化时间
+const formatDate = (dateString) => {
+  if (!dateString) return '';
+  const date = new Date(dateString);
+  return date.toLocaleDateString();
+}
 
-const interactionAchievements = ref([
-  // 互动类成就
-  {
-    id: 26,
-    name: '破茧之笔',
-    description: '完成第一次日记记录',
-    icon: 'EditPen',
-    progress: 0,
-    required: 1,
-    completed: false
-  },
-  {
-    id: 27,
-    name: '初识之印',
-    description: '完善个人资料',
-    icon: 'User',
-    progress: 0,
-    required: 1,
-    completed: false
-  },
-  {
-    id: 28,
-    name: '个性之彩',
-    description: '自定义主题',
-    icon: 'Brush',
-    progress: 0,
-    required: 1,
-    completed: false
-  },
-  {
-    id: 29,
-    name: '分享之心',
-    description: '分享日记',
-    icon: 'Share',
-    progress: 0,
-    required: 1,
-    completed: false
-  },
-  {
-    id: 30,
-    name: '时间之约',
-    description: '设置提醒',
-    icon: 'Bell',
-    progress: 0,
-    required: 1,
-    completed: false
-  },
-  {
-    id: 31,
-    name: '标签达人',
-    description: '使用标签功能',
-    icon: 'Collection',
-    progress: 0,
-    required: 1,
-    completed: false
-  }
-])
+// 查看成就详情
+const viewAchievementDetail = (achievement) => {
+  selectedAchievement.value = achievement;
+  showDetail.value = true;
+}
 
-// 添加字数成就
-const contentAchievements = ref([
-  {
-    id: 32,
-    name: '初露锋芒',
-    description: '累计写作100字',
-    icon: 'Edit',
-    progress: 0,
-    required: 100,
-    completed: false
-  },
-  {
-    id: 33,
-    name: '笔耕不辍',
-    description: '累计写作500字',
-    icon: 'Edit',
-    progress: 0,
-    required: 500,
-    completed: false
-  },
-  {
-    id: 34,
-    name: '文思泉涌',
-    description: '累计写作1000字',
-    icon: 'Edit',
-    progress: 0,
-    required: 1000,
-    completed: false
-  },
-  {
-    id: 35,
-    name: '妙笔生花',
-    description: '累计写作2000字',
-    icon: 'Edit',
-    progress: 0,
-    required: 2000,
-    completed: false
-  },
-  {
-    id: 36,
-    name: '笔走龙蛇',
-    description: '累计写作5000字',
-    icon: 'Edit',
-    progress: 0,
-    required: 5000,
-    completed: false
-  },
-  {
-    id: 37,
-    name: '文采斐然',
-    description: '累计写作1万字',
-    icon: 'Edit',
-    progress: 0,
-    required: 10000,
-    completed: false
-  },
-  {
-    id: 38,
-    name: '著作等身',
-    description: '累计写作5万字',
-    icon: 'Edit',
-    progress: 0,
-    required: 50000,
-    completed: false
-  },
-  {
-    id: 39,
-    name: '文坛巨匠',
-    description: '累计写作10万字',
-    icon: 'Edit',
-    progress: 0,
-    required: 100000,
-    completed: false
+// 重构获取成就数据的方法
+const fetchAchievements = async () => {
+  try {
+    // 显示加载状态
+    loading.value = true;
+    
+    console.log('正在获取成就数据...');
+    
+    // 获取所有成就列表
+    await achievementStore.fetchAchievements().catch(err => {
+      console.error('achievementStore.fetchAchievements调用失败:', err);
+      return false;
+    });
+    
+    console.log('获取到的成就数据:', achievementStore.achievements);
+    
+    if (!achievementStore.achievements || achievementStore.achievements.length === 0) {
+      console.log('成就数据为空，初始化为空数组');
+      // 如果没有数据，初始化各分类为空数组
+      streakAchievements.value = [];
+      specialAchievements.value = [];
+      interactionAchievements.value = [];
+      contentAchievements.value = [];
+    } else {
+      // 按类型分类成就
+      updateAchievementCategories();
+    }
+    
+    // 获取连续打卡天数
+    currentStreak.value = achievementStore.currentStreak || 0;
+    
+  } catch (error) {
+    console.error('获取成就数据失败:', error);
+    // 确保各分类为空数组
+    streakAchievements.value = [];
+    specialAchievements.value = [];
+    interactionAchievements.value = [];
+    contentAchievements.value = [];
+  } finally {
+    // 隐藏加载状态
+    loading.value = false;
   }
-])
+}
+
+// 组件挂载时获取数据
+onMounted(async () => {
+  console.log('成就页面挂载，开始加载数据...');
+  await fetchAchievements();
+  
+  // 检查"启程之日"成就状态
+  const firstDayAchievement = achievementStore.achievements.find(a => a.name === '启程之日' || a.id === 1);
+  if (firstDayAchievement) {
+    console.log('启程之日成就状态:', {
+      id: firstDayAchievement.id,
+      name: firstDayAchievement.name,
+      completed: firstDayAchievement.completed,
+      progress: firstDayAchievement.progress,
+      completed_at: firstDayAchievement.completed_at
+    });
+    
+    // 手动修正启程之日成就状态
+    if (!firstDayAchievement.completed) {
+      console.log('手动修正"启程之日"成就状态');
+      // 在数组中查找对应的成就索引
+      const achievementIndex = achievementStore.achievements.findIndex(a => a.id === 1);
+      if (achievementIndex !== -1) {
+        // 直接修改成就状态
+        achievementStore.achievements[achievementIndex].completed = true;
+        console.log('已修正"启程之日"成就状态:', achievementStore.achievements[achievementIndex]);
+      }
+    }
+  } else {
+    console.log('未找到启程之日成就');
+  }
+  
+  // 查找并手动检查连续打卡成就
+  const streakAchievements = achievementStore.achievements.filter(a => a.type === 'streak');
+  console.log('连续打卡成就列表:', streakAchievements);
+  
+  // 获取当前连续打卡天数
+  const currentStreakDays = achievementStore.currentStreak;
+  console.log('当前连续打卡天数:', currentStreakDays);
+  
+  // 手动检查每个连续打卡成就的状态
+  streakAchievements.forEach(achievement => {
+    // 跳过"启程之日"成就
+    if (achievement.name === '启程之日') {
+      return;
+    }
+    
+    const requiredDays = achievement.required_value || 0;
+    console.log(`检查连续打卡成就: ${achievement.name}, 需要${requiredDays}天, 当前${currentStreakDays}天`);
+    
+    // 如果连续天数已达到或超过成就要求
+    if (currentStreakDays >= requiredDays) {
+      // 查找成就在数组中的索引
+      const achievementIndex = achievementStore.achievements.findIndex(a => a.id === achievement.id);
+      
+      if (achievementIndex !== -1 && !achievementStore.achievements[achievementIndex].completed) {
+        console.log(`成就 ${achievement.name} 条件已满足，但未标记为已完成，现在手动修正`);
+        
+        // 更新成就为已完成状态
+        achievementStore.achievements[achievementIndex].completed = true;
+        achievementStore.achievements[achievementIndex].progress = currentStreakDays;
+        achievementStore.achievements[achievementIndex].completed_at = new Date();
+        
+        // 添加到已解锁列表
+        if (!achievementStore.unlockedAchievements.includes(achievement.id)) {
+          achievementStore.unlockedAchievements.push(achievement.id);
+          achievementStore.unlockDates[achievement.id] = new Date();
+        }
+        
+        console.log(`已修正成就 ${achievement.name} 的状态:`, achievementStore.achievements[achievementIndex]);
+      }
+    }
+  });
+  
+  // 自动检查成就进度
+  checkAchievements();
+  
+  // 启动定期检查
+  achievementStore.startPeriodicCheck();
+})
+
+// 检查成就进度
+const checkAchievements = async () => {
+  try {
+    checkingAchievements.value = true;
+    console.log('开始检查成就...');
+    
+    // 首先重新计算连续天数（在后台进行，对用户无感）
+    try {
+      await achievementStore.recalculateStreak();
+      console.log('连续天数重新计算完成');
+    } catch (error) {
+      console.error('重新计算连续天数失败，但继续检查其他成就:', error);
+    }
+    
+    // 然后检查所有成就
+    const newAchievements = await achievementStore.checkAchievementProgress();
+    console.log('检查成就完成');
+    
+    if (newAchievements.length > 0) {
+      ElMessage.success(`恭喜！您解锁了 ${newAchievements.length} 个新成就！`);
+    } else {
+      ElMessage.info('暂无新解锁的成就，继续加油！');
+    }
+    
+    // 更新分类
+    updateAchievementCategories();
+  } catch (error) {
+    console.error('检查成就进度失败:', error);
+    ElMessage.error('检查成就进度失败，请稍后再试');
+  } finally {
+    checkingAchievements.value = false;
+  }
+}
+
+// 更新成就分类逻辑
+const updateAchievementCategories = () => {
+  streakAchievements.value = achievementStore.achievements.filter(a => a.type === 'streak') || [];
+  specialAchievements.value = achievementStore.achievements.filter(a => a.type === 'special') || [];
+  interactionAchievements.value = achievementStore.achievements.filter(a => a.type === 'interaction') || [];
+  contentAchievements.value = achievementStore.achievements.filter(a => a.type === 'content') || [];
+  
+  console.log('分类后的成就数据:', {
+    streak: streakAchievements.value.length,
+    special: specialAchievements.value.length,
+    interaction: interactionAchievements.value.length, 
+    content: contentAchievements.value.length
+  });
+}
+
+// 监听成就状态变化
+watch(() => achievementStore.achievements, async (newAchievements) => {
+  if (newAchievements && newAchievements.length > 0) {
+    // 更新分类
+    updateAchievementCategories();
+  }
+}, { deep: true });
 </script>
 
 <style scoped>
 .achievement-container {
-  padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
+  padding: 20px;
+}
+
+.loading-container {
+  padding: 40px;
 }
 
 .achievement-summary {
-  margin-bottom: 24px;
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(10px);
-  border-radius: 12px;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.05);
+  margin-bottom: 20px;
 }
 
-.summary-stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  padding: 20px;
+.summary-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
-.stat-item {
+.summary-item {
   text-align: center;
+  padding: 10px 20px;
 }
 
-.stat-item h3 {
-  margin: 0;
-  font-size: 16px;
-  color: #909399;
-  font-weight: normal;
-}
-
-.stat-item p {
-  margin: 8px 0 0;
+.summary-number {
   font-size: 24px;
-  color: #303133;
-  font-weight: 500;
+  font-weight: bold;
+  color: #409EFF;
 }
 
-.achievement-tabs {
-  margin-top: 20px;
+.summary-actions {
+  display: flex;
+  gap: 10px;
+  margin-left: auto;
 }
 
 .achievement-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 20px;
-  padding: 20px 0;
+  margin-top: 20px;
 }
 
-.achievement-item {
-  transition: transform 0.3s ease;
+.achievement-tabs {
+  margin-top: 20px;
 }
 
-.achievement-item:hover {
-  transform: translateY(-2px);
+.empty-achievement {
+  padding: 40px;
+  text-align: center;
 }
 
-:deep(.el-tabs__nav-wrap::after) {
-  height: 1px;
+.achievement-detail-content {
+  padding: 10px;
 }
 
-:deep(.el-tabs__item) {
-  font-size: 16px;
-  padding: 0 20px;
-  height: 40px;
-  line-height: 40px;
+.achievement-status {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px dashed #eee;
 }
 
-:deep(.el-tabs__active-bar) {
-  height: 3px;
-  border-radius: 3px;
+.achievement-debug {
+  margin-top: 30px;
+  border-top: 1px dashed #eee;
+  padding-top: 20px;
+}
+
+.debug-info {
+  font-family: monospace;
+  font-size: 12px;
+  white-space: pre-wrap;
+  padding: 10px;
+  background: #f8f8f8;
+  border-radius: 4px;
 }
 </style> 

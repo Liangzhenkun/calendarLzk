@@ -54,6 +54,7 @@ class UserService extends Service {
                 password_hash: hashedPassword,
                 avatar_url: null,
                 refresh_token: null,
+                points: 0,
                 created_at: app.mysql.literals.now,
                 updated_at: app.mysql.literals.now
             });
@@ -94,11 +95,107 @@ class UserService extends Service {
         const { app } = this;
         try {
             const users = await app.mysql.select('user', {
-                columns: ['id', 'username', 'email', 'avatar_url', 'experience', 'level', 'created_at', 'updated_at']
+                columns: ['id', 'username', 'email', 'avatar_url', 'points', 'created_at', 'updated_at']
             });
             return users;
         } catch (error) {
             this.ctx.logger.error('获取所有用户失败:', error);
+            throw error;
+        }
+    }
+
+    // 添加积分
+    async addPoints(userId, points) {
+        const { app } = this;
+        try {
+            this.ctx.logger.info('开始添加积分:', { userId, points });
+            
+            // 获取用户当前积分
+            const user = await app.mysql.get('user', { id: userId });
+            if (!user) {
+                throw new Error('用户不存在');
+            }
+
+            const currentPoints = user.points || 0;
+            const newPoints = currentPoints + points;
+
+            // 更新用户积分
+            const result = await app.mysql.update('user', {
+                points: newPoints,
+                updated_at: app.mysql.literals.now
+            }, {
+                where: { id: userId }
+            });
+
+            this.ctx.logger.info('积分更新成功:', {
+                userId,
+                oldPoints: currentPoints,
+                addedPoints: points,
+                newPoints,
+                affectedRows: result.affectedRows
+            });
+
+            // 记录积分历史
+            await app.mysql.insert('points_history', {
+                user_id: userId,
+                points: points,
+                type: 'earned',
+                description: '完成任务获得积分',
+                created_at: app.mysql.literals.now
+            });
+
+            return {
+                oldPoints: currentPoints,
+                addedPoints: points,
+                newPoints
+            };
+        } catch (error) {
+            this.ctx.logger.error('添加积分失败:', error);
+            throw error;
+        }
+    }
+
+    // 获取用户积分历史
+    async getPointsHistory(userId) {
+        const { app } = this;
+        try {
+            const history = await app.mysql.select('points_history', {
+                where: { user_id: userId },
+                orders: [['created_at', 'desc']],
+                limit: 50
+            });
+
+            return history;
+        } catch (error) {
+            this.ctx.logger.error('获取积分历史失败:', error);
+            throw error;
+        }
+    }
+
+    // 获取用户统计信息
+    async getUserStats(userId) {
+        const { app } = this;
+        try {
+            const user = await app.mysql.get('user', { id: userId });
+            if (!user) {
+                throw new Error('用户不存在');
+            }
+
+            // 获取任务完成统计
+            const taskStats = await this.service.dailyTask.getTaskStats(userId);
+
+            // 获取成就统计
+            const achievements = await this.service.achievement.getUserAchievements(userId);
+            const completedAchievements = achievements.filter(a => a.completed).length;
+
+            return {
+                points: user.points || 0,
+                taskStats,
+                achievementsCompleted: completedAchievements,
+                totalAchievements: achievements.length
+            };
+        } catch (error) {
+            this.ctx.logger.error('获取用户统计信息失败:', error);
             throw error;
         }
     }

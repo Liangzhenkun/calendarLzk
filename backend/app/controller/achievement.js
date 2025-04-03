@@ -1,65 +1,61 @@
-const { Controller } = require('egg');
+const Controller = require('egg').Controller;
 
 class AchievementController extends Controller {
-  // 获取所有成就
-  async getAll() {
-    const { ctx, service } = this;
-    try {
-      const achievements = await service.achievement.getAllAchievements();
-      ctx.body = {
-        code: 0,
-        message: '获取成就列表成功',
-        data: achievements
-      };
-    } catch (error) {
-      ctx.logger.error('获取成就列表失败:', error);
-      ctx.body = {
-        code: 1,
-        message: error.message || '获取成就列表失败',
-        data: null
-      };
-    }
+  // 获取所有成就列表
+  async list() {
+    const { ctx } = this;
+    const achievements = await ctx.service.achievement.getAllAchievements();
+    ctx.body = achievements;
   }
 
-  // 获取用户已解锁的成就
-  async getUserAchievements() {
-    const { ctx, service } = this;
-    try {
-      const userId = ctx.state.user.id;
-      const achievements = await service.achievement.getUserAchievements(userId);
-      ctx.body = {
-        code: 0,
-        message: '获取用户成就成功',
-        data: achievements
-      };
-    } catch (error) {
-      ctx.logger.error('获取用户成就失败:', error);
-      ctx.body = {
-        code: 1,
-        message: error.message || '获取用户成就失败',
-        data: null
-      };
-    }
+  // 获取用户成就
+  async user() {
+    const { ctx } = this;
+    const userId = ctx.state.user.id;
+    const userAchievements = await ctx.service.achievement.getUserAchievements(userId);
+    ctx.body = userAchievements;
   }
 
   // 检查成就进度
-  async checkProgress() {
-    const { ctx, service } = this;
+  async check() {
+    const { ctx } = this;
+    const userId = ctx.state.user.id;
+    const newAchievements = await ctx.service.achievement.checkProgress(userId);
+    ctx.body = { newAchievements };
+  }
+
+  // 获取当前连续签到天数
+  async streak() {
+    const { ctx } = this;
+    const userId = ctx.state.user.id;
+    const currentStreak = await ctx.service.achievement.getCurrentStreak(userId);
+    ctx.body = { currentStreak };
+  }
+  
+  // 手动重新计算连续天数
+  async recalculateStreak() {
+    const { ctx } = this;
+    const userId = ctx.state.user.id;
+    
     try {
-      const userId = ctx.state.user.id;
-      const result = await service.achievement.checkAchievements(userId);
-      ctx.body = {
-        code: 0,
-        message: '检查成就进度成功',
-        data: result
+      // 重新计算连续天数
+      const streak = await ctx.service.achievement.recalculateStreak(userId);
+      
+      // 检查相关的连续打卡成就
+      const updatedAchievements = await ctx.service.achievement._checkStreakAchievements(userId);
+      
+      ctx.body = { 
+        success: true, 
+        streak,
+        updatedAchievements: updatedAchievements.length > 0 ? updatedAchievements : undefined
       };
     } catch (error) {
-      ctx.logger.error('检查成就进度失败:', error);
-      ctx.body = {
-        code: 1,
-        message: error.message || '检查成就进度失败',
-        data: null
+      ctx.logger.error('重新计算连续天数失败:', error);
+      ctx.body = { 
+        success: false, 
+        error: error.message 
       };
+      ctx.status = 500;
     }
   }
 }

@@ -97,6 +97,20 @@ class CalendarService extends Service {
       throw error;
     }
   }
+
+  async createDiary(data) {
+    const { userId, date, content, mood = 3, weather = 'sunny' } = data;
+    
+    const diary = {
+      userId,
+      date,
+      content,
+      mood,
+      weather
+    };
+    
+    return await this.app.mysql.insert('diary', diary);
+  }
 }
 
 module.exports = CalendarService; 

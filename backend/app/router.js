@@ -18,13 +18,10 @@ module.exports = app => {
   router.post('/auth/login', controller.auth.login);
   router.post('/auth/register', controller.auth.register);
 
-  // 日记相关路由 - 注意路由顺序很重要
-  router.get('/diary/list', jwt, controller.diary.index);  // 放在具体路径前面
-  router.post('/diary/create', jwt, controller.diary.create);
-  router.get('/diary/metrics/:metric', jwt, controller.metrics.getData);
-  router.get('/diary/metrics/stats', jwt, controller.metrics.getStats);
-  router.get('/diary/metrics/trend/:metric', jwt, controller.metrics.getTrend);
-  router.get('/diary/:date', jwt, controller.diary.show);  // 通配路由放在最后
+  // 日记相关路由
+  router.get('/diary', jwt, controller.diary.index);
+  router.post('/diary', jwt, controller.diary.create);
+  router.get('/diary/:date', jwt, controller.diary.show);
   router.put('/diary/:date', jwt, controller.diary.update);
   router.delete('/diary/:date', jwt, controller.diary.destroy);
 
@@ -32,21 +29,32 @@ module.exports = app => {
   router.get('/calendar/records', jwt, controller.calendar.getRecords);
   router.post('/calendar/record', jwt, controller.calendar.createOrUpdate);
   
-  // 成就相关路由
-  router.get('/achievements/all', jwt, controller.achievement.getAll);
-  router.get('/achievements/user', jwt, controller.achievement.getUserAchievements);
-  router.post('/achievements/check', jwt, controller.achievement.checkProgress);
+  // 成就相关路由 - 确保controller.achievement存在
+  if (controller.achievement) {
+    router.get('/achievement/list', jwt, controller.achievement.list);
+    router.get('/achievement/user', jwt, controller.achievement.user);
+    router.post('/achievement/check', jwt, controller.achievement.check);
+    router.get('/achievement/streak', jwt, controller.achievement.streak);
+    router.post('/achievement/recalculate-streak', jwt, controller.achievement.recalculateStreak);
+  }
   
   // 任务相关路由
-  router.get('/tasks/daily', jwt, controller.dailyTask.getDailyTasks);
-  router.post('/tasks/complete', jwt, controller.dailyTask.completeTask);
-  router.get('/tasks/history', jwt, controller.dailyTask.getTaskHistory);
-  
+  if (controller.dailyTask) {
+    router.get('/tasks/daily', jwt, controller.dailyTask.getDailyTasks);
+    router.post('/tasks/complete', jwt, controller.dailyTask.completeTask);
+    router.get('/tasks/history', jwt, controller.dailyTask.getTaskHistory);
+  }
+
   // 商店相关路由
-  router.get('/shop/items', jwt, controller.shop.getItems);
-  router.post('/shop/purchase', jwt, controller.shop.purchaseItem);
-  router.get('/shop/user-items', jwt, controller.shop.getUserItems);
-  router.post('/shop/use-item', jwt, controller.shop.useItem);
-// 调试路由
-router.get('/debug/delete-diary/:date', jwt, controller.debug.testDeleteDiary);
+  if (controller.shop) {
+    router.get('/shop/items', jwt, controller.shop.getItems);
+    router.post('/shop/purchase', jwt, controller.shop.purchaseItem);
+    router.get('/shop/user-items', jwt, controller.shop.getUserItems);
+    router.post('/shop/use-item', jwt, controller.shop.useItem);
+  }
+
+  // 调试路由
+  if (controller.debug) {
+    router.get('/debug/delete-diary/:date', jwt, controller.debug.testDeleteDiary);
+  }
 }; 

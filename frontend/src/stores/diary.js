@@ -172,10 +172,22 @@ export const useDiaryStore = defineStore('diary', {
         const day = String(date.getDate()).padStart(2, '0');
         const dateStr = `${year}-${month}-${day}`;
         
+        // 确保其他数据格式正确
         const data = {
-          ...diary,
-          date: dateStr
+          title: diary.title || `${dateStr}的日记`,
+          content: diary.content || '',
+          date: dateStr,
+          mood: parseInt(diary.mood || 3, 10),
+          weather: diary.weather || 'sunny',
+          metrics: {
+            sleepQuality: parseInt(diary.metrics?.sleepQuality || 5, 10),
+            stressLevel: parseInt(diary.metrics?.stressLevel || 5, 10),
+            productivity: parseInt(diary.metrics?.productivity || 5, 10)
+          }
         };
+        
+        console.log('日记store准备保存数据:', data);
+        console.log('检查当前缓存是否存在该日期的日记:', this.diaries.has(dateStr));
         
         let response;
         const existingDiary = this.diaries.get(dateStr);

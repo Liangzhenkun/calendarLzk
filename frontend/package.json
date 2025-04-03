@@ -1,12 +1,11 @@
 {
   "name": "diary-app-frontend",
-  "version": "1.0.0",
   "private": true,
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
     "dev": "vite --mode development --port 3000",
     "build": "vite build",
-    "build:dev": "vite build --mode development",
-    "build:prod": "vite build --mode production",
     "preview": "vite preview",
     "test": "vitest",
     "coverage": "vitest run --coverage"
@@ -29,22 +28,19 @@
     "vitest": "^1.2.2"
   },
   "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
     "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
+      "plugin:vue/vue3-essential",
+      "eslint:recommended"
     ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "rules": {}
   },
-  "homepage": "https://liangzhenkun.github.io/clanderLzk/"
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
 }

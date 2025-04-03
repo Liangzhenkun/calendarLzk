@@ -58,8 +58,8 @@
       </div>
       
         <!-- 日期网格 -->
-        <div class="days">
-          <div
+      <div class="days">
+        <div
             v-for="({ date, isCurrentMonth, hasDiary }, index) in calendarDays"
           :key="date.toISOString()"
           class="day"
@@ -431,12 +431,14 @@ import { ElMessage } from 'element-plus';
 import { ArrowLeft, ArrowRight } from '@element-plus/icons-vue';
 import { useDiaryStore } from '@/stores/diary';
 import { useAuthStore } from '@/stores/auth';
+import { useAchievementStore } from '@/stores/achievement';
 import { useI18n } from 'vue-i18n';
 import axios from 'axios';
 
 const { t } = useI18n();
 const diaryStore = useDiaryStore();
 const authStore = useAuthStore();
+const achievementStore = useAchievementStore();
 const weekDays = ['日', '一', '二', '三', '四', '五', '六'];
 const currentDate = ref(new Date());
 const diaryDialogVisible = ref(false);
@@ -621,33 +623,60 @@ const openDiaryDialog = async ({ date, hasDiary }) => {
 
 // 保存日记
 const saveDiary = async () => {
-  saving.value = true
+  if (saving.value) return;
+  saving.value = true;
+
   try {
-    // 确保使用正确的日期格式 - 使用本地时间
     const date = new Date(diaryForm.value.date);
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     const formattedDate = `${year}-${month}-${day}`;
+
+    const formattedDiary = {
+      date: formattedDate,
+      mood: parseInt(diaryForm.value.mood || 3, 10),
+      weather: diaryForm.value.weather || 'sunny',
+      title: diaryForm.value.title || `${formattedDate}的日记`,
+      content: diaryForm.value.content || '',
+      metrics: {
+        sleepQuality: parseInt(diaryForm.value.sleepQuality || 5, 10),
+        stressLevel: parseInt(diaryForm.value.stressLevel || 5, 10),
+        productivity: parseInt(diaryForm.value.productivity || 5, 10)
+      }
+    };
     
-    await diaryStore.saveDiary({
-      ...diaryForm.value,
-      date: formattedDate
-    });
+    console.log('正在保存日记:', formattedDiary);
+    
+    await diaryStore.saveDiary(formattedDiary);
     
     editDialogVisible.value = false;
     ElMessage.success('日记保存成功');
     
     // 刷新当月数据
     await fetchMonthDiaries();
+    
+    // 检查成就
+    const newAchievements = await achievementStore.checkAchievementProgress();
+    if (newAchievements && newAchievements.length > 0) {
+      // 显示成就解锁提示
+      newAchievements.forEach(achievement => {
+        ElMessage({
+          type: 'success',
+          message: `恭喜解锁成就：${achievement.name}！`,
+          duration: 3000
+        });
+      });
+    }
   } catch (error) {
     ElMessage({
       type: 'error',
-      message: '保存失败: ' + error.message,
+      message: '保存失败: ' + (error.response?.data?.message || error.message),
       customClass: 'ios-message'
-    })
+    });
+    console.error('保存日记失败:', error);
   } finally {
-    saving.value = false
+    saving.value = false;
   }
 }
 

@@ -33,14 +33,16 @@ const initDatabase = async (app) => {
     await mysql.query(`
       CREATE TABLE IF NOT EXISTS Diary (
         id INT PRIMARY KEY AUTO_INCREMENT,
-        userId INT NOT NULL,
-        title VARCHAR(100) NOT NULL,
-        content TEXT NOT NULL,
-        mood INT DEFAULT 3,
+        user_id INT NOT NULL,
         date DATE NOT NULL,
+        title VARCHAR(255) NOT NULL,
+        content TEXT,
+        mood INT DEFAULT 3,
+        weather VARCHAR(50),
         createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-        FOREIGN KEY (userId) REFERENCES User(id)
+        FOREIGN KEY (user_id) REFERENCES User(id),
+        UNIQUE KEY unique_user_date (user_id, date)
       )
     `);
 

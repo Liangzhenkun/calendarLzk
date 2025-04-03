@@ -40,4 +40,14 @@ temp/
 
 # System Files
 .DS_Store
-Thumbs.db 
+Thumbs.db
+
+# Script files
+*.bat
+*.ps1
+
+# Config files
+mysql-init.txt
+
+# Temporary project files
+et --hard * 

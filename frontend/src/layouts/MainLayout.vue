@@ -76,23 +76,16 @@ const isOpen = ref(false)
 
 const currentRoute = computed(() => route.path)
 
+// 在组件挂载时添加打开动画
+onMounted(() => {
+  isOpen.value = true;
+});
+
 // 监听路由变化
 watch(route, () => {
   // 确保在路由变化时保持打开状态
-  nextTick(() => {
-    isOpen.value = true;
-  });
+  isOpen.value = true;
 });
-
-// 在组件挂载时添加打开动画
-onMounted(() => {
-  // 使用 nextTick 确保 DOM 已经更新
-  nextTick(() => {
-    setTimeout(() => {
-      isOpen.value = true;
-    }, 300);
-  });
-})
 
 const handleLogout = async () => {
   try {

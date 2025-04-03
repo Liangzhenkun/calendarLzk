@@ -68,7 +68,9 @@
 import { ref, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import axios from 'axios'
+import { useAchievementStore } from '@/stores/achievement'
 
+const achievementStore = useAchievementStore()
 const diaries = ref([])
 const showNewDiaryDialog = ref(false)
 const newDiary = ref({
@@ -96,6 +98,11 @@ const saveDiary = async () => {
     ElMessage.success('日记保存成功')
     showNewDiaryDialog.value = false
     await fetchDiaries()
+    
+    // 自动检查成就（包含连续天数计算和成就检查）
+    console.log('日记保存成功，执行成就检查...');
+    await achievementStore.checkAchievementsRealTime('saveDiary');
+    
     // 重置表单
     newDiary.value = {
       title: '',

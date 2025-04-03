@@ -1,16 +1,40 @@
 import request from '@/utils/axios'
 
 export function createDiary(data) {
+  // 确保数据格式正确
+  const formattedData = {
+    title: data.title || '',
+    content: data.content || '',
+    date: data.date, // 确保日期格式为 YYYY-MM-DD
+    mood: parseInt(data.mood || 3, 10),
+    weather: data.weather || 'sunny',
+    type: data.type || 'normal',
+    metrics: {
+      sleepQuality: parseInt(data.metrics?.sleepQuality || 5, 10),
+      stressLevel: parseInt(data.metrics?.stressLevel || 5, 10),
+      productivity: parseInt(data.metrics?.productivity || 5, 10)
+    }
+  }
+  
+  console.log('准备发送到后端的日记数据:', JSON.stringify(formattedData));
+  
   return request({
-    url: '/api/diary/create',
+    url: '/api/diary',
     method: 'post',
-    data
+    data: formattedData
+  }).then(response => {
+    console.log('创建日记响应:', response);
+    return response;
+  }).catch(error => {
+    console.error('API 调用 createDiary 失败:', error);
+    console.error('错误响应数据:', error.response?.data);
+    throw error;
   })
 }
 
 export function getDiaryList(params) {
   return request({
-    url: '/api/diary/list',
+    url: '/api/diary',
     method: 'get',
     params
   })
