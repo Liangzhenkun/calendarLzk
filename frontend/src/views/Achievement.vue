@@ -218,82 +218,19 @@ const fetchAchievements = async () => {
 // 组件挂载时获取数据
 onMounted(async () => {
   console.log('成就页面挂载，开始加载数据...');
+  
+  // 初始化成就存储
+  achievementStore.initStore();
+  
+  // 获取成就数据
   await fetchAchievements();
-  
-  // 检查"启程之日"成就状态
-  const firstDayAchievement = achievementStore.achievements.find(a => a.name === '启程之日' || a.id === 1);
-  if (firstDayAchievement) {
-    console.log('启程之日成就状态:', {
-      id: firstDayAchievement.id,
-      name: firstDayAchievement.name,
-      completed: firstDayAchievement.completed,
-      progress: firstDayAchievement.progress,
-      completed_at: firstDayAchievement.completed_at
-    });
-    
-    // 手动修正启程之日成就状态
-    if (!firstDayAchievement.completed) {
-      console.log('手动修正"启程之日"成就状态');
-      // 在数组中查找对应的成就索引
-      const achievementIndex = achievementStore.achievements.findIndex(a => a.id === 1);
-      if (achievementIndex !== -1) {
-        // 直接修改成就状态
-        achievementStore.achievements[achievementIndex].completed = true;
-        console.log('已修正"启程之日"成就状态:', achievementStore.achievements[achievementIndex]);
-      }
-    }
-  } else {
-    console.log('未找到启程之日成就');
-  }
-  
-  // 查找并手动检查连续打卡成就
-  const streakAchievements = achievementStore.achievements.filter(a => a.type === 'streak');
-  console.log('连续打卡成就列表:', streakAchievements);
-  
-  // 获取当前连续打卡天数
-  const currentStreakDays = achievementStore.currentStreak;
-  console.log('当前连续打卡天数:', currentStreakDays);
-  
-  // 手动检查每个连续打卡成就的状态
-  streakAchievements.forEach(achievement => {
-    // 跳过"启程之日"成就
-    if (achievement.name === '启程之日') {
-      return;
-    }
-    
-    const requiredDays = achievement.required_value || 0;
-    console.log(`检查连续打卡成就: ${achievement.name}, 需要${requiredDays}天, 当前${currentStreakDays}天`);
-    
-    // 如果连续天数已达到或超过成就要求
-    if (currentStreakDays >= requiredDays) {
-      // 查找成就在数组中的索引
-      const achievementIndex = achievementStore.achievements.findIndex(a => a.id === achievement.id);
-      
-      if (achievementIndex !== -1 && !achievementStore.achievements[achievementIndex].completed) {
-        console.log(`成就 ${achievement.name} 条件已满足，但未标记为已完成，现在手动修正`);
-        
-        // 更新成就为已完成状态
-        achievementStore.achievements[achievementIndex].completed = true;
-        achievementStore.achievements[achievementIndex].progress = currentStreakDays;
-        achievementStore.achievements[achievementIndex].completed_at = new Date();
-        
-        // 添加到已解锁列表
-        if (!achievementStore.unlockedAchievements.includes(achievement.id)) {
-          achievementStore.unlockedAchievements.push(achievement.id);
-          achievementStore.unlockDates[achievement.id] = new Date();
-        }
-        
-        console.log(`已修正成就 ${achievement.name} 的状态:`, achievementStore.achievements[achievementIndex]);
-      }
-    }
-  });
   
   // 自动检查成就进度
   checkAchievements();
   
   // 启动定期检查
   achievementStore.startPeriodicCheck();
-})
+});
 
 // 检查成就进度
 const checkAchievements = async () => {

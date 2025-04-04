@@ -4,10 +4,10 @@ CREATE TABLE IF NOT EXISTS achievements (
   name VARCHAR(100) NOT NULL,
   description TEXT NOT NULL,
   type VARCHAR(50) NOT NULL COMMENT '成就类型：streak(连续打卡), special(特殊成就), interaction(互动成就), content(字数成就)',
-  required INT NOT NULL,
+  required_value INT NOT NULL,
   points_reward INT NOT NULL DEFAULT 10,
   experience_reward INT NOT NULL DEFAULT 10,
-  icon VARCHAR(50) NOT NULL,
+  icon_url VARCHAR(50) NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -27,8 +27,8 @@ CREATE TABLE IF NOT EXISTS user_achievements (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 插入连续打卡成就
-INSERT INTO achievements (id, name, description, type, required, points_reward, experience_reward, icon) VALUES
-(1, '启程之日', '完成第一次日记记录', 'streak', 1, 10, 5, 'Calendar'),
+INSERT INTO achievements (id, name, description, type, required_value, points_reward, experience_reward, icon_url) VALUES
+(1, '启程之日', '完成第一次日记记录', 'interaction', 1, 10, 5, 'EditPen'),
 (2, '初心萌动', '连续记录3天', 'streak', 3, 30, 15, 'Star'),
 (3, '坚持之芽', '连续记录7天', 'streak', 7, 70, 35, 'Check'),
 (4, '习惯养成', '连续记录14天（激活容错机制）', 'streak', 14, 140, 70, 'Trophy'),
@@ -46,7 +46,7 @@ INSERT INTO achievements (id, name, description, type, required, points_reward, 
 (16, '岁末之誓', '连续记录12个月', 'streak', 365, 3650, 1825, 'Sunny');
 
 -- 插入特殊成就
-INSERT INTO achievements (id, name, description, type, required, points_reward, experience_reward, icon) VALUES
+INSERT INTO achievements (id, name, description, type, required_value, points_reward, experience_reward, icon_url) VALUES
 (17, '春之物语', '完成春季（3个月）连续记录', 'special', 90, 900, 450, 'Cherry'),
 (18, '夏之轻语', '完成夏季（6个月）连续记录', 'special', 180, 1800, 900, 'Sunny'),
 (19, '秋之私语', '完成秋季（9个月）连续记录', 'special', 270, 2700, 1350, 'Leaf'),
@@ -58,14 +58,14 @@ INSERT INTO achievements (id, name, description, type, required, points_reward, 
 (25, '节日记事官', '在节日当天完成记录', 'special', 1, 100, 50, 'Present');
 
 -- 插入互动成就
-INSERT INTO achievements (id, name, description, type, required, points_reward, experience_reward, icon) VALUES
+INSERT INTO achievements (id, name, description, type, required_value, points_reward, experience_reward, icon_url) VALUES
 (26, '破茧之笔', '完成第一次日记记录', 'interaction', 1, 10, 5, 'EditPen'),
 (27, '初识之印', '完善个人资料', 'interaction', 1, 10, 5, 'User'),
 (28, '个性之彩', '自定义主题', 'interaction', 1, 10, 5, 'Brush'),
 (29, '时间之约', '设置提醒', 'interaction', 1, 10, 5, 'Bell');
 
 -- 插入字数成就
-INSERT INTO achievements (id, name, description, type, required, points_reward, experience_reward, icon) VALUES
+INSERT INTO achievements (id, name, description, type, required_value, points_reward, experience_reward, icon_url) VALUES
 (30, '初露锋芒', '累计写作100字', 'content', 100, 10, 5, 'Edit'),
 (31, '笔耕不辍', '累计写作500字', 'content', 500, 50, 25, 'Edit'),
 (32, '文思泉涌', '累计写作1000字', 'content', 1000, 100, 50, 'Edit'),

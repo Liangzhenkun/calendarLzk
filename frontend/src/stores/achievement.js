@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { getAchievements, getUserAchievements, checkProgress, getAchievementStreak, recalculateStreak } from '@/api/achievement';
+import { getAllAchievements, getUserAchievements, checkAchievementProgress, getAchievementStreak, recalculateStreak } from '@/api/achievements';
 import { ElMessage, ElNotification } from 'element-plus';
 import { Edit, Calendar, Star, Document } from '@element-plus/icons-vue';
 
@@ -15,7 +15,8 @@ export const useAchievementStore = defineStore('achievement', {
     currentStreak: 0,
     dailyStreak: 0, // 连续日记天数
     totalDiaries: 0, // 总日记数
-    lastFetch: null // 上次获取成就的时间
+    lastFetch: null, // 上次获取成就的时间
+    lastCheck: null
   }),
 
   getters: {
@@ -43,132 +44,88 @@ export const useAchievementStore = defineStore('achievement', {
   },
 
   actions: {
+    // 初始化store
+    initStore() {
+      // 从localStorage加载数据
+      const savedState = localStorage.getItem('achievementStore');
+      if (savedState) {
+        const state = JSON.parse(savedState);
+        this.achievements = state.achievements || [];
+        this.userAchievements = state.userAchievements || [];
+        this.unlockedAchievements = state.unlockedAchievements || [];
+        this.unlockDates = state.unlockDates || {};
+        this.currentStreak = state.currentStreak || 0;
+        this.lastCheck = state.lastCheck || null;
+      }
+    },
+
+    // 保存状态到localStorage
+    saveState() {
+      const state = {
+        achievements: this.achievements,
+        userAchievements: this.userAchievements,
+        unlockedAchievements: this.unlockedAchievements,
+        unlockDates: this.unlockDates,
+        currentStreak: this.currentStreak,
+        lastCheck: this.lastCheck
+      };
+      localStorage.setItem('achievementStore', JSON.stringify(state));
+    },
+
+    // 获取成就列表
     async fetchAchievements() {
       try {
-        console.log('获取所有成就...');
-        
-        // 使用try-catch分别获取成就和用户成就数据，避免一个失败导致全部失败
-        let achievementsData = [];
-        let userAchievementsData = [];
-        
-        try {
-          const achievementsResponse = await getAchievements();
-          achievementsData = achievementsResponse.data || [];
-          console.log(`成功获取${achievementsData.length}个成就定义`);
-        } catch (error) {
-          console.error('获取成就列表失败:', error);
-          // 成就列表获取失败不影响后续流程
-        }
-        
-        try {
-          const userAchievementsResponse = await getUserAchievements();
-          userAchievementsData = userAchievementsResponse.data || [];
-          console.log(`成功获取${userAchievementsData.length}个用户成就记录`);
-        } catch (error) {
-          console.error('获取用户成就进度失败:', error);
-          // 用户成就获取失败不影响后续流程
-        }
-        
-        // 设置成就列表，增加类型字段
-        this.achievements = achievementsData.map(achievement => ({
-          ...achievement,
-          category: achievement.type || 'other'
-        }));
-        
-        // 设置用户成就
-        this.userAchievements = userAchievementsData;
-        
+        console.log('开始获取成就列表...');
+        const [achievementsResponse, userAchievementsResponse] = await Promise.all([
+          getAllAchievements(),
+          getUserAchievements()
+        ]);
+
+        this.achievements = achievementsResponse.data;
+        this.userAchievements = userAchievementsResponse.data;
+
         // 处理用户成就数据
-        if (userAchievementsData.length > 0) {
-          this.processUserAchievements();
-        }
+        this.processUserAchievements();
         
-        // 获取连续打卡天数
-        try {
-          await this.getCurrentStreak();
-        } catch (error) {
-          console.error('获取连续打卡天数失败:', error);
-          this.currentStreak = 0;
-          this.dailyStreak = 0;
-        }
+        // 保存到localStorage
+        this.saveState();
         
         return true;
       } catch (error) {
         console.error('获取成就列表失败:', error);
-        // 确保成就列表至少是空数组
-        this.achievements = [];
-        this.userAchievements = [];
-        this.currentStreak = 0;
-        this.dailyStreak = 0;
         return false;
       }
     },
 
+    // 处理用户成就数据
     processUserAchievements() {
-      console.log('处理用户成就数据...');
-      if (!this.userAchievements || this.userAchievements.length === 0) {
-        console.log('用户没有成就数据');
-        return;
-      }
-      
-      const userAchievementMap = {};
-      this.userAchievements.forEach(ua => {
-        console.log(`用户成就: ${ua.achievement_id}, 完成状态:`, ua.completed, '类型:', typeof ua.completed);
-        userAchievementMap[ua.achievement_id] = ua;
-      });
-      
+      if (!this.achievements || !this.userAchievements) return;
+
       this.achievements = this.achievements.map(achievement => {
-        const userAchievement = userAchievementMap[achievement.id];
-        
+        const userAchievement = this.userAchievements.find(ua => ua.achievement_id === achievement.id);
         if (userAchievement) {
-          const isCompleted = userAchievement.completed === true || 
-                              userAchievement.completed === 1 || 
-                              userAchievement.completed === '1' || 
-                              userAchievement.completed === 'true';
-          
-          console.log(`更新成就 ${achievement.name} (ID:${achievement.id})的状态为: ${isCompleted ? '已完成' : '进行中'}`);
-          
-          if (isCompleted) {
-            if (!this.unlockedAchievements.includes(achievement.id)) {
-              this.unlockedAchievements.push(achievement.id);
-            }
-            
-            if (userAchievement.completed_at) {
-              this.unlockDates[achievement.id] = userAchievement.completed_at;
-            }
+          // 更新成就状态
+          achievement.completed = userAchievement.completed;
+          achievement.progress = userAchievement.current_value;
+          achievement.completed_at = userAchievement.completed_at;
+
+          // 如果成就已完成，添加到已解锁列表
+          if (userAchievement.completed && !this.unlockedAchievements.includes(achievement.id)) {
+            this.unlockedAchievements.push(achievement.id);
+            this.unlockDates[achievement.id] = userAchievement.completed_at;
           }
-          
-          this.achievementProgress[achievement.id] = userAchievement.current_value || 0;
-          
-          if (achievement.type === 'streak' && userAchievement.current_value >= achievement.required_value) {
-            console.log(`成就 ${achievement.name} 的连续打卡天数已达到要求，将强制标记为已完成`);
-            return {
-              ...achievement,
-              progress: userAchievement.current_value || 0,
-              completed: true,
-              completed_at: userAchievement.completed_at || new Date()
-            };
-          }
-          
-          return {
-            ...achievement,
-            progress: userAchievement.current_value || 0,
-            completed: isCompleted,
-            completed_at: userAchievement.completed_at
-          };
         }
-        
-        return {
-          ...achievement,
-          progress: 0,
-          completed: false,
-          completed_at: null
-        };
+        return achievement;
       });
+
+      // 特别处理"启程之日"成就
+      this.checkFirstDayAchievement();
       
-      console.log('处理后的成就数据:', this.achievements);
+      // 保存更新后的状态
+      this.saveState();
     },
 
+    // 检查"启程之日"成就
     checkFirstDayAchievement() {
       const firstDayAchievement = this.achievements.find(a => a.name === '启程之日' || a.id === 1);
       if (!firstDayAchievement) {
@@ -176,21 +133,14 @@ export const useAchievementStore = defineStore('achievement', {
         return;
       }
 
-      console.log('找到"启程之日"成就:', firstDayAchievement);
-      
       const userFirstDayAchievement = this.userAchievements.find(ua => ua.achievement_id === 1);
       if (!userFirstDayAchievement) {
-        console.log('用户未获得"启程之日"成就记录');
+        // 如果用户有日记但没有成就记录，自动添加
+        this.checkAndCreateFirstDayAchievement();
         return;
       }
 
-      console.log('用户"启程之日"成就记录:', userFirstDayAchievement);
-      
-      const isCompleted = userFirstDayAchievement.completed === true || 
-                          userFirstDayAchievement.completed === 1 || 
-                          userFirstDayAchievement.completed === '1' || 
-                          userFirstDayAchievement.completed === 'true';
-      
+      // 更新成就状态
       const achievementIndex = this.achievements.findIndex(a => a.id === 1);
       if (achievementIndex !== -1) {
         this.achievements[achievementIndex] = {
@@ -199,14 +149,32 @@ export const useAchievementStore = defineStore('achievement', {
           progress: userFirstDayAchievement.current_value || 1,
           completed_at: userFirstDayAchievement.completed_at
         };
-        
-        console.log('已强制更新"启程之日"成就状态为已完成');
-        
+
         if (!this.unlockedAchievements.includes(1)) {
           this.unlockedAchievements.push(1);
+          this.unlockDates[1] = userFirstDayAchievement.completed_at;
         }
-        
-        this.unlockDates[1] = userFirstDayAchievement.completed_at;
+
+        // 保存状态
+        this.saveState();
+      }
+    },
+
+    // 检查并创建"启程之日"成就
+    async checkAndCreateFirstDayAchievement() {
+      try {
+        // 检查用户是否有日记
+        const response = await getUserAchievements();
+        const diaryCount = response.data.length;
+
+        if (diaryCount > 0) {
+          // 触发成就检查
+          await getUserAchievements();
+          // 重新获取成就列表
+          await this.fetchAchievements();
+        }
+      } catch (error) {
+        console.error('检查首篇日记成就失败:', error);
       }
     },
 
@@ -235,7 +203,7 @@ export const useAchievementStore = defineStore('achievement', {
         console.log('检查成就进度...');
         
         try {
-          const response = await checkProgress();
+          const response = await checkAchievementProgress();
           const { newAchievements } = response.data;
           
           console.log('成就检查响应:', response.data);
@@ -317,7 +285,7 @@ export const useAchievementStore = defineStore('achievement', {
     getAchievementIcon(achievement) {
       if (!achievement) return null;
       
-      const iconName = achievement.icon_url || achievement.icon;
+      const iconName = achievement.icon_url;
       const iconMap = {
         'Edit': Edit,
         'Calendar': Calendar,

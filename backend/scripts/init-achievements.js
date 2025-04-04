@@ -36,8 +36,8 @@ const initAchievements = async () => {
         name VARCHAR(100) NOT NULL,
         description TEXT NOT NULL,
         type ENUM('streak', 'special', 'interaction', 'content') NOT NULL,
-        icon VARCHAR(50) DEFAULT 'Medal',
-        required INT DEFAULT 1,
+        icon_url VARCHAR(50) DEFAULT 'Medal',
+        required_value INT DEFAULT 1,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
       )

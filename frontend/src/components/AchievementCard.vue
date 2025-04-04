@@ -122,14 +122,14 @@ const isCompleted = computed(() => {
 
 // 当前进度值
 const currentProgress = computed(() => {
-  const progress = props.achievement.progress || props.achievement.current_value || 0;
+  const progress = props.achievement.current_value || 0;
   console.log(`成就 "${props.achievement.name}" 当前进度:`, progress);
   return progress;
 })
 
 // 所需值
 const requiredValue = computed(() => {
-  return props.achievement.required_value || props.achievement.required || 1;
+  return props.achievement.required_value || 1;
 })
 
 // 检查是否有进度
@@ -168,7 +168,7 @@ const progressColor = computed(() => {
 
 // 获取图标组件
 const getIconComponent = computed(() => {
-  const iconName = props.achievement.icon_url || props.achievement.icon;
+  const iconName = props.achievement.icon_url;
   
   // 常用图标映射
   const iconMap = {

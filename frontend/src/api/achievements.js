@@ -3,7 +3,7 @@ import request from '@/utils/axios'
 // 获取所有成就
 export function getAllAchievements() {
   return request({
-    url: '/achievements/all',
+    url: '/api/achievement/all',
     method: 'get'
   })
 }
@@ -11,7 +11,7 @@ export function getAllAchievements() {
 // 获取用户已解锁的成就
 export function getUserAchievements() {
   return request({
-    url: '/achievements/user',
+    url: '/api/achievement/user',
     method: 'get'
   })
 }
@@ -19,7 +19,7 @@ export function getUserAchievements() {
 // 检查成就进度
 export function checkAchievementProgress() {
   return request({
-    url: '/achievements/check',
+    url: '/api/achievement/check',
     method: 'post'
   })
 } 
